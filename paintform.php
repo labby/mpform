@@ -1,17 +1,36 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file paints the form in the frontend.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-// Must include code to stop this file being access directly
-if (!defined('WB_PATH'))  exit("Cannot access this file directly"); 
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
-require_once(WB_PATH.'/modules/mpform/constants.php');
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
+} else {
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
+	} else {
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
+	}
+}
+
+require_once(LEPTON_PATH.'/modules/mpform/constants.php');
 
 // Function for generating an options for a select field
 if (!function_exists('make_option')) {
@@ -158,14 +177,14 @@ JS;
 
 if (!function_exists('paint_form')) {
 function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true) {
-	global $database, $MENU, $TEXT, $LANG;
+	global $database, $MENU, $TEXT, $MOD_MPFORM;
 	global $code, $admin;
 	
 	if($missing != array()) {
-		if(!isset($LANG['frontend']['REQUIRED_FIELDS'])) {
+		if(!isset($MOD_MPFORM['frontend']['REQUIRED_FIELDS'])) {
 			$msg = 'Please complete or correct the fields in red color!';
 		} else {
-			$msg = $LANG['frontend']['REQUIRED_FIELDS'];
+			$msg = $MOD_MPFORM['frontend']['REQUIRED_FIELDS'];
 		}
 		echo "<div class='mpform_missing'>$msg</div>";
 	}
@@ -173,10 +192,10 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	// Get settings
 	$query_settings = $database->query("SELECT * FROM ".TABLE_PREFIX."mod_mpform_settings WHERE section_id = '$section_id'");
 	if($query_settings->numRows() > 0) {
-		$fetch_settings = $query_settings->fetchRow();
-		$header = str_replace('{WB_URL}',WB_URL,$fetch_settings['header']);
+		$fetch_settings = $query_settings->fetchRow( MYSQL_ASSOC );
+		$header = str_replace('{LEPTON_URL}',LEPTON_URL,$fetch_settings['header']);
 		$field_loop = $fetch_settings['field_loop'];
-		$footer = str_replace('{WB_URL}',WB_URL,$fetch_settings['footer']);
+		$footer = str_replace('{LEPTON_URL}',LEPTON_URL,$fetch_settings['footer']);
 		$use_captcha = $fetch_settings['use_captcha'];
 		$is_following = $fetch_settings['is_following'];
 		$max_file_size = $fetch_settings['max_file_size_kb'] * 1024;
@@ -202,8 +221,9 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	if ($success_page != 'none') {
 		$qs = $database->query("SELECT * FROM ".TABLE_PREFIX."sections WHERE page_id = '$success_page' AND module = 'mpform'");
 		if($qs->numRows() > 0) {
-			$s = $qs->fetchRow();
+			$s = $qs->fetchRow( MYSQL_ASSOC );
 			$sid = $s['section_id'];
+			if (!isset($_SESSION['submission_id_'.$section_id])) $_SESSION['submission_id_'.$section_id] = "";
 			$_SESSION['submission_id_'.$sid] = substr($_SESSION['submission_id_'.$section_id], 0, 8);
 		}
 	}
@@ -228,7 +248,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	echo "\n<div class=\"mpform\">
 	<form name=\"form_$section_id\"  enctype='multipart/form-data' action=\"". htmlspecialchars(strip_tags($_SERVER['SCRIPT_NAME'])) ."#wb_section_$section_id\" method=\"post\">
 	<input type=\"hidden\" name=\"submission_id\" value=\"". $_SESSION['submission_id_'.$section_id] ."\" />\n";
-	echo (WB_VERSION >= "2.8.2") ? $admin->getFTAN() : '';
+	
 	
 	if(ENABLED_ASP) { // first add some honeypot-fields
 		$t = time();
@@ -334,7 +354,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 			} elseif ($field['type'] == 'filename') {
 				$vars[] = '{FIELD}';
 				if ($first_MAX) $vmax = '<input type="hidden" name="MAX_FILE_SIZE" value="'.$max_file_size.'" />'; else $vmax = '';
-				$s = $LANG['frontend']['MAX_FILESIZE'];
+				$s = $MOD_MPFORM['frontend']['MAX_FILESIZE'];
 				$values[] = $vmax.'<input type="file" name="field'.$field_id.'" id="field'.$field_id.'" '.$maxlength.' value="'.(isset($_SESSION['field'.$field_id])?$_SESSION['field'.$field_id]:$value).'"
 					class="'.$err_class.'text" /><span style="font-size:9px;"><br />'.sprintf($s, $max_file_size/1024, $upload_only_exts).'</span>';
 				$first_MAX = false;
@@ -368,7 +388,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 			} elseif($field['type'] == 'email_recip') {
 				$vars[] = '{FIELD}';
 				$options = array();
-				array_push($options, $LANG['frontend']['select']);
+				array_push($options, $MOD_MPFORM['frontend']['select']);
 				$emails = preg_split('/[\r\n]/', $email_to);
 				foreach ($emails as $recip) {
 					$teil = explode("<", $recip);
@@ -423,7 +443,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 				'<input type="text" name="field'.$field_id.'" id="field'.$field_id.'"'
 					.$maxlength.' value="'.(isset($_SESSION['field'.$field_id])?$_SESSION['field'.$field_id]:$value).'" class="'.$err_class.'date" />'.
 				"</td>\n<td>\n"
-				.'<img src="'.WB_URL .'/modules/mpform/images/cal.gif" id="field'.$field_id.'_trigger" class="mpform_date_img" title="'.$TEXT['CALENDAR']
+				.'<img src="'.LEPTON_URL .'/modules/mpform/images/cal.gif" id="field'.$field_id.'_trigger" class="mpform_date_img" title="'.$TEXT['CALENDAR']
 				.'" alt="'.$TEXT['CALENDAR'].'" />'
 				."</td>\n</tr>\n</table>\n";
 			}
@@ -436,7 +456,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 				$help = str_replace('&quot;', '\\&quot;', $help);
 				$values[] = "<a id=\"mpform_a_". $field_id . "\" class=\"mpform_a_help\" href=\"#\" onclick='javascript:helpme(\"mpform_a_$field_id\", \"$help\", \""
 					.$field['title']."\",\"".$MENU['HELP']."\");return false;' title=\"".$MENU['HELP']."\">\n<img class=\"mpform_img_help\"
-					src=\"".WB_URL."/modules/mpform/images/help.gif\" alt=\"".$MENU['HELP']."\" /></a>";
+					src=\"".LEPTON_URL."/modules/mpform/images/help.gif\" alt=\"".$MENU['HELP']."\" /></a>";
 				if ($needhelpbutton) $onehelp=true;
 			} else {
 				$values[] = "";
@@ -471,7 +491,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 
 		$field_loop = $fetch_settings['field_loop'];
 		$vars = array('{TITLE}', '{REQUIRED}', '{FIELD}', '{HELP}', '{HELPTXT}', '{CLASSES}', '{ERRORTEXT}');
-		$values = array($LANG['frontend']['VERIFICATION'], '<span class="mpform_required">*</span>',
+		$values = array($MOD_MPFORM['frontend']['VERIFICATION'], '<span class="mpform_required">*</span>',
 						"'; call_captcha('all', '', $section_id); echo '", "", "", $classes,
 						(isset($err_txt['captcha'.$section_id])) ? $err_txt['captcha'.$section_id] : '');
 		$cmd = "{echo '" . str_replace($vars, $values, $field_loop) . "';}";

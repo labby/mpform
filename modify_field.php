@@ -1,55 +1,71 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file prints the settings FOR A FIELD OF THE FORM in the backend.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-// manually include the config.php file (defines the required constants)
-require('../../config.php');
-require(WB_PATH.'/modules/admin.php');
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
+
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
+} else {
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
+	} else {
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
+	}
+}
+
+require(LEPTON_PATH.'/modules/admin.php');
 
 // obtain module directory
 $mod_dir = basename(dirname(__FILE__));
 
-// include module.functions.php (introduced with WB 2.7)
-@include_once(WB_PATH . '/framework/module.functions.php');
-
-// include the module language file depending on the backend language of the current user
-if (!@include(get_module_language_file($mod_dir))) return;
+$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
+require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
 
 //START HEADER HERE
-require_once(WB_PATH.'/modules/'.$mod_dir.'/functions.php');
-require_once(WB_PATH.'/modules/'.$mod_dir.'/constants.php');
+require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
+require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/constants.php');
 module_header_footer($page_id, $mod_dir);
 //END HEADER HERE
 
 // Get id
-if (WB_VERSION >= "2.8.2") {
-	$field_id = $admin->checkIDKEY('field_id', false, 'GET');
-	if (!$field_id) {
-		$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], ADMIN_URL);
-		exit();
-	}
+
+if(!isset($_GET['field_id']) OR !is_numeric($_GET['field_id'])) {
+	header("Location: ".ADMIN_URL."/pages/index.php");
+	exit(0);
 } else {
-	if(!isset($_GET['field_id']) OR !is_numeric($_GET['field_id'])) {
-		header("Location: ".ADMIN_URL."/pages/index.php");
-		exit(0);
-	} else {
-		$field_id = $_GET['field_id'];
-	}
+	$field_id = $_GET['field_id'];
 }
 
 // Get header and footer
-$query_content = $database->query("SELECT * FROM ".TABLE_PREFIX."mod_mpform_fields WHERE field_id = '$field_id'");
-$form = $query_content->fetchRow();
-$type = $form['type'];
-if($type == '') {
-	$type = 'none';
-}
+$form = array();
+$database->execute_query(
+	"SELECT * FROM `".TABLE_PREFIX."mod_mpform_fields` WHERE `field_id` = '".$field_id."'",
+	true,
+	$form,
+	false
+);
+
+$type = ($form['type'] != "")
+	? $form['type']
+	: 'none'
+	;
 
 // protect from cross page reading
 if ($form['page_id'] != $page_id) {  
@@ -58,7 +74,7 @@ if ($form['page_id'] != $page_id) {
 }
 
 // include template parser class and set template
-require_once(WB_PATH . '/include/phplib/template.inc');
+require_once(LEPTON_PATH . '/include/phplib/template.inc');
 $tpl = new Template(dirname(__FILE__) . '/htt/');
 // define how to handle unknown variables (default:='remove', during development use 'keep' or 'comment')
 $tpl->set_unknowns('keep');
@@ -73,21 +89,21 @@ $tpl->set_block('page', 'main_block', 'main');
 $tpl->set_block('main_block', 'field_block', 'field_loop');
 $fieldtypes = array (
 	"heading"	=> $TEXT['HEADING'],
-	"fieldset_start"	=> $LANG['backend']['fieldset_start'],
-	"fieldset_end"	=> $LANG['backend']['fieldset_end'],
-	"textfield"	=> $LANG['backend']["textfield"],
-	"textarea"	=> $LANG['backend']["textarea"],
+	"fieldset_start"	=> $MOD_MPFORM['backend']['fieldset_start'],
+	"fieldset_end"	=> $MOD_MPFORM['backend']['fieldset_end'],
+	"textfield"	=> $MOD_MPFORM['backend']["textfield"],
+	"textarea"	=> $MOD_MPFORM['backend']["textarea"],
 	"select"	=> $TEXT['SELECT_BOX'],
 	"checkbox"	=> $TEXT['CHECKBOX_GROUP'],
 	"radio"	=> $TEXT['RADIO_BUTTON_GROUP'],
 	"email"	=> $TEXT['EMAIL_ADDRESS'],
-	"email_recip"	=> $LANG['backend']['email_recip'],
-	"email_subj"	=> $LANG['backend']['email_subj'],
-	"date"	=> $LANG['backend']['date'],
-	"filename"	=> $LANG['backend']['fileupload'],
-	"integer_number"	=> $LANG['backend']['integer_number'],
-	"decimal_number"	=> $LANG['backend']['decimal_number'],
-	"html"	=> $LANG['backend']['HTML'] 
+	"email_recip"	=> $MOD_MPFORM['backend']['email_recip'],
+	"email_subj"	=> $MOD_MPFORM['backend']['email_subj'],
+	"date"	=> $MOD_MPFORM['backend']['date'],
+	"filename"	=> $MOD_MPFORM['backend']['fileupload'],
+	"integer_number"	=> $MOD_MPFORM['backend']['integer_number'],
+	"decimal_number"	=> $MOD_MPFORM['backend']['decimal_number'],
+	"html"	=> $MOD_MPFORM['backend']['HTML'] 
 );
 foreach ($fieldtypes as $k => $v) {
 	$selected = ($k == $type) ? " selected=\"selected\">" : ">";
@@ -116,7 +132,7 @@ switch ($type) {
 		."<td><input type='text' name='length' value='". $form['extra'] ."' style='width: 98%;' maxlength='3' /></td>\n"
 		."</tr>\n"
 		."<tr>\n"
-		."<td>". $LANG['backend']['TXT_DEFAULT'] .":</td>\n"
+		."<td>". $MOD_MPFORM['backend']['TXT_DEFAULT'] .":</td>\n"
 		."<td><input type='text' name='value' value='". $form['value'] ."' style='width: 98%;' /></td>\n"
 		."</tr>\n";
 		break;
@@ -137,17 +153,17 @@ switch ($type) {
 		."<td><input type='text' name='width' value='$cols' style='width: 98%;' maxlength='3' /></td>\n"
 		."</tr>\n"
 		."<tr>\n"
-		."<td>". $LANG['backend']['ROWS'] .":</td>\n"
+		."<td>". $MOD_MPFORM['backend']['ROWS'] .":</td>\n"
 		."<td><input type='text' name='rows' value='$rows' style='width: 98%;' maxlength='3' /></td>\n"
 		."</tr>\n"
 		."<tr>\n"
-		."<td>". $LANG['backend']['TXT_DEFAULT'] .":</td>\n"
+		."<td>". $MOD_MPFORM['backend']['TXT_DEFAULT'] .":</td>\n"
 		."<td><textarea name='value' cols='50' rows='5' style='width: 98%; height: 100px;'>". $form['value'] ."</textarea></td>\n"
 		."</tr>\n";
 		break;
 	case 'html':
 		$fieldtypeoption = "<tr>\n"
-		."<td>". $LANG['backend']['HTML'] .":</td>\n"
+		."<td>". $MOD_MPFORM['backend']['HTML'] .":</td>\n"
 		."<td><textarea name='value' cols='80' rows='8' style='width: 98%; height: 200px;'>". $form['value'] ."</textarea></td>\n"
 		."</tr>\n";
 		$form['required'] = 3;
@@ -158,7 +174,7 @@ switch ($type) {
 		."<td><input type='text' name='length' value='". $form['extra'] ."' style='width: 98%;' maxlength='3' /></td>\n"
 		."</tr>\n"
 		."<tr>\n"
-		."<td>". $LANG['backend']['TXT_DEFAULT'] .":</td>\n"
+		."<td>". $MOD_MPFORM['backend']['TXT_DEFAULT'] .":</td>\n"
 		."<td><input type='text' name='value' value='". $form['value'] ."' style='width: 98%;' /></td>\n"
 		."</tr>\n";
 		break;
@@ -168,7 +184,7 @@ switch ($type) {
 		."<td><input type='text' name='length' value='". $form['extra'] ."' style='width: 98%;' maxlength='3' /></td>\n"
 		."</tr>\n"
 		."<tr>\n"
-		."<td>". $LANG['backend']['TXT_DEFAULT'] .":</td>\n"
+		."<td>". $MOD_MPFORM['backend']['TXT_DEFAULT'] .":</td>\n"
 		."<td><input type='text' name='value' value='". $form['value'] ."' style='width: 98%;' /></td>\n"
 		."</tr>\n";
 		break;
@@ -184,7 +200,7 @@ switch ($type) {
 		($type == 'radio') ? $kind = 'radio' : $kind = 'checkbox';
 		$fieldtypeoption = "<tr>\n"
 		//."<tr>\n"
-		."<td valign='top'>". $LANG['backend']['TXT_LIST'] .":</td>\n"
+		."<td valign='top'>". $MOD_MPFORM['backend']['TXT_LIST'] .":</td>\n"
 		."<td>";
 			
 		$option_count = 0;
@@ -247,22 +263,22 @@ if($type == 'checkbox' OR $type == 'radio') {
 	$fieldtypeoption .= '<td><input type="text" name="seperator" value="'. $form['extra'] .'" style="width: 98%;" />'."</td>\n</tr>\n";
 }
 if($type != 'heading' AND $type != 'fieldset_start' AND $type != 'fieldset_end' AND $type != 'none' AND $type != 'html') { 
-	$fieldtypeoption .= "<tr>\n<td>". $LANG['backend']['entry'] .":</td>\n";
+	$fieldtypeoption .= "<tr>\n<td>". $MOD_MPFORM['backend']['entry'] .":</td>\n";
 	$fieldtypeoption .= '<td><input type="radio" name="required" id="required_true" value="1"';
 	if($form['required'] == 1 OR $type == 'email_recip') $fieldtypeoption .= ' checked="checked"';
 	$fieldtypeoption .= " />";
 	$fieldtypeoption .= '<a href="#" onclick="javascript: document.getElementById(\'required_true\').checked = true;">';
-	$fieldtypeoption .= $LANG['backend']['compulsory_entry'] ."</a>	&nbsp; ";
+	$fieldtypeoption .= $MOD_MPFORM['backend']['compulsory_entry'] ."</a>	&nbsp; ";
 	$fieldtypeoption .= '<input type="radio" name="required" id="required_false" value="0"';
 	if($form['required'] == 0 AND $type != 'email_recip') $fieldtypeoption .= ' checked="checked"';
 	$fieldtypeoption .= " />";
 	$fieldtypeoption .= '<a href="#" onclick="javascript: document.getElementById(\'required_false\').checked = true;">';
-	$fieldtypeoption .= $LANG['backend']['optional_entry'] ."</a>	&nbsp; ";
+	$fieldtypeoption .= $MOD_MPFORM['backend']['optional_entry'] ."</a>	&nbsp; ";
 	$fieldtypeoption .= '<input type="radio" name="required" id="required_ro" value="2"';
 	if($form['required'] == 2 AND $type != 'email_recip') $fieldtypeoption .= ' checked="checked"';
 	$fieldtypeoption .= " />";
 	$fieldtypeoption .= '<a href="#" onclick="javascript: document.getElementById(\'required_ro\').checked = true;">';
-	$fieldtypeoption .= $LANG['backend']['ro_entry'] ."</a></td>\n</tr>\n";
+	$fieldtypeoption .= $MOD_MPFORM['backend']['ro_entry'] ."</a></td>\n</tr>\n";
 	$fieldtypeoption .= "<tr>\n<td valign='top'>". $MENU['HELP'] .":</td>\n";
 	$fieldtypeoption .= '<td><textarea name="help"  cols="50" rows="5" style="width: 98%; height: 100px;">'. $form['help'] ."</textarea></td>\n</tr>\n";
 }
@@ -276,22 +292,22 @@ $tpl->set_var(
 		'PAGE_ID'		=> (int) $page_id,
 		'SECTION_ID'	=> (int) $section_id,
 		'FIELD_ID'		=> (int) $field_id,
-		'WB_URL'		=> WB_URL,
+		'LEPTON_URL'		=> LEPTON_URL,
 		'ADMIN_URL'		=> ADMIN_URL,
 		'TXT_SAVE'		=> $TEXT['SAVE'],
 		'TXT_CANCEL'	=> $TEXT['CANCEL'],
 		'TXT_TITLE'		=> $TEXT['TITLE'],
 		'TXT_PLEASE_SELECT'	=> $TEXT['PLEASE_SELECT'],
-		'MODULE_URL'    => WB_URL.'/modules/'.$mod_dir,
+		'MODULE_URL'    => LEPTON_URL.'/modules/'.$mod_dir,
 		//'FTAN'			=> (WB_VERSION >= "2.8.2") ? $admin->getFTAN() : '',
 		'FTAN'			=> '',
 		
 		// module settings
 		'MODULE_DIR'    => $mod_dir,
-		'TXT_TYPE'		=> $LANG['backend']['TXT_TYP'],
-		'TXT_COPY_FIELD'=> $LANG['backend']['TXT_COPY_FIELD'],
-		'TXT_ADD_FIELD'	=> $LANG['backend']['TXT_ADD_FIELD'],
-		'TXT_MODIFY_FIELD'	=> sprintf($LANG['backend']['TXT_MODIFY_FIELD'], $field_id),
+		'TXT_TYPE'		=> $MOD_MPFORM['backend']['TXT_TYP'],
+		'TXT_COPY_FIELD'=> $MOD_MPFORM['backend']['TXT_COPY_FIELD'],
+		'TXT_ADD_FIELD'	=> $MOD_MPFORM['backend']['TXT_ADD_FIELD'],
+		'TXT_MODIFY_FIELD'	=> sprintf($MOD_MPFORM['backend']['TXT_MODIFY_FIELD'], $field_id),
 		'VAL_TITLE'		=> $form['title']
 	)
 );

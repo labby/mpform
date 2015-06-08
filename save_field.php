@@ -1,14 +1,34 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file saves the settings FOR A FIELD OF THE FORM in the backend.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-require('../../config.php');
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
+
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
+} else {
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
+	} else {
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
+	}
+}
 
 // Get id
 if(!isset($_POST['field_id']) OR !is_numeric($_POST['field_id'])) {
@@ -18,14 +38,14 @@ if(!isset($_POST['field_id']) OR !is_numeric($_POST['field_id'])) {
 	$field_id = (int) $_POST['field_id'];
 }
 
-require_once(WB_PATH.'/modules/mpform/constants.php');
+require_once(LEPTON_PATH.'/modules/mpform/constants.php');
 
 // Include WB admin wrapper script
 $update_when_modified = true; // Tells script to update when this page was last updated
-require(WB_PATH.'/modules/admin.php');
+require(LEPTON_PATH.'/modules/admin.php');
 
 /*$admin_header = false;
-require(WB_PATH.'/modules/admin.php');
+require(LEPTON_PATH.'/modules/admin.php');
 if ((WB_VERSION >= "2.8.2") && (!$admin->checkFTAN()))
 {
 	$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
@@ -48,7 +68,7 @@ if($admin->get_post('title') == '' AND $admin->get_post('type') == 'html') 		   
 
 // Validate all fields
 if($admin->get_post('title') == '' OR $admin->get_post('type') == '') {
-	$admin->print_error($MESSAGE['GENERIC']['FILL_IN_ALL'], WB_URL.'/modules/mpform/modify_field.php?page_id='.$page_id.'&section_id='.$section_id.'&field_id='.$fid);
+	$admin->print_error($MESSAGE['GENERIC']['FILL_IN_ALL'], LEPTON_URL.'/modules/mpform/modify_field.php?page_id='.$page_id.'&section_id='.$section_id.'&field_id='.$fid);
 } else {
 	$title		= str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post_escaped('title'), ENT_QUOTES));
 	$type 		= str_replace(array("[[", "]]"), '', $admin->get_post_escaped('type'));
@@ -81,7 +101,7 @@ if($database->is_error()) {
 
 // If field type has multiple options, get all values and implode them
 $value = '';
-$list_count = $admin->add_slashes($admin->get_post('list_count'));
+$list_count = addslashes($admin->get_post('list_count'));
 if(is_numeric($list_count)) {
 	$values = array();
 	for($i = 1; $i <= $list_count; $i++) {
@@ -94,7 +114,7 @@ if(is_numeric($list_count)) {
 		}
 		if($admin->get_post('value'.$i) != '') {
 			($default == $i) ? $defcode = IS_DEFAULT : $defcode = '';
-			$values[] = str_replace(array("[[", "]]"), '', str_replace(",", "&#44;", htmlspecialchars($admin->add_slashes($admin->get_post('value'.$i)), ENT_QUOTES))) . $defcode;
+			$values[] = str_replace(array("[[", "]]"), '', str_replace(",", "&#44;", htmlspecialchars(addslashes($admin->get_post('value'.$i)), ENT_QUOTES))) . $defcode;
 		}
 	}
 	$value = implode(',', $values);
@@ -140,14 +160,14 @@ if ($admin->get_post('type') == 'textfield'
 
 // Check if there is a db error, otherwise say successful
 if ($database->is_error()) {
-	$admin->print_error($database->get_error(), WB_URL.'/modules/mpform/modify_field.php?page_id='.$page_id.'&section_id='.$section_id.'&field_id='.$fid);
+	$admin->print_error($database->get_error(), LEPTON_URL.'/modules/mpform/modify_field.php?page_id='.$page_id.'&section_id='.$section_id.'&field_id='.$fid);
 } else {
 	if (isset($_POST['copy'])) {
-		$admin->print_success($TEXT['SUCCESS'], WB_URL.'/modules/mpform/copy_field.php?page_id='.$page_id.'&section_id='.$section_id.'&oldfield_id='.$fid);
+		$admin->print_success($TEXT['SUCCESS'], LEPTON_URL.'/modules/mpform/copy_field.php?page_id='.$page_id.'&section_id='.$section_id.'&oldfield_id='.$fid);
 	} elseif (isset($_POST['add'])) {
-		$admin->print_success($TEXT['SUCCESS'], WB_URL.'/modules/mpform/add_field.php?page_id='.$page_id.'&section_id='.$section_id);
+		$admin->print_success($TEXT['SUCCESS'], LEPTON_URL.'/modules/mpform/add_field.php?page_id='.$page_id.'&section_id='.$section_id);
 	} else {
-		$admin->print_success($TEXT['SUCCESS'], WB_URL.'/modules/mpform/modify_field.php?page_id='.$page_id.'&section_id='.$section_id.'&field_id='.$fid);
+		$admin->print_success($TEXT['SUCCESS'], LEPTON_URL.'/modules/mpform/modify_field.php?page_id='.$page_id.'&section_id='.$section_id.'&field_id='.$fid);
 	}
 }
 

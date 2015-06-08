@@ -162,7 +162,7 @@ JsAdmin.DD.addMoveButton = function(tr, cell, op) {
 	}
 	
 	var html = '<a href="' + item.url + 'move_' + op + '.php' + item.params
-				+ '"><img src="' + JsAdmin.WB_URL + '/admin/images/' + op
+				+ '"><img src="' + JsAdmin.THEME_URL + '/images/' + op
 				+ '_16.png" border="0" alt="' + op + '" /></a>';
 	tr.cells[cell].innerHTML = html;
 };
@@ -258,7 +258,7 @@ JsAdmin.DD.trDDSwap.prototype.endDrag = function(e) {
 	var newIndex = this.getEl().rowIndex;
 	if(newIndex != this.rowIndex) {
 		url = JsAdmin.movable_rows[this.getEl().id].url;
-//		var url = JsAdmin.WB_URL + "/modules/formx2/move_to.php";
+//		var url = JsAdmin.LEPTON_URL + "/modules/formx2/move_to.php";
 		url += JsAdmin.movable_rows[this.getEl().id].params + "&position=" + newIndex;
 		//alert(url);return;
 //		window.status = url;
@@ -371,7 +371,7 @@ JsAdmin.DD.liDDSwap.prototype.endDrag = function(e) {
 	if(newIndex != this.rowIndex) {
 		url = JsAdmin.movable_rows[this.getEl().id].url;
 
-//		var url = JsAdmin.WB_URL + JsAdmin.WB_PRG; //"/modules/formx2/move_to.php";
+//		var url = JsAdmin.LEPTON_URL + JsAdmin.WB_PRG; //"/modules/formx2/move_to.php";
 
 		url += JsAdmin.movable_rows[this.getEl().id].params + "&position=" + (newIndex+1);
 //		url += JsAdmin.movable_rows[this.getEl().id].params + "&position=" + newIndex;

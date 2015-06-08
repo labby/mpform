@@ -1,23 +1,24 @@
 <?php
-/*
- * CMS module: MPForm
- * CMS modul: MPForm
- * For more information see info.php
- * For nærmere informasjon se: info.php
+
+/**
  *
- * The file NO.php provides strings in Norwegian language.
- * Filen NO.php inneholder Norske språk strenger.
- * Oversatt til Norsk av/ Translated ti Norwegian by: Odd Egil Hansen (oeh)
- * Denne filen er/ This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
 // declare module language array
-global $LANG;
-$LANG = array();
+global $MOD_MPFORM;
+$MOD_MPFORM = array();
 
 // Text outputs for the backend
-$LANG['backend'] = array(
+$MOD_MPFORM['backend'] = array(
 	'SETTINGS' => 'Skjema innstillinger',
 	'TXT_TYP'	=> 'Type',
 	'TXT_LIST'	=> 'Vis', //List *uklar
@@ -97,10 +98,11 @@ If no "Following page" is set, the text specified in the next field will be sent
  'TXT_MODIFY_FIELD'	=> 'Edit Field (ID: %s)',
  'TXT_ADD_FIELD'	=> 'Add Field',
  'TXT_SETTINGS'		=> 'General Options',
- 'TXT_EDIT_CSS'		=> 'CSS Settings'  
+ 'TXT_EDIT_CSS'		=> 'CSS Settings',
+  'Are_you_sure'		=> 'Are you sure you want to delete the selected item?'
 );
 
-$LANG['backend_adv'] = array(
+$MOD_MPFORM['backend_adv'] = array(
 	'adv_settings'	=> 'Advanced Settings',
 	'TXT_NOTIFICATION_SETTINGS'	=> 'Field Formatting for Notifications',
 	'txt_heading_html'	=> 'Headings',
@@ -135,7 +137,7 @@ $LANG['backend_adv'] = array(
 );
 
 // Text outputs for the frontend
-$LANG['frontend'] = array(
+$MOD_MPFORM['frontend'] = array(
 	'MAX_FILESIZE' => 'Maksimal fil st&oslash;rrelse: %d kilobyte<br />Allowed file types: %s',
 	'integer_error'	=> 'Heltall kan bare v&aelig;re tall (1,2,3 osv)',
 	'decimal_error'	=> 'Please enter a valid decimal number',

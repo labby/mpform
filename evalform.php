@@ -1,40 +1,61 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file evaluates the submitted form in the frontend.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2012 Frank Heyne
-*/
 
-// Must include code to stop this file being access directly
-if(defined('WB_PATH') == false) { exit("Cannot access this file directly"); }
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
+
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
+} else {
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
+	} else {
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
+	}
+}
 
 if (!function_exists('upload_one_file')) {
 	function upload_one_file($fileid, $upload_files_folder, $filename, $only_exts, $chmod, $maxbytes) {
 		// include strings for this function
 		$mod_dir = basename(dirname(__FILE__));
-		@include(get_module_language_file($mod_dir));
+		
+		$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
+		require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
 	
 		// stop if file too large
 		if ($_FILES[$fileid]['size'] > $maxbytes) {
-			$s = sprintf($LANG['frontend']['err_too_large'], $_FILES[$fileid]['size'], $maxbytes);
+			$s = sprintf($MOD_MPFORM['frontend']['err_too_large'], $_FILES[$fileid]['size'], $maxbytes);
 			return $s;
 		}
 		
 		// stop after upload error
 		if ($_FILES[$fileid]['error'] == 1) {
-			$s = sprintf($LANG['frontend']['err_too_large2'], $maxbytes);
+			$s = sprintf($MOD_MPFORM['frontend']['err_too_large2'], $maxbytes);
 			return $s;
 		} elseif ($_FILES[$fileid]['error'] == 2) {
-			$s = sprintf($LANG['frontend']['err_too_large2'], $maxbytes);
+			$s = sprintf($MOD_MPFORM['frontend']['err_too_large2'], $maxbytes);
 			return $s;
 		} elseif ($_FILES[$fileid]['error'] == 3) {
-			$s = $LANG['frontend']['err_partial_upload'];
+			$s = $MOD_MPFORM['frontend']['err_partial_upload'];
 			return $s;
 		} elseif ($_FILES[$fileid]['error'] == 4) {
-			$s = $LANG['frontend']['err_no_upload'];
+			$s = $MOD_MPFORM['frontend']['err_no_upload'];
 			return $s;
 		}
 	
@@ -140,19 +161,19 @@ if (!class_exists('wbx')) {
 
 if (!function_exists('eval_form')) {
 function eval_form($section_id) {
-	global $database, $MESSAGE, $admin, $TEXT, $wbx, $LANG;
+	global $database, $MESSAGE, $admin, $TEXT, $wbx, $MOD_MPFORM;
 
 /*	if ((WB_VERSION >= "2.8.2") && (!$admin->checkFTAN()))
 	{
-		$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], WB_URL);
+		$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], LEPTON_URL);
 		exit();
 	} */
 
 	(preg_match("/^\d+\.\d+\.\d+\.\d+$/", $_SERVER['REMOTE_ADDR'])) ? $ip = $_SERVER['REMOTE_ADDR'] : $ip = 'unknown';  // IP address of sender
 
 	// obtain the settings of the output filter module
-	if (file_exists(WB_PATH.'/modules/output_filter/filter-routines.php')) {
-		include_once(WB_PATH.'/modules/output_filter/filter-routines.php');
+	if (file_exists(LEPTON_PATH.'/modules/output_filter/filter-routines.php')) {
+		include_once(LEPTON_PATH.'/modules/output_filter/filter-routines.php');
 		if (function_exists('get_output_filter_settings')) {
 			$filter_settings = get_output_filter_settings();
 		} else {
@@ -170,7 +191,7 @@ function eval_form($section_id) {
 	if (!isset($_SESSION['submission_id_'.$section_id])
 		OR !isset($_POST['submission_id'])
 		OR $_SESSION['submission_id_'.$section_id] != $_POST['submission_id']) {
-			include_once(WB_PATH .'/modules/mpform/paintform.php');
+			include_once(LEPTON_PATH .'/modules/mpform/paintform.php');
 			paint_form($section_id);
 			return;
 	}
@@ -183,7 +204,7 @@ function eval_form($section_id) {
 		(!isset($_POST['comment']) OR $_POST['comment']) OR
 		(!isset($_POST['url']) OR $_POST['url'])
 	)) {
-		exit(header("Location: ".WB_URL.PAGES_DIRECTORY.""));
+		exit(header("Location: ".LEPTON_URL.PAGES_DIRECTORY.""));
 	}
 
 	// Get form settings
@@ -274,11 +295,11 @@ function eval_form($section_id) {
 		if(isset($_POST['captcha']) AND $_POST['captcha'] != ''){
 			// Check for a mismatch
 			if(!isset($_SESSION['captcha'.$section_id]) OR $_POST['captcha'] != $_SESSION['captcha'.$section_id]) {
-				$err_txt['captcha'.$section_id] = $LANG['frontend']['INCORRECT_CAPTCHA'];
+				$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA'];
 				$fer[] = 'captcha'.$section_id;
 			}
 		} else {
-			$err_txt['captcha'.$section_id] = $LANG['frontend']['INCORRECT_CAPTCHA'];
+			$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA'];
 			$fer[] = 'captcha'.$section_id;
 		}
 	}
@@ -329,14 +350,14 @@ function eval_form($section_id) {
 					if($field['type'] == 'integer_number') {
 						$v = $post_field;
 						if (!preg_match("/^[0-9]+$/", $v)) {  // only allow valid chars
-							$err_txt[$field_id] = $LANG['frontend']['integer_error'];
+							$err_txt[$field_id] = $MOD_MPFORM['frontend']['integer_error'];
 							$fer[]=$field_id;
 						}
 					}
 					if ($field['type'] == 'decimal_number') {
 						$v = $post_field;
 						if (!preg_match("/^(\+|\-)?[0-9]+(\,|\.)?[0-9]*$/", $v)) {  // only allow valid chars
-							$err_txt[$field_id] = $LANG['frontend']['decimal_error'];
+							$err_txt[$field_id] = $MOD_MPFORM['frontend']['decimal_error'];
 							$fer[]=$field_id;
 						}
 					}
@@ -348,8 +369,8 @@ function eval_form($section_id) {
 					} elseif ($field['type'] == 'email_recip') {
 						// the browser will convert umlauts, we need to undo this for compare:
 						$recip = htmlentities  ($post_field[0], ENT_NOQUOTES, 'UTF-8');
-						if ($recip == $LANG['frontend']['select']) {
-							$err_txt[$field_id] = $LANG['frontend']['select_recip'];
+						if ($recip == $MOD_MPFORM['frontend']['select']) {
+							$err_txt[$field_id] = $MOD_MPFORM['frontend']['select_recip'];
 							$fer[]=$field_id;
 						}
 						$recip = htmlspecialchars($post_field[0], ENT_QUOTES);
@@ -384,7 +405,7 @@ function eval_form($section_id) {
 						if (strlen($felder) > 0) {
 							$felder .= ", ";
 						}
-						$felder .= "field" . $field_id . " = '" . mysql_real_escape_string(htmlspecialchars($post_field)) . "'";
+						$felder .= "field" . $field_id . " = '" . $database->mysql_escape(htmlspecialchars($post_field)) . "'";
 					} else {
 						//$email_body .= $field['title'].": \n";   
 						//$s1[$field['title']]='';
@@ -394,11 +415,11 @@ function eval_form($section_id) {
 						$felder .= "field" . $field_id . " = '";
 						$zeilen = '';
 						foreach ($post_field as $k => $v) {
-							$field_value = htmlspecialchars($admin->add_slashes($v), ENT_QUOTES);
+							$field_value = htmlspecialchars(addslashes($v), ENT_QUOTES);
 							//$email_body .= $field_value."\n";  // besser noch strip_tags ??
 							//$s1[$field['title']] .= $field_value; // save as label_name => value,,,
-							$felder .= mysql_real_escape_string($field_value) . ", ";
-							$zeilen .= mysql_real_escape_string($field_value) . "<br />";
+							$felder .= $database->mysql_escape($field_value) . ", ";
+							$zeilen .= $database->mysql_escape($field_value) . "<br />";
 						}
 						$felder .= "'";
 						//$email_body .= "\n";
@@ -409,16 +430,16 @@ function eval_form($section_id) {
 					if($_FILES['field'.$field_id]['name'] != ""){
 						$filename = preg_replace("/[^0-9a-zA-Z_\-\.]/", "", basename($_FILES['field'.$field_id]['name'])); // only allow valid chars in filename
 						$newfilename = date('YmdHis') . "-" . rand(10000, 99999). "-" . $filename;
-						$uploadfailed = upload_one_file('field'.$field_id, WB_PATH.$upload_files_folder, $newfilename, $upload_only_exts, $upload_file_mask, $max_file_size);
+						$uploadfailed = upload_one_file('field'.$field_id, LEPTON_PATH.$upload_files_folder, $newfilename, $upload_only_exts, $upload_file_mask, $max_file_size);
 						if ($uploadfailed) {
-							$err_txt[$field_id] = sprintf($LANG['frontend']['err_upload'], $filename, $uploadfailed);
+							$err_txt[$field_id] = sprintf($MOD_MPFORM['frontend']['err_upload'], $filename, $uploadfailed);
 							$fer[]=$field_id;
 						} else {
 							$upload_filename = $upload_files_folder . "/". $newfilename;  	// for results table only
-							$file_url = WB_URL . $upload_files_folder . "/" . $newfilename; // for links in email to admin and backend
+							$file_url = LEPTON_URL . $upload_files_folder . "/" . $newfilename; // for links in email to admin and backend
 						
 							if ($attach_file == 1) {
-								$files_to_attach[WB_PATH. $upload_files_folder. "/". $newfilename] = $filename;
+								$files_to_attach[LEPTON_PATH. $upload_files_folder. "/". $newfilename] = $filename;
 							}
 							if (strlen($felder) > 0) {
 								$felder .= ", ";
@@ -450,7 +471,7 @@ function eval_form($section_id) {
 	// Check if the user forgot to enter values into all the required fields
 	if($fer != array()) {
 		// paint form again:
-		include_once(WB_PATH .'/modules/mpform/paintform.php');
+		include_once(LEPTON_PATH .'/modules/mpform/paintform.php');
 		paint_form($section_id, $fer, $err_txt, false);
 	} else {
 		// Check how many times form has been submitted in last hour
@@ -614,7 +635,7 @@ function eval_form($section_id) {
 				$query_menu = $database->query("SELECT link,target FROM ".TABLE_PREFIX."pages WHERE `page_id` = '$success_page'");
 				if ($query_menu->numRows() > 0) {
 					$fetch_settings = $query_menu->fetchRow();
-				   $link = WB_URL.PAGES_DIRECTORY.$fetch_settings['link'].PAGE_EXTENSION;
+				   $link = LEPTON_URL.PAGES_DIRECTORY.$fetch_settings['link'].PAGE_EXTENSION;
 				   echo "<script type='text/javascript'>location.href='".$link."';</script>";
 				}
 			}

@@ -1,6 +1,6 @@
 <!-- BEGIN main_block -->
 <div class="{MODULE_DIR}">
-<form name="modify" action="{WB_URL}/modules/{MODULE_DIR}/save_field.php" method="post" style="margin: 0;">
+<form name="modify" action="{LEPTON_URL}/modules/{MODULE_DIR}/save_field.php" method="post" style="margin: 0;">
 
 <input type="hidden" name="section_id" value="{SECTION_ID}" />
 <input type="hidden" name="page_id" value="{PAGE_ID}" />
@@ -52,5 +52,6 @@
 	</tr>
 </table>
 </form>
+</div>
 </div>
 <!-- END main_block -->

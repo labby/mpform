@@ -1,19 +1,39 @@
 <?php
-/* CMS module: MPForm
- * For more information see info.php
- * 
- * This file provides the installation functions of the module.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-if(defined('WB_URL')) {
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
+
+if(defined('LEPTON_URL')) {
 	
 	// Rename files
-	if (!file_exists(WB_PATH."/modules/mpform/backend.css"))  rename(WB_PATH."/modules/mpform/backend.css.txt",  WB_PATH."/modules/mpform/backend.css");
-	if (!file_exists(WB_PATH."/modules/mpform/frontend.css")) rename(WB_PATH."/modules/mpform/frontend.css.txt", WB_PATH."/modules/mpform/frontend.css");
-	if (!file_exists(WB_PATH."/modules/mpform/private.php"))  rename(WB_PATH."/modules/mpform/private.php.txt",  WB_PATH."/modules/mpform/private.php");
-
+	if (!file_exists(LEPTON_PATH."/modules/mpform/backend.css")) {
+		if (file_exists(LEPTON_PATH."/modules/mpform/backend.css.txt")) {
+			rename(LEPTON_PATH."/modules/mpform/backend.css.txt",  LEPTON_PATH."/modules/mpform/backend.css");
+		}
+	}
+	
+	if (!file_exists(LEPTON_PATH."/modules/mpform/frontend.css")) {
+		if (file_exists(LEPTON_PATH."/modules/mpform/frontend.css.txt")) {
+			rename(LEPTON_PATH."/modules/mpform/frontend.css.txt", LEPTON_PATH."/modules/mpform/frontend.css");
+		}
+	}
+	
+	if (!file_exists(LEPTON_PATH."/modules/mpform/private.php")) {
+		if (file_exists(LEPTON_PATH."/modules/mpform/private.php.txt")) {
+			rename(LEPTON_PATH."/modules/mpform/private.php.txt",  LEPTON_PATH."/modules/mpform/private.php");
+		}
+	}
+	
 	// Create tables
 	$database->query("DROP TABLE IF EXISTS `".TABLE_PREFIX."mod_mpform_fields`");
 	$mod_mpform = 'CREATE TABLE `'.TABLE_PREFIX.'mod_mpform_fields` ( `field_id` INT NOT NULL AUTO_INCREMENT,'

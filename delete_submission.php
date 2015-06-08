@@ -1,38 +1,55 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file deletes a submission in a section in the backend.
- * It does not delete it from the results table!
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-require('../../config.php');
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
-// Include WB admin wrapper script
-$update_when_modified = true; // Tells script to update when this page was last updated
-require(WB_PATH.'/modules/admin.php');
-
-// Get id
-if (WB_VERSION >= "2.8.2") {
-	$submission_id = $admin->checkIDKEY('submission_id', false, 'GET');
-	if (!$submission_id) {
-		$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], ADMIN_URL);
-		exit();
-	}
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
 } else {
-	if(!isset($_GET['submission_id']) OR !is_numeric($_GET['submission_id'])) {
-		header("Location: ".ADMIN_URL."/pages/index.php");
-		exit(0);
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
 	} else {
-		$submission_id = $_GET['submission_id'];
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
 	}
 }
 
+// Include WB admin wrapper script
+$update_when_modified = true; // Tells script to update when this page was last updated
+require(LEPTON_PATH.'/modules/admin.php');
+
+if(!isset($_GET['submission_id']) OR !is_numeric($_GET['submission_id'])) {
+	header("Location: ".ADMIN_URL."/pages/index.php");
+	exit(0);
+} else {
+	$submission_id = intval($_GET['submission_id']);
+}
+
 // Delete row
-$database->query("DELETE FROM ".TABLE_PREFIX."mod_mpform_submissions WHERE submission_id = '$submission_id'");
+$fields = array(
+	'submission_id'	=> $submission_id
+);
+
+$database->prepare_and_execute(
+	"DELETE FROM `".TABLE_PREFIX."mod_mpform_submissions` WHERE `submission_id` = :submission_id",
+	$fields
+);
 
 // Check if there is a db error, otherwise say successful
 if($database->is_error()) {

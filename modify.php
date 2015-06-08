@@ -1,52 +1,77 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file prints the main form of the module in the backend.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-// prevent this file from being accessed directly
-if (!defined('WB_PATH')) die(header('Location: ../../index.php'));
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
+
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
+} else {
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
+	} else {
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
+	}
+}
 
 // obtain module directory
 $mod_dir = basename(dirname(__FILE__));
-require(WB_PATH.'/modules/'.$mod_dir.'/info.php');
+require(LEPTON_PATH.'/modules/'.$mod_dir.'/info.php');
 
-// include module.functions.php (introduced with WB 2.7)
-@include_once(WB_PATH . '/framework/module.functions.php');
+$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
+require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
 
-// include the module language file depending on the backend language of the current user
-if (!include(get_module_language_file($mod_dir))) return;
+/** 
+ *	Make sure that page and section id are numeric.
+ */
+$page_id = (isset($page_id)) ? intval($page_id) : 0;
+$section_id = (isset($section_id)) ? intval($section_id ): 0;
 
-//print_r (get_defined_constants()); #########
+/**
+ *	Delete all form fields with no title
+ */
+$fields = array(
+	'page_id' => $page_id,
+	'section_id' => $section_id,
+	'title' => ""
+);
 
-//Delete all form fields with no title
-$database->query("DELETE FROM `".TABLE_PREFIX."mod_mpform_fields`  WHERE `page_id` = '$page_id' and `section_id` = '$section_id' and `title` = '';");
+$database->prepare_and_execute(
+	"DELETE FROM `".TABLE_PREFIX."mod_mpform_fields`  WHERE `page_id` = :page_id and `section_id` = :section_id and `title` = :title;",
+	$fields
+);
 
 // include template parser class and set template
-require_once(WB_PATH . '/include/phplib/template.inc');
-$tpl = new Template(dirname(__FILE__) . '/htt/');
-// define how to handle unknown variables (default:='remove', during development use 'keep' or 'comment')
+if (!class_exists("Template")) require_once(LEPTON_PATH . '/include/phplib/template.inc');
+
+$tpl = new Template(__DIR__. '/htt/');
+
+// set up how to handle unknown variables (default:='remove', during development use 'keep' or 'comment')
 $tpl->set_unknowns('keep');
 
-// define debug mode (default:=0 (disabled), 1:=variable assignments, 2:=calls to get variable, 4:=show internals)
+// set up the debug mode (default:=0 (disabled), 1:=variable assignments, 2:=calls to get variable, 4:=show internals)
 $tpl->debug = 0;
 
 $tpl->set_file('page', 'backend_modify.htt');
 $tpl->set_block('page', 'main_block', 'main');
 
-// ensure that page and section id are numeric
-$page_id = (isset($page_id)) ? (int) $page_id : '';
-$section_id = (isset($section_id)) ? (int) $section_id : '';
-
-if (substr(VERSION, 0, 3) == "2.7") {
-	$imgurl = ADMIN_URL . '/images/';
-} else {
-	$imgurl = THEME_URL . '/images/';
-}
+$imgurl = THEME_URL . '/images/';
 
 $tpl->set_var(
 	array(
@@ -54,11 +79,9 @@ $tpl->set_var(
 		'PAGE_ID'		=> (int) $page_id,
 		'SECTION_ID'	=> (int) $section_id,
 		'IMG_URL'		=> $imgurl,
-		'WB_URL'		=> WB_URL,
-		'LANGUAGE'		=> ((file_exists(WB_PATH .'/modules/'.$mod_dir.'/help.' . LANGUAGE .'.php')) ? LANGUAGE : 'EN'),
-		'MODULE_URL'    => WB_URL.'/modules/'.$mod_dir,
-		//'FTAN'		=> (WB_VERSION >= "2.8.2") ? $admin->getFTAN() : '',
-		'FTAN'			=> '',
+		'LEPTON_URL'		=> LEPTON_URL,
+		'LANGUAGE'		=> ((file_exists(LEPTON_PATH .'/modules/'.$mod_dir.'/help.' . LANGUAGE .'.php')) ? LANGUAGE : 'EN'),
+		'MODULE_URL'    => LEPTON_URL.'/modules/'.$mod_dir,
 		
 		// variables from global WB language files
 		'TXT_SAVE'		=> $TEXT['SAVE'],
@@ -67,7 +90,7 @@ $tpl->set_var(
 		'TEXT_HEADING_F'=> $TEXT['MODIFY'].'/'.$TEXT['DELETE'].' '.$TEXT['FIELD'] ,
 		'TEXT_HEADING_S'=> $TEXT['SUBMISSIONS'], 
 		'TEXT_DELETE'	=> $TEXT['DELETE'],
-		'TEXT_ARE_YOU_SURE' => str_replace(' ', '%20', $TEXT['ARE_YOU_SURE']),
+		'TEXT_ARE_YOU_SURE' => str_replace(' ', '%20', $MOD_MPFORM['backend']['Are_you_sure']), // #1
 		'TEXT_FIELD'	=> $TEXT['FIELD'],
 		'TEXT_MOVE_UP'	=> $TEXT['MOVE_UP'],
 		'TEXT_MOVE_DOWN'=> $TEXT['MOVE_DOWN'],
@@ -79,33 +102,39 @@ $tpl->set_var(
 		'TXT_HEADING'	=> $module_name,
 		'MODULE_DIR'    => $mod_dir,
   		'MOD_CANCEL_URL'=> ADMIN_URL,
-		'TEXT_TYPE'		=> $LANG['backend']['TXT_TYP'],
-		'TXT_ADV_SETTINGS'	=> $LANG['backend_adv']['adv_settings'],
-		'TXT_FIELDS'	=> $LANG['backend']['TXT_ADD_FIELD'],
-		'TXT_SETTINGS'	=> $LANG['backend']['TXT_SETTINGS'],
-		'EDIT_CSS'		=> $LANG['backend']['TXT_EDIT_CSS']
+		'TEXT_TYPE'		=> $MOD_MPFORM['backend']['TXT_TYP'],
+		'TXT_ADV_SETTINGS'	=> $MOD_MPFORM['backend_adv']['adv_settings'],
+		'TXT_FIELDS'	=> $MOD_MPFORM['backend']['TXT_ADD_FIELD'],
+		'TXT_SETTINGS'	=> $MOD_MPFORM['backend']['TXT_SETTINGS'],
+		'EDIT_CSS'		=> $MOD_MPFORM['backend']['TXT_EDIT_CSS']
 	)
 );
 
 // Include the ordering class
-require_once(WB_PATH.'/framework/class.order.php');
+require_once(LEPTON_PATH.'/framework/class.order.php');
 // Create new order object an reorder
 $order = new order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
 $order->clean($section_id);
-require_once(WB_PATH.'/modules/'.$mod_dir.'/functions.php');
+require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
 $tpl->set_block('main_block', 'field_block' , 'field_loop');
 
 // Loop through existing fields
-$query_fields = $database->query("SELECT * FROM `".TABLE_PREFIX."mod_mpform_fields` WHERE section_id = '$section_id' ORDER BY position ASC");
-if($query_fields->numRows() > 0) {
-	$num_fields = $query_fields->numRows();
+$all_fields = array();
+$database->execute_query(
+	"SELECT * FROM `".TABLE_PREFIX."mod_mpform_fields` WHERE `section_id` = '".$section_id."' ORDER BY position ASC",
+	true,
+	$all_fields
+);
+
+$num_fields = count($all_fields);
+if( $num_fields > 0) {
 	$pos = 0;
-	$row = 'row_a';
-	while($field = $query_fields->fetchRow()) {
+
+	foreach($all_fields as &$field) {
 		$pos++;		
 
 		// alternate row color
-		if($row == 'row_a') {
+		if( $pos % 2 == 1 ) {
 			$row = 'row_b';
 			$rowcolor = '#ECF3F7';
 		} else {
@@ -142,25 +171,25 @@ if($query_fields->numRows() > 0) {
 				$rt = $TEXT['EMAIL_ADDRESS'];
 				break;
 			case 'fieldset_start':
-				$rt = $LANG['backend']['fieldset_start'];
+				$rt = $MOD_MPFORM['backend']['fieldset_start'];
 				break;
 			case 'fieldset_end':
-				$rt = $LANG['backend']['fieldset_end'];
+				$rt = $MOD_MPFORM['backend']['fieldset_end'];
 				break;
 			case 'integer_number':
-				$rt = $LANG['backend']['integer_number'];
+				$rt = $MOD_MPFORM['backend']['integer_number'];
 				break;
 			case 'decimal_number':
-				$rt = $LANG['backend']['decimal_number'];
+				$rt = $MOD_MPFORM['backend']['decimal_number'];
 				break;
 			case 'email_recip':
-				$rt = $LANG['backend']['email_recip'];
+				$rt = $MOD_MPFORM['backend']['email_recip'];
 				break;
 			case 'email_subj':
-				$rt = $LANG['backend']['email_subj'];
+				$rt = $MOD_MPFORM['backend']['email_subj'];
 				break;
 			case 'html':
-				$rt = $LANG['backend']['HTML'];
+				$rt = $MOD_MPFORM['backend']['HTML'];
 				break;
 			default:
 				 $rt = '';
@@ -169,19 +198,19 @@ if($query_fields->numRows() > 0) {
 		if ($field['type'] == 'select') {
 			$field['extra'] = explode(',',$field['extra']);
 			$multiselect_txt = $TEXT['MULTISELECT'] .': '.(($field['extra'][1] == 'multiple') ? $TEXT['YES'] : $TEXT['NO']);
-			$multiselect_img = WB_URL.'/modules/'.$mod_dir.'/images/'. (($field['extra'][1] == 'multiple') ? "mehrfach.gif" : "einfach.gif");
+			$multiselect_img = LEPTON_URL.'/modules/'.$mod_dir.'/images/'. (($field['extra'][1] == 'multiple') ? "mehrfach.gif" : "einfach.gif");
 			$multiselect_field = "<img src='$multiselect_img' border='0' alt='$multiselect_txt' title='$multiselect_txt' />";
 		}
 		
 		if ($field['required'] == 1) {
-			$entry = $LANG['backend']['compulsory_entry'];
-			$entrytype = "<img src='" .WB_URL. "/modules/$mod_dir/images/compulsory.gif' border='0' alt='$entry' title='$entry' />";
+			$entry = $MOD_MPFORM['backend']['compulsory_entry'];
+			$entrytype = "<img src='" .LEPTON_URL. "/modules/$mod_dir/images/compulsory.gif' border='0' alt='$entry' title='$entry' />";
 		} elseif ($field['required'] == 0) {
-			$entry = $LANG['backend']['optional_entry'];
-			$entrytype = "<img src='" .WB_URL. "/modules/$mod_dir/images/optional.gif' border='0' alt='$entry' title='$entry' />";
+			$entry = $MOD_MPFORM['backend']['optional_entry'];
+			$entrytype = "<img src='" .LEPTON_URL. "/modules/$mod_dir/images/optional.gif' border='0' alt='$entry' title='$entry' />";
 		} elseif ($field['required'] == 2) {
-			$entry = $LANG['backend']['ro_entry'];
-			$entrytype = "<img src='" .WB_URL. "/modules/$mod_dir/images/readonly.gif' border='0' alt='$entry' title='$entry' />";
+			$entry = $MOD_MPFORM['backend']['ro_entry'];
+			$entrytype = "<img src='" .LEPTON_URL. "/modules/$mod_dir/images/readonly.gif' border='0' alt='$entry' title='$entry' />";
 		} else {
 			$entrytype = '&nbsp;';
 		} 
@@ -189,7 +218,7 @@ if($query_fields->numRows() > 0) {
 		// set vars for this field
 		$tpl->set_var(
 			array(
-				'FIELD_ID'			=> (WB_VERSION >= "2.8.2") ? $admin->getIDKEY($field['field_id']) : $field['field_id'],
+				'FIELD_ID'			=> $field['field_id'],
 				'MUVE_UP_STYLE'		=> (($pos != 1) ? '' : 'style="display:none"'),
 				'MUVE_DOWN_STYLE'	=> (($pos != $num_fields) ? '' : 'style="display:none"'),
 				'ROW_CLASS'			=> $row,
@@ -198,7 +227,7 @@ if($query_fields->numRows() > 0) {
 				'field_title'		=> $field['title'],
 				'type_field'		=> $rt,
 				'entrytype'			=> $entrytype,		
-				'multiselect_field'	=> $multiselect_field,
+				'multiselect_field'	=> $multiselect_field
 			)
 		);
 		$tpl->parse('field_loop', 'field_block', true);
@@ -210,11 +239,17 @@ if($query_fields->numRows() > 0) {
 $tpl->set_block('main_block', 'submission_block' , 'submission_loop');
 
 // Query submissions table
-$query_submissions = $database->query("SELECT * FROM `".TABLE_PREFIX."mod_mpform_submissions` WHERE section_id = '$section_id' ORDER BY submitted_when ASC");
-if($query_submissions->numRows() > 0) {
+$all_submissions = array();
+$database->execute_query(
+	"SELECT * FROM `".TABLE_PREFIX."mod_mpform_submissions` WHERE `section_id` = '".$section_id."' ORDER BY `submitted_when` DESC",
+	true,
+	$all_submissions
+);
+
+if(count($all_submissions) > 0) {
 	// List submissions
 	$row = 'row_a';
-	while($submission = $query_submissions->fetchRow()) {
+	foreach($all_submissions as &$submission) {
 
 		// Alternate row color
 		if($row == 'row_a') {
@@ -227,7 +262,7 @@ if($query_submissions->numRows() > 0) {
 
 		$tpl->set_var(
 			array(
-				'SUBMISSION_ID'	=> (WB_VERSION >= "2.8.2") ? $admin->getIDKEY($submission['submission_id']) : $submission['submission_id'],
+				'SUBMISSION_ID'	=> $submission['submission_id'],
 				'ROW_CLASS'		=> $row,
 				'ROW_COLOR'		=> $rowcolor,
 				'field_submission_id'	=> $submission['submission_id'],

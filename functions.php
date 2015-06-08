@@ -1,19 +1,23 @@
 <?php
-/*
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file provides functions and classes for the module
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
+
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
 function module_header_footer($page_id, $mod_dir) {
 	global $admin, $database, $HEADING, $TEXT, $MESSAGE, $section_id;
-	require_once(WB_PATH.'/modules/admin.php');
-	require_once(WB_PATH.'/framework/functions.php');
+	require_once(LEPTON_PATH.'/modules/admin.php');
 	
-	require(WB_PATH.'/modules/'.$mod_dir.'/info.php');
+	require(LEPTON_PATH.'/modules/'.$mod_dir.'/info.php');
 	//START HEADER HERE
 	
 	// Get page details
@@ -29,7 +33,7 @@ function module_header_footer($page_id, $mod_dir) {
 		$modified_ts = 'Unknown';
 	}
 	// Include page info script
-	$template = new Template(WB_PATH.'/modules/'.$mod_dir.'/htt/');
+	$template = new Template(LEPTON_PATH.'/modules/'.$mod_dir.'/htt/');
 	$template->set_file('page', 'modify.htt');
 	$template->set_block('page', 'main_block', 'main');
 	$template->set_var(array(
@@ -78,7 +82,7 @@ function module_header_footer($page_id, $mod_dir) {
 	//END HEADER HERE
 }  // end of: function module_header_footer
 
-require_once (WB_PATH.'/framework/class.order.php');
+require_once (LEPTON_PATH.'/framework/class.order.php');
 class orderx extends order {
 
 // Clean ordering (should be called if a row in the middle has been deleted)
@@ -135,16 +139,16 @@ class orderx extends order {
 function insert_drag_drop($button_up_cell) {
 echo "<script type=\"text/javascript\">
 <!--
-var JsAdmin = { WB_URL : '". WB_URL."', structure_type : 'ul', buttonCell : ". $button_up_cell." };
+var JsAdmin = { LEPTON_URL : '". LEPTON_URL."', THEME_URL : '". THEME_URL."', structure_type : 'ul', buttonCell : ". $button_up_cell." };
 //-->
 </script>
-<script type='text/javascript' src='". WB_URL."/include/yui/yahoo/yahoo-min.js'></script>
-<script type='text/javascript' src='". WB_URL."/include/yui/event/event-min.js'></script>
-<script type='text/javascript' src='". WB_URL."/include/yui/dom/dom-min.js'></script>
-<script type='text/javascript' src='". WB_URL."/include/yui/connection/connection-min.js'></script>
-<script type='text/javascript' src='". WB_URL."/include/yui/dragdrop/dragdrop-min.js'></script>
-<script type='text/javascript' src='". WB_URL."/modules/jsadmin/js/jsadmin.js'></script>
-<script type='text/javascript' src='". WB_URL."/modules/mpform/dragdrop.js'></script>
+<script type='text/javascript' src='". LEPTON_URL."/include/yui/yahoo/yahoo-min.js'></script>
+<script type='text/javascript' src='". LEPTON_URL."/include/yui/event/event-min.js'></script>
+<script type='text/javascript' src='". LEPTON_URL."/include/yui/dom/dom-min.js'></script>
+<script type='text/javascript' src='". LEPTON_URL."/include/yui/connection/connection-min.js'></script>
+<script type='text/javascript' src='". LEPTON_URL."/include/yui/dragdrop/dragdrop-min.js'></script>
+<script type='text/javascript' src='". LEPTON_URL."/modules/jsadmin/js/jsadmin.js'></script>
+<script type='text/javascript' src='". LEPTON_URL."/modules/mpform/js/dragdrop.js'></script>
 ";
 } // end of: function insert_drag_drop
 

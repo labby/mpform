@@ -62,7 +62,7 @@ class HTTP_Upload_Error extends PEAR
      * @var string
      */
 
-//    var $lang = LANGUAGE;
+//    var $MOD_MPFORM = LANGUAGE;
 
     /**
      * Whether HTML entities shall be encoded automatically
@@ -75,7 +75,7 @@ class HTTP_Upload_Error extends PEAR
      *
      * Creates a new PEAR_Error
      *
-     * @param string $lang The language selected for error code messages
+     * @param string $MOD_MPFORM The language selected for error code messages
      * @access public
      */
     function HTTP_Upload_Error($html = false)
@@ -313,7 +313,7 @@ class HTTP_Upload extends HTTP_Upload_Error
     /**
      * Constructor
      *
-     * @param string $lang Language to use for reporting errors
+     * @param string $MOD_MPFORM Language to use for reporting errors
      * @see Upload_Error::error_codes
      * @access public
      */
@@ -576,7 +576,7 @@ class HTTP_Upload_File extends HTTP_Upload_Error
      * @param   string  $type       Mime type of the file
      * @param   string  $size       size of the file
      * @param   string  $error      error on upload
-     * @param   string  $lang       used language for errormessages
+     * @param   string  $MOD_MPFORM       used language for errormessages
      * @access  public
      */
     function HTTP_Upload_File($name = null, $tmp = null,  $formname = null,

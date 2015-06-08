@@ -1,12 +1,17 @@
 <?php
+
 /**
- * CMS module: MPForm
- * For more information see info.php
- * 
- * The file NL.php provides strings in Dutch language.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
 // Dutch module description
 $module_description = 'Deze module biedt mogelijkheden om krachtige webformulieren te maken. 
@@ -14,11 +19,11 @@ Zie http://www.websitebakers.com/pages/modules/interaction/mpform.php en de uitg
 van de maker op http://wbdemo.heysoft.de/pages/en/mpform.php.';
 
 // declare module language array
-global $LANG;
-$LANG = array();
+global $MOD_MPFORM;
+$MOD_MPFORM = array();
 
 // Text outputs for the backend
-$LANG['backend'] = array(
+$MOD_MPFORM['backend'] = array(
 	'SETTINGS' => 'Formulierinstellingen',
 	'TXT_TYP'	=> 'Type',
 	'TXT_LIST'	=> "Lijst",
@@ -101,10 +106,11 @@ Als geen landingspagina is ingesteld wordt de in het volgende veld gespecificeer
 
  'TXT_ADD_FIELD'	=> 'Add Field',
  'TXT_SETTINGS'		=> 'General Options',
- 'TXT_EDIT_CSS'		=> 'CSS Settings'   
+ 'TXT_EDIT_CSS'		=> 'CSS Settings',
+  'Are_you_sure'		=> 'Are you sure you want to delete the selected item?' 
 );
 	
-$LANG['backend_adv'] = array(
+$MOD_MPFORM['backend_adv'] = array(
 	'adv_settings'	=> 'Geavanceerde instellingen',
 	'TXT_NOTIFICATION_SETTINGS'	=> 'Notificatie-instellingen',
 	'txt_heading_html'	=> 'Titel',
@@ -139,7 +145,7 @@ Als dit veld een cijfer of letter krijgt (handige cijfers of letters kunnen bijv
 );
 
 // Text outputs for the frontend
-$LANG['frontend'] = array(
+$MOD_MPFORM['frontend'] = array(
 	'integer_error'	=> 'Cijfervelden kunnen alleen cijfers bevatten.',
 	'decimal_error'	=> 'Geef een juist decimaal nummer',
 	'MAX_FILESIZE' => "Max. bestandsgrootte: %d Kilobyte<br />Toegestane bestandstypen: %s",

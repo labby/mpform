@@ -1,16 +1,30 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file deletes section specific entries in the module tables in the backend.
- * It does not delete results and submissions!
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-// Delete section
-$database->query("DELETE FROM ".TABLE_PREFIX."mod_mpform_fields   WHERE section_id = '$section_id'");
-$database->query("DELETE FROM ".TABLE_PREFIX."mod_mpform_settings WHERE section_id = '$section_id'");
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
+
+$fields = array(
+	'section_id' => $section_id
+);
+
+$database->prepare_and_execute(
+	"DELETE FROM `".TABLE_PREFIX."mod_mpform_fields` WHERE `section_id` = :section_id",
+	$fields
+);
+
+$database->prepare_and_execute(
+	"DELETE FROM `".TABLE_PREFIX."mod_mpform_settings` WHERE `section_id` = :section_id",
+	$fields
+);
 
 ?>

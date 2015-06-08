@@ -1,4 +1,5 @@
 <!-- BEGIN main_block -->
+
 <div class="{MOD_CLASS}">
 
 <form name="modify" action="{MOD_SAVE_URL}" method="post" style="margin: 0;">
@@ -189,5 +190,6 @@
 	</tr>
     </table>
 </form>	
+</div>
 </div>
 <!-- END main_block -->

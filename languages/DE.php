@@ -1,22 +1,27 @@
 <?php
+
 /**
- * CMS module: MPForm
- * For more information see info.php
- * 
- * The file DE.php provides strings in German language.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
 // German module description
 $module_description = 'Dieses Modul erm&ouml;glicht es, Formulare f&uuml;r verschiedene Zwecke anzulegen, siehe Hilfedatei.';
 
 // declare module language array
-global $LANG;
-$LANG = array();
+global $MOD_MPFORM;
+$MOD_MPFORM = array();
 
 // Text outputs for the backend
-$LANG['backend'] = array(
+$MOD_MPFORM['backend'] = array(
 	'SETTINGS' 	=> 'Formular-Einstellungen',
 	'TXT_TYP'	=> 'Typ',
 	'TXT_LIST'	=> "Liste",
@@ -101,10 +106,11 @@ Falls keine Folgeseite angegeben wurde, wird der Text ausgegeben, der im folgend
  'TXT_MODIFY_FIELD'	=> 'Feld (ID: %s) bearbeiten',
  'TXT_ADD_FIELD'	=> 'Feld hinzuf&uuml;gen',
  'TXT_SETTINGS'		=> 'Allgemeine Optionen',
- 'TXT_EDIT_CSS'		=> 'CSS-Einstellungen'
+ 'TXT_EDIT_CSS'		=> 'CSS-Einstellungen',
+  'Are_you_sure'		=> 'Sind sie sicher, das Sie diese Auswahl l&ouml;schen wollen?'
 );
 
-$LANG['backend_adv'] = array(
+$MOD_MPFORM['backend_adv'] = array(
 	'adv_settings'	=> 'Erweiterte Optionen',
 	'TXT_NOTIFICATION_SETTINGS'	=> 'Feldformatierungen f&uuml;r Benachrichtigungen',
 	'txt_heading_html'	=> '&Uuml;berschriften',
@@ -141,7 +147,7 @@ $LANG['backend_adv'] = array(
 );
 
 // Text outputs for the frontend
-$LANG['frontend'] = array(
+$MOD_MPFORM['frontend'] = array(
 	'MAX_FILESIZE' => 'Maximale Dateigr&ouml;sse: %d Kilobyte<br />Erlaubte Dateitypen: %s',
 	'integer_error'	=> 'Ganze Zahlen d&uuml;rfen nur aus Ziffern bestehen',
 	'decimal_error'	=> 'Bitte geben Sie eine g&uuml;ltige Dezimalzahl ein',

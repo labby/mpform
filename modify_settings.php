@@ -1,35 +1,50 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file prints the settings form of the module in the backend.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-// unset page/section IDs defined via GET before including the admin file (we expect POST here)
-unset($_GET['page_id']);
-unset($_GET['section_id']);
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
-// manually include the config.php file (defines the required constants)
-require('../../config.php');
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
+} else {
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
+	} else {
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
+	}
+}
 
 // Include WB admin wrapper script
-require(WB_PATH.'/modules/admin.php');
-
-// include core functions of WB 2.7 to edit the optional module CSS files (frontend.css, backend.css)
-@include_once(WB_PATH .'/framework/module.functions.php');
+$admin_header = false;
+require(LEPTON_PATH.'/modules/admin.php');
 
 // obtain module directory
 $mod_dir = basename(dirname(__FILE__));
 
-// include the module language file depending on the backend language of the current user
-if (!@include(get_module_language_file($mod_dir))) return;  
+$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
+require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
 
-//START HEADER HERE
-require_once(WB_PATH.'/modules/'.$mod_dir.'/functions.php');
+//	START HEADER HERE
+require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
+
 module_header_footer($page_id, $mod_dir);
+
 //END HEADER HERE
 
 // Get header and footer
@@ -43,7 +58,7 @@ if ($setting['page_id'] != $page_id) {
 }
 
 // include template parser class and set template
-require_once(WB_PATH . '/include/phplib/template.inc');
+require_once(LEPTON_PATH . '/include/phplib/template.inc');
 $tpl = new Template(dirname(__FILE__) . '/htt/');
 
 // define how to handle unknown variables (default:='remove', during development use 'keep' or 'comment')
@@ -56,7 +71,7 @@ $tpl->set_file('page', 'backend_modify_settings.htt');
 $tpl->set_block('page', 'main_block', 'main');
 
 // replace all placeholder {xxx} of the template file with values from language file
-foreach($LANG['backend'] as $key => $value) {
+foreach($MOD_MPFORM['backend'] as $key => $value) {
 	$tpl->set_var($key, $value);
 }
 
@@ -81,9 +96,9 @@ $tpl->set_var(
 		'PAGE_ID'			=> (int) $page_id,
 		'SECTION_ID'		=> (int) $section_id,
 		'ADMIN_URL'			=> ADMIN_URL,
-		'WB_URL'			=> WB_URL,
+		'LEPTON_URL'			=> LEPTON_URL,
 		'MOD_CLASS'			=> strtolower(basename(dirname(__FILE__))),
-		'MODULE_URL'		=> WB_URL . "/modules/mpform",
+		'MODULE_URL'		=> LEPTON_URL . "/modules/mpform",
 		//'FTAN'				=> (WB_VERSION >= "2.8.2") ? $admin->getFTAN() : '',
 		'FTAN'				=> '',
 
@@ -114,7 +129,7 @@ $tpl->set_var(
 		'TXT_YES'			=> $TEXT['YES'],
 		'TXT_NO'			=> $TEXT['NO'],
 		// module settings
-		'MOD_SAVE_URL'						=> WB_URL. str_replace("\\","/",substr(dirname(__FILE__),strlen(WB_PATH))).'/save_settings.php',
+		'MOD_SAVE_URL'						=> LEPTON_URL. str_replace("\\","/",substr(dirname(__FILE__),strlen(LEPTON_PATH))).'/save_settings.php',
 		'MOD_CANCEL_URL'					=> ADMIN_URL.'/pages/modify.php?page_id='.$page_id
 	)
 );
@@ -216,16 +231,16 @@ function give_me_pages_list($page, $fname){	// returns list of possible success 
 }
 
 // fill some fields with lists
-$rt1 = give_me_address_list($email_from_value, true, 'email_from_f', $LANG['backend']['TXT_USER_ADDR']);
+$rt1 = give_me_address_list($email_from_value, true, 'email_from_f', $MOD_MPFORM['backend']['TXT_USER_ADDR']);
 $tpl->set_var('display_email_from_field', (($rt1) ? 'none' : 'block'));
-$rt2 = give_me_name_list($email_fromname_value, true, 'email_fromname_f', $LANG['backend']['TXT_USER_NAME']);
+$rt2 = give_me_name_list($email_fromname_value, true, 'email_fromname_f', $MOD_MPFORM['backend']['TXT_USER_NAME']);
 $tpl->set_var('display_email_fromname_field', (($rt2) ? 'none' : 'block'));
-give_me_address_list($settings['success_email_to'], false, 'success_email_to', $LANG['backend']['TXT_USER_ADDR']);
+give_me_address_list($settings['success_email_to'], false, 'success_email_to', $MOD_MPFORM['backend']['TXT_USER_ADDR']);
 give_me_pages_list($settings['success_page'],'success_page');
 
 // Parse template objects output
 $tpl->parse('main', 'main_block', false);
 $tpl->pparse('output', 'page',false, false);
-
+echo "&nbsp;";
 $admin->print_footer();
 ?>

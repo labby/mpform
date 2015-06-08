@@ -1,27 +1,47 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This backend file changes the ordering of the fields in the form.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-require('../../config.php');
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
+
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
+} else {
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
+	} else {
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
+	}
+}
 
 // obtain module directory
 $mod_dir = basename(dirname(__FILE__));
 
 // Include WB admin wrapper script
-require(WB_PATH.'/modules/admin.php');
+require(LEPTON_PATH.'/modules/admin.php');
 
 // Load the other required class files if they are not already loaded
-require_once(WB_PATH."/framework/class.database.php");
+require_once(LEPTON_PATH."/framework/class.database.php");
 
 // Include the ordering class
-require(WB_PATH.'/framework/class.order.php');
-require(WB_PATH.'/modules/'.$mod_dir.'/functions.php');
+require(LEPTON_PATH.'/framework/class.order.php');
+require(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
 
 // Get id
 if (WB_VERSION >= "2.8.2") {

@@ -1,37 +1,56 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file deletes a field in a section in the backend.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-require('../../config.php');
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
-// Include WB admin wrapper script
-$update_when_modified = true; // Tells script to update when this page was last updated
-require(WB_PATH.'/modules/admin.php');
-
-// Get id
-if (WB_VERSION >= "2.8.2") {
-	$field_id = $admin->checkIDKEY('field_id', false, 'GET');
-	if (!$field_id) {
-		$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], ADMIN_URL);
-		exit();
-	}
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
 } else {
-	if(!isset($_GET['field_id']) OR !is_numeric($_GET['field_id'])) {
-		header("Location: ".ADMIN_URL."/pages/index.php");
-		exit(0);
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
 	} else {
-		$field_id = $_GET['field_id'];
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
 	}
 }
 
+// Include WB admin wrapper script
+$update_when_modified = true; // Tells script to update when this page was last updated
+require(LEPTON_PATH.'/modules/admin.php');
+
+if(!isset($_GET['field_id']) OR !is_numeric($_GET['field_id'])) {
+	header("Location: ".ADMIN_URL."/pages/index.php");
+	exit(0);
+} else {
+	$field_id = intval($_GET['field_id']);
+}
+
 // Delete row
-$database->query("DELETE FROM ".TABLE_PREFIX."mod_mpform_fields WHERE field_id = '$field_id' and page_id = '$page_id'");
+$fields = array(
+	'field_id'	=> $field_id,
+	'page_id'	=> $page_id
+);
+
+$database->prepare_and_execute(
+	"DELETE FROM `".TABLE_PREFIX."mod_mpform_fields` WHERE `field_id` = :field_id and `page_id` = :page_id",
+	$fields
+);
 
 // Check if there is a db error, otherwise say successful
 if($database->is_error()) {

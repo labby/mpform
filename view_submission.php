@@ -1,32 +1,34 @@
 <?php
-/* 
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file shows the content of a submission for a page in the backend.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
+
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
 // manually include the config.php file (defines the required constants)
 require('../../config.php');
-require(WB_PATH.'/modules/admin.php');
+require(LEPTON_PATH.'/modules/admin.php');
 
 // obtain module directory
 $mod_dir = basename(dirname(__FILE__));
-
-// include module.functions.php (introduced with WB 2.7)
-@include_once(WB_PATH . '/framework/module.functions.php');
 
 // convert page/section id to numbers (already checked by /modules/admin.php but kept for consistency)
 $page_id = (isset($_GET['page_id'])) ? (int) $_GET['page_id'] : '';
 $section_id = (isset($_GET['section_id'])) ? (int) $_GET['section_id'] : '';
 
-// include the module language file depending on the backend language of the current user
-if (!@include(get_module_language_file($mod_dir))) return;
+$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
+require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
 
 //START HEADER HERE
-require_once(WB_PATH.'/modules/'.$mod_dir.'/functions.php');
+require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
 module_header_footer($page_id,$mod_dir);
 //END HEADER HERE
 
@@ -105,7 +107,7 @@ if (WB_VERSION >= "2.8.2") { $submission_id = $admin->getIDKEY($submission_id); 
 <br />
 <center>
 <input type="button" value="<?php echo $TEXT['CLOSE']; ?>" onclick="javascript: window.location = '<?php echo ADMIN_URL; ?>/pages/modify.php?page_id=<?php echo $page_id; ?>';" style="width: 110px; margin-top: 5px;" />
-<input type="button" value="<?php echo $TEXT['DELETE']; ?>" onclick="javascript: confirm_link('<?php echo $TEXT['ARE_YOU_SURE']; ?>', '<?php echo WB_URL; ?>/modules/mpform/delete_submission.php?page_id=<?php
+<input type="button" value="<?php echo $TEXT['DELETE']; ?>" onclick="javascript: confirm_link('<?php echo $TEXT['ARE_YOU_SURE']; ?>', '<?php echo LEPTON_URL; ?>/modules/mpform/delete_submission.php?page_id=<?php
 		echo $page_id; ?>&section_id=<?php echo $section_id; ?>&submission_id=<?php
 		echo $submission_id; ?>');" style="width: 110px; margin-top: 5px;" /></center>
 <?php

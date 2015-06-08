@@ -1,26 +1,41 @@
 <?php
-/*
- * CMS module: MPForm
- * For more information see info.php
- * 
- * This file saves the settings made in the main form of the module in the backend.
- * This file is (c) 2009 Website Baker Project <http://www.websitebaker.org/>
- * Improvements are copyright (c) 2009-2011 Frank Heyne
-*/
 
-// include global configuration file
-require('../../config.php');
+/**
+ *
+ * @category        page
+ * @package         MPForm
+ * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
+ * @license         http://www.gnu.org/licenses/gpl.html
+ * @platform        LEPTON-CMS 2.0.0
+ * @requirements    PHP 5.3 and higher
+ * @version         1.1.8
+ * @lastmodified    Jun 2015 
+ *
+ */
 
-// unset page/section IDs defined via GET before including the admin file (we expect POST here)
-unset($_GET['page_id']);
-unset($_GET['section_id']);
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
+} else {
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
+	} else {
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
+	}
+}
 
 // include WB admin wrapper script to check permissions
 $update_when_modified = true;
-require(WB_PATH . '/modules/admin.php');
+require(LEPTON_PATH . '/modules/admin.php');
 
 /*$admin_header = false;
-require(WB_PATH . '/modules/admin.php');
+require(LEPTON_PATH . '/modules/admin.php');
 if ((WB_VERSION >= "2.8.2") && (!$admin->checkFTAN()))
 {
 	$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
