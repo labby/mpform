@@ -7,6 +7,7 @@ Please note: This change log may not be accurate
 #### 1.1.8
 - Minor bugfixes and some minor codechanges.
 - Update some index.php files.
+- Change outdated mysql-function calls in upgrade.php
 
 #### 1.1.7
 - Change language-ref var to $MOD_MPFORM to avoid name-conflicts.
