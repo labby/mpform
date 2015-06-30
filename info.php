@@ -2,22 +2,22 @@
 
 /**
  *
- * @category        page
- * @package         MPForm
- * @author          Frank Heyne (mod 4 wb at heysoft dot de), Dietrich Roland Pehlke (last)
- * @license         http://www.gnu.org/licenses/gpl.html
- * @platform        LEPTON-CMS 2.0.0
- * @requirements    PHP 5.3 and higher
- * @version         1.1.8
- * @lastmodified    Jun 2015 
+ * 
+ *  @module      	MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @license        http://www.gnu.org/licenses/gpl.htm
+ *  @platform       see info.php of this addon
+ *  @license terms  see info.php of this addon
+ *  @version        see info.php of this module
+ *  
  *
  */
  
 $module_directory	= 'mpform';
 $module_name		= 'MPForm';
 $module_function	= 'page';
-$module_version		= '1.1.8';
-$module_platform	= '1.3.1';
+$module_version		= '1.1.9';
+$module_platform	= '2.0.0';
 $module_author		= 'Frank Heyne, Dietrich Roland Pehlke (last)';
 $module_license		= 'GNU General Public License';
 $module_requirements	= 'Works best under the Lepton CMS.';
