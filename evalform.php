@@ -163,7 +163,7 @@ if (!function_exists('eval_form')) {
 function eval_form($section_id) {
 	global $database, $MESSAGE, $admin, $TEXT, $wbx, $MOD_MPFORM;
 
-	(preg_match("/^\d+\.\d+\.\d+\.\d+$/", $_SERVER['REMOTE_ADDR'])) ? $ip = $_SERVER['REMOTE_ADDR'] : $ip = 'unknown';  // IP address of sender
+	 $ip = (preg_match("/^\d+\.\d+\.\d+\.\d+$/", $_SERVER['REMOTE_ADDR'])) ? $_SERVER['REMOTE_ADDR'] : 'unknown';  // IP address of sender
 
 	// obtain the settings of the output filter module
 	if (file_exists(LEPTON_PATH.'/modules/output_filter/filter-routines.php')) {
