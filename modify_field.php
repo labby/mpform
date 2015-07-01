@@ -299,8 +299,6 @@ $tpl->set_var(
 		'TXT_TITLE'		=> $TEXT['TITLE'],
 		'TXT_PLEASE_SELECT'	=> $TEXT['PLEASE_SELECT'],
 		'MODULE_URL'    => LEPTON_URL.'/modules/'.$mod_dir,
-		//'FTAN'			=> (WB_VERSION >= "2.8.2") ? $admin->getFTAN() : '',
-		'FTAN'			=> '',
 		
 		// module settings
 		'MODULE_DIR'    => $mod_dir,

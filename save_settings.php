@@ -34,14 +34,6 @@ if (defined('LEPTON_PATH')) {
 $update_when_modified = true;
 require(LEPTON_PATH . '/modules/admin.php');
 
-/*$admin_header = false;
-require(LEPTON_PATH . '/modules/admin.php');
-if ((WB_VERSION >= "2.8.2") && (!$admin->checkFTAN()))
-{
-	$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
-	exit();
-}*/
-
 // protect from cross page writing
 $query_content = $database->query("SELECT * FROM ".TABLE_PREFIX."sections WHERE section_id = '$section_id'");
 $res = $query_content->fetchRow();

@@ -91,9 +91,6 @@ $tpl->set_var(
 		'SECTION_ID'		=> (int) $section_id,
 		'MOD_CLASS'			=> strtolower(basename(dirname(__FILE__))),
 		'MODULE_URL'		=> LEPTON_URL . "/modules/mpform",
-		//'FTAN'				=> (WB_VERSION >= "2.8.2") ? $admin->getFTAN() : '',
-		'FTAN'			=> '',
-
 		// variables from global WB language files
 		'des_use_captcha'           => '',
 		'txt_use_captcha'           => $TEXT['CAPTCHA_VERIFICATION'],

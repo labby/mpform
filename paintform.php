@@ -74,7 +74,7 @@ if (!function_exists('make_checkbox')) {
 		$isnew = $params[4];
 		$label_i = urlencode($n) . $field_id;
 		$bad = array("%", "+", "&");
-		$label_id = 'wb_'.str_replace($bad, "", $label_i);
+		$label_id = SEC_ANCHOR.str_replace($bad, "", $label_i);
 		if (in_array($v, $params[2]) or ($isnew and $def > 0) or in_array(html_entity_decode($v), $params[2])) {
 			$n = '<input class="'.$err_class.'checkbox" type="checkbox" id="'.$label_id.'" name="field'.$field_id.'['.$idx.']" value="'.$v.
 			'" checked="checked" />'.'<label for="'.$label_id.'" class="mpform_checkbox_label">'.$h.'</label>'.$seperator."      \n";
@@ -103,7 +103,7 @@ if (!function_exists('make_radio')) {
 		$isnew = $params[4];
 		$label_i = urlencode($n) . $field_id;
 		$bad = array("%", "+");
-		$label_id = 'wb_'.str_replace($bad, "", $label_i);
+		$label_id = SEC_ANCHOR.str_replace($bad, "", $label_i);
 		if (($v == $params[2]) or ($isnew and $def > 0)) {
 			$n = '<input class="'.$err_class.'radio" type="radio" id="'.$label_id.'" name="field'.$field_id.'" value="'.$v.
 			'" checked="checked" />'.'<label for="'.$label_id.'" class="mpform_radio_label">'.$h.'</label>'.$seperator."     \n";
@@ -246,7 +246,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	}
 
 	echo "\n<div class=\"mpform\">
-	<form name=\"form_$section_id\"  enctype='multipart/form-data' action=\"". htmlspecialchars(strip_tags($_SERVER['SCRIPT_NAME'])) ."#wb_section_$section_id\" method=\"post\">
+	<form name=\"form_$section_id\"  enctype='multipart/form-data' action=\"". htmlspecialchars(strip_tags($_SERVER['SCRIPT_NAME'])) ."#".SEC_ANCHOR."section_".$section_id."\" method=\"post\">
 	<input type=\"hidden\" name=\"submission_id\" value=\"". $_SESSION['submission_id_'.$section_id] ."\" />\n";
 	
 	

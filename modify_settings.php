@@ -99,8 +99,6 @@ $tpl->set_var(
 		'LEPTON_URL'			=> LEPTON_URL,
 		'MOD_CLASS'			=> strtolower(basename(dirname(__FILE__))),
 		'MODULE_URL'		=> LEPTON_URL . "/modules/mpform",
-		//'FTAN'				=> (WB_VERSION >= "2.8.2") ? $admin->getFTAN() : '',
-		'FTAN'				=> '',
 
 		// variables from global WB language files
 		'TXT_SAVE'			=> $TEXT['SAVE'],

@@ -5,7 +5,6 @@
 <form name="modify" action="{MOD_SAVE_URL}" method="post" style="margin: 0;">
 	<input type="hidden" name="section_id" value="{SECTION_ID}" />
 	<input type="hidden" name="page_id" value="{PAGE_ID}" />
-		{FTAN}
 	<fieldset>
 	<legend>{TXT_MP_SETTINGS}</legend>
 	<table class="row_a" cellpadding="2" cellspacing="0" border="0" width="100%">

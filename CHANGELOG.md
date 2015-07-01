@@ -4,6 +4,11 @@ Please note: This change log may not be accurate
 
 ### MODULE VERSION HISTORY
 
+#### 1.1.10
+- Replace $wbx->add\_slashes wthin php-function addslashes inside evalform.php.
+- Replace hard-coded wb\_ section-anchor within constant SEC_ANCHOR inside paintform.php
+- Remove FTAN code from the project
+
 #### 1.1.8
 - Minor bugfixes and some minor codechanges.
 - Update some index.php files.

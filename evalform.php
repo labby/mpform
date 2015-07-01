@@ -163,12 +163,6 @@ if (!function_exists('eval_form')) {
 function eval_form($section_id) {
 	global $database, $MESSAGE, $admin, $TEXT, $wbx, $MOD_MPFORM;
 
-/*	if ((WB_VERSION >= "2.8.2") && (!$admin->checkFTAN()))
-	{
-		$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], LEPTON_URL);
-		exit();
-	} */
-
 	(preg_match("/^\d+\.\d+\.\d+\.\d+$/", $_SERVER['REMOTE_ADDR'])) ? $ip = $_SERVER['REMOTE_ADDR'] : $ip = 'unknown';  // IP address of sender
 
 	// obtain the settings of the output filter module
@@ -215,7 +209,7 @@ function eval_form($section_id) {
 		$email_from = $fetch_settings['email_from'];
 		if(substr($email_from, 0, 5) == 'field') {
 			// Set the email from field to what the user entered in the specified field
-			$email_from = htmlspecialchars($wbx->add_slashes($_POST[$email_from]));  
+			$email_from = htmlspecialchars(addslashes($_POST[$email_from]));  
 		}
 		if ($email_from == 'wbu') {
 			$email_from = $admin->get_email();
@@ -233,7 +227,7 @@ function eval_form($section_id) {
 		$success_email_to = $fetch_settings['success_email_to'];
 		if(substr($success_email_to, 0, 5) == 'field') {
 			// Set the success_email to field to what the user entered in the specified field
-			$success_email_to = htmlspecialchars($wbx->add_slashes($_POST[$success_email_to]));
+			$success_email_to = htmlspecialchars(addslashes($_POST[$success_email_to]));
 		}
 		if ($success_email_to == 'wbu') {
 			$success_email_to = $admin->get_email();

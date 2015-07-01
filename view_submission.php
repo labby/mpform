@@ -62,8 +62,6 @@ if($get_user->numRows() != 0) {
 	$user['username'] = 'unknown';
 }
 
-if (WB_VERSION >= "2.8.2") { $submission_id = $admin->getIDKEY($submission_id); }
-
 ?>
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 <tr>

@@ -44,15 +44,7 @@ require_once(LEPTON_PATH.'/modules/mpform/constants.php');
 $update_when_modified = true; // Tells script to update when this page was last updated
 require(LEPTON_PATH.'/modules/admin.php');
 
-/*$admin_header = false;
-require(LEPTON_PATH.'/modules/admin.php');
-if ((WB_VERSION >= "2.8.2") && (!$admin->checkFTAN()))
-{
-	$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
-	exit();
-}*/
-
-(WB_VERSION >= "2.8.2") ? $fid = $admin->getIDKEY($field_id): $fid = $field_id;
+$fid = $field_id;
 
 // obtain module directory
 $mod_dir = basename(dirname(__FILE__));
