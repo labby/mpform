@@ -36,7 +36,7 @@ echo "<BR><B>Updating database for module: $module_name</B><BR>";
 
 // adding fields new in version 0.4.0:
 //get settings table to see what needs to be created
-$settingstable=$database->query("SELECT * FROM `".TABLE_PREFIX."mod_mpform_settings");
+$settingstable=$database->query("SELECT * FROM `".TABLE_PREFIX."mod_mpform_settings` ");
 $settings = $settingstable->fetchRow();
 
 
