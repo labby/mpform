@@ -96,9 +96,11 @@ if (!function_exists('upload_one_file')) {
 if (!class_exists('wbx')) {
 	class wbx extends wb
 	{
-		function wbx() {
+		function __construct() {
+		
 		}
-	// Validate send email
+	
+		// Validate send email
 		function mailx($fromaddress, $toaddress, $subject, $message, $fromname='', $file_attached='') {
 			/* 
 				INTEGRATED OPEN SOURCE PHPMAILER CLASS FOR SMTP SUPPORT AND MORE
