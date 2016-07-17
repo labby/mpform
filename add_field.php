@@ -44,7 +44,9 @@ $fields = array(
 	'section_id'	=> $section_id,
 	'page_id'		=> $page_id,
 	'position'		=> $position,
-	'required'		=> '0'
+	'required'		=> '0',
+	'value'			=> '',
+	'extra'			=> ''
 );
 $database->build_and_execute(
 	'insert',
@@ -57,12 +59,12 @@ $field_id = $database->get_one("SELECT LAST_INSERT_ID()");
 
 // Check whether results table exists, create it if not
 $ts = $database->query("SELECT `tbl_suffix` FROM `".TABLE_PREFIX."mod_mpform_settings` WHERE `section_id` = '$section_id'");
-$setting = $ts->fetchRow( MYSQL_ASSOC );
+$setting = $ts->fetchRow();
 $suffix = $setting['tbl_suffix'];
 $results = TABLE_PREFIX . "mod_mpform_results_" . $suffix;
 $t = $database->query("SHOW TABLES LIKE '".$results."'");
 if ($t->numRows() < 1 ) {
-	$s = "CREATE TABLE `$results` ( `session_id` VARCHAR(20) NOT NULL,"
+	$s = "CREATE TABLE `".$results."` ( `session_id` VARCHAR(20) NOT NULL,"
 		. ' `started_when` INT NOT NULL DEFAULT \'0\' ,'     	// time when first form was sent to browser
 		. ' `submitted_when` INT NOT NULL DEFAULT \'0\' ,'   	// time when last form was sent back to server
 		. ' `referer` VARCHAR( 255 ) NOT NULL, '				// referer page
