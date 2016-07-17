@@ -94,7 +94,7 @@ $database->build_and_execute(
 
 // Insert new column into results database
 $ts = $database->query("SELECT `tbl_suffix` FROM `".TABLE_PREFIX."mod_mpform_settings` WHERE `section_id` = '$section_id'");
-$setting = $ts->fetchRow( MYSQL_ASSOC );
+$setting = $ts->fetchRow();
 $suffix = $setting['tbl_suffix'];
 $results = TABLE_PREFIX . "mod_mpform_results_" . $suffix;
 $s = "ALTER TABLE `$results` add `field" . $field_id . "` TEXT NOT NULL";

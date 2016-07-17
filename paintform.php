@@ -192,7 +192,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	// Get settings
 	$query_settings = $database->query("SELECT * FROM ".TABLE_PREFIX."mod_mpform_settings WHERE section_id = '$section_id'");
 	if($query_settings->numRows() > 0) {
-		$fetch_settings = $query_settings->fetchRow( MYSQL_ASSOC );
+		$fetch_settings = $query_settings->fetchRow();
 		$header = str_replace('{LEPTON_URL}',LEPTON_URL,$fetch_settings['header']);
 		$field_loop = $fetch_settings['field_loop'];
 		$footer = str_replace('{LEPTON_URL}',LEPTON_URL,$fetch_settings['footer']);
@@ -221,7 +221,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	if ($success_page != 'none') {
 		$qs = $database->query("SELECT * FROM ".TABLE_PREFIX."sections WHERE page_id = '$success_page' AND module = 'mpform'");
 		if($qs->numRows() > 0) {
-			$s = $qs->fetchRow( MYSQL_ASSOC );
+			$s = $qs->fetchRow();
 			$sid = $s['section_id'];
 			if (!isset($_SESSION['submission_id_'.$section_id])) $_SESSION['submission_id_'.$section_id] = "";
 			$_SESSION['submission_id_'.$sid] = substr($_SESSION['submission_id_'.$section_id], 0, 8);

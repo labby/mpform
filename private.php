@@ -81,7 +81,7 @@ function private_function_on_success($section_id) {
 		($_SESSION['field'.$prev_field] == $prev_cond) ? $np = $loop_page : $np = $next_page;
 		$query_menu = $database->query("SELECT link,target FROM ".TABLE_PREFIX."pages WHERE `page_id` = $np");
 		if($query_menu->numRows() > 0) {
-			$fetch_settings = $query_menu->fetchRow( MYSQL_ASSOC );
+			$fetch_settings = $query_menu->fetchRow();
 			$link = LEPTON_URL.PAGES_DIRECTORY.$fetch_settings['link'].PAGE_EXTENSION;
 			echo "<script type='text/javascript'>location.href='".$link."';</script>";
 		}
@@ -100,7 +100,7 @@ function private_function_on_success($section_id) {
 		}
 		$query_menu = $database->query("SELECT link,target FROM ".TABLE_PREFIX."pages WHERE `page_id` = $np");
 		if($query_menu->numRows() > 0) {
-			$fetch_settings = $query_menu->fetchRow( MYSQL_ASSOC );
+			$fetch_settings = $query_menu->fetchRow();
 			$link = LEPTON_URL.PAGES_DIRECTORY.$fetch_settings['link'].PAGE_EXTENSION;
 			echo "<script type='text/javascript'>location.href='".$link."';</script>";
 		}
