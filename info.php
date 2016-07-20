@@ -16,7 +16,7 @@
 $module_directory	= 'mpform';
 $module_name		= 'MPForm';
 $module_function	= 'page';
-$module_version		= '1.1.11';
+$module_version		= '1.1.12';
 $module_platform	= '2.0.0';
 $module_author		= 'Frank Heyne, Dietrich Roland Pehlke (last)';
 $module_license		= '<a href="http://www.gnu.org/licenses/gpl.htm">GNU General Public License</a>';
