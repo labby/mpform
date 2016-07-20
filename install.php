@@ -130,9 +130,6 @@ if(defined('LEPTON_URL')) {
 	$query_end_code = "";
 	$database->query("INSERT INTO ".TABLE_PREFIX."search (name,value,extra) VALUES ('query_end', '$query_end_code', 'mpform')");
 	
-	// Insert blank row (there needs to be at least on row for the search to work)
-	$database->query("INSERT INTO ".TABLE_PREFIX."mod_mpform_fields (page_id,section_id) VALUES ('0','0')");
-	$database->query("INSERT INTO ".TABLE_PREFIX."mod_mpform_settings (page_id,section_id) VALUES ('0','0')");
 }
 
 ?>
