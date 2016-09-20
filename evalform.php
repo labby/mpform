@@ -570,10 +570,34 @@ function eval_form($section_id) {
 					
 					$query_submitted = $database->query("SELECT session_id FROM ".TABLE_PREFIX."mod_mpform_results_$suffix WHERE session_id = '$us'");
 					$num_submitted = $query_submitted->numRows();
-					if ($num_submitted == 0) {   // new session:
-						$qs = "INSERT INTO ".TABLE_PREFIX."mod_mpform_results_$suffix (session_id, started_when, referer) VALUES ('$us', '$started_when', '". $_SESSION['href'] ."')";
-						$database->query($qs);
-				}
+					if ($num_submitted == 0) {
+						// 1.0	new session:
+						// 1.1	Bugfix Aldus: 2016-09-20
+						//		To avoid problems/errors within fields "fieldxxxx" with have no default values
+						//		we've to look first to the table:
+						$table_info = array();
+						$database->describe_table( TABLE_PREFIX."mod_mpform_results_".$suffix, $table_info);
+						$defaults_fields = array();
+						
+						foreach( $table_info as $tRef) {
+							if( strpos( $tRef['Field'],  "field" ) === 0) { //	Keep in mind that we're lokking for position 0 (first char)!
+								$defaults_fields[] = $tRef['Field'];
+							}
+						}
+						$fields = array(
+							'session_id'	=> $us,
+							'started_when'	=> $started_when,
+							'referer'		=> $_SESSION['href'] 
+						);
+						foreach( $defaults_fields as &$temp_name ) $fields[ $temp_name] = "";
+						
+						$database->build_and_execute(
+							'insert',
+							TABLE_PREFIX."mod_mpform_results_".$suffix,
+							$fields
+						);
+					}
+					
 					if($database->is_error()) {
 						echo $TEXT['DATABASE']. " " . $qs;
 						$success = false;
