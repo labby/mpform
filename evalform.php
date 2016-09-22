@@ -606,6 +606,7 @@ function eval_form($section_id) {
 						$felder .= "submitted_when = '". time() ."'";
 						$lf = array("\r\n", "\n", "\r");
 						$qs = "UPDATE ".TABLE_PREFIX."mod_mpform_results_$suffix SET ". str_replace($lf, " ", $felder) ." WHERE session_id = '$us' LIMIT 1";
+						
 						$database->query($qs);
 						if($database->is_error()) {
 							echo $TEXT['DATABASE']. " " . $qs;

@@ -435,7 +435,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 			} elseif($field['type'] == 'email') {
 				$vars[] = '{FIELD}';
 				$values[] = '<input type="text" name="field'.$field_id.'" id="field'.$field_id.'" value="'.(isset($_SESSION['field'.$field_id])?$_SESSION['field'.$field_id]:'').'"'
-					.$maxlength.' class="'.$err_class.'email" '."$readonly />";
+					.$maxlength.' class="'.$err_class.'email" '."$readonly placeholder='".$field['value']."'/>";
 			} elseif($field['type'] == 'date') {
 				$vars[] = '{FIELD}';
 				$cla['field'.$field_id] = "field".$field_id;

@@ -4,6 +4,11 @@ Please note: This change log may not be accurate
 
 ### MODULE VERSION HISTORY
 
+#### 1.1.14
+- Updates and codechanges for L* 2.2 and PHP7
+- Codechanges inside "save_field.php"
+- Add "placehoder" attribute to field-type "email"
+
 #### 1.1.10
 - Replace $wbx->add\_slashes wthin php-function addslashes inside evalform.php.
 - Replace hard-coded wb\_ section-anchor within constant SEC_ANCHOR inside paintform.php
