@@ -62,14 +62,14 @@ if($admin->get_post('title') == '' AND $admin->get_post('type') == 'html') 		   
 if($admin->get_post('title') == '' OR $admin->get_post('type') == '') {
 	$admin->print_error($MESSAGE['GENERIC']['FILL_IN_ALL'], LEPTON_URL.'/modules/mpform/modify_field.php?page_id='.$page_id.'&section_id='.$section_id.'&field_id='.$fid);
 } else {
-	$title		= str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post_escaped('title'), ENT_QUOTES));
-	$type 		= str_replace(array("[[", "]]"), '', $admin->get_post_escaped('type'));
+	$title		= str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post('title'), ENT_QUOTES));
+	$type 		= str_replace(array("[[", "]]"), '', $admin->get_post('type'));
 	if (isset($_POST['required'])) {
-		$required = $admin->get_post_escaped('required');
+		$required = $admin->get_post('required');
 	} else {
 		$required = '0';
 	}
-	$help 		= str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post_escaped('help'), ENT_QUOTES));
+	$help 		= str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post('help'), ENT_QUOTES));
 }
 
 // is this a new field or an attack?
@@ -114,6 +114,7 @@ if(is_numeric($list_count)) {
 
 // Get extra fields for field-type-specific settings
 // Validate all fields and translate special chars
+$fields = array();
 $field_type = $admin->get_post('type');
 switch( $field_type ) {
 	
@@ -122,56 +123,83 @@ switch( $field_type ) {
 	case 'email':
 	case 'integer_number':
 	case 'decimal_number':
-		$length = int_not0($admin->get_post_escaped('length'));
-		$value = str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post_escaped('value'), ENT_QUOTES));
-		$database->query("UPDATE ".TABLE_PREFIX."mod_mpform_fields SET value = '$value', extra = '$length' WHERE field_id = '$field_id'");
+		$fields = array(
+			'value'		=> str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post('value'), ENT_QUOTES)),
+			'extra'	=> int_not0($admin->get_post('length'))
+		);
 		break;
 	
 	case 'textarea':
-		$value = str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post_escaped('value'), ENT_QUOTES));
-		$width = int_not0($admin->get_post_escaped('width'));
-		$rows  = int_not0($admin->get_post_escaped('rows'));
-		$database->query("UPDATE ".TABLE_PREFIX."mod_mpform_fields SET value = '$value', extra = '$width,$rows' WHERE field_id = '$field_id'");
+		$width = int_not0($admin->get_post('width'));
+		$rows  = int_not0($admin->get_post('rows'));
+		
+		$fields = array(
+			'value'	=> str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post('value'), ENT_QUOTES)),
+			'extra'	=> $width.",".$rows
+		);
 		break;
 		
 	case 'html':
-		$value = str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post_escaped('value'), ENT_QUOTES));
-		$database->query("UPDATE ".TABLE_PREFIX."mod_mpform_fields SET value = '$value' WHERE field_id = '$field_id'");
+		$fields = array(
+			'value'	=> str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post('value'), ENT_QUOTES))
+		);
 		break;
 		
 	case 'heading':
-		$extra = str_replace(array("[[", "]]"), '', $admin->get_post_escaped('template'));
+		$extra = str_replace(array("[[", "]]"), '', $admin->get_post('template'));
 		if(trim($extra) == '') $extra = '<tr><td class="mpform_heading" colspan="3">{TITLE}{FIELD}</td></tr>';
-		$database->query("UPDATE ".TABLE_PREFIX."mod_mpform_fields SET value = '', extra = '$extra' WHERE field_id = '$field_id'");
+		
+		$fields = array(
+			'value'	=> "",
+			'extra'	=> $extra
+		);
 		break;
 		
 	case 'select':
-		$extra = int_not0($admin->get_post_escaped('size')).','.$admin->get_post_escaped('multiselect');
-		$database->query("UPDATE ".TABLE_PREFIX."mod_mpform_fields SET value = '$value', extra = '$extra' WHERE field_id = '$field_id'");
+		$fields = array(
+			'value' => $value, 	// *
+			'extra'	=> int_not0($admin->get_post('size')).','.$admin->get_post('multiselect')
+		);
 		break;
 		
 	case 'checkbox':
-		$extra = str_replace(array("[[", "]]"), '', $admin->get_post_escaped('seperator'));
+		$extra = str_replace(array("[[", "]]"), '', $admin->get_post('seperator'));
 		if ($extra=="" and $isnewfield) $extra = "<br />";   // set default value
-		$database->query("UPDATE ".TABLE_PREFIX."mod_mpform_fields SET value = '$value', extra = '$extra' WHERE field_id = '$field_id'");
+		
+		$fields = array(
+			'value' => $value, 	// *
+			'extra'	=> $extra
+		);
 		break;
 		
 	case 'date':
-		$length = int_not0($admin->get_post_escaped('length'));
-		$value = str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post_escaped('value'), ENT_QUOTES));
-		$database->query("UPDATE ".TABLE_PREFIX."mod_mpform_fields SET value = '$value', extra = '$length' WHERE field_id = '$field_id'");
+		$fields = array(
+			'value' => str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post('value'), ENT_QUOTES)),
+			'extra'	=> int_not0($admin->get_post('length'))
+		);
 		break;
 		
 	case 'radio':
-		$extra = str_replace(array("[[", "]]"), '', $admin->get_post_escaped('seperator'));
+		$extra = str_replace(array("[[", "]]"), '', $admin->get_post('seperator'));
 		if ($extra=="" and $isnewfield) $extra = "<br />";   // set default value
-		$database->query("UPDATE ".TABLE_PREFIX."mod_mpform_fields SET value = '$value', extra = '$extra' WHERE field_id = '$field_id'");
+		
+		$fields = array(
+			'value'	=> $value, // *!
+			'extra'	=> $extra
+		);
 		break;
 		
 	default:
 		$admin->print_error( "[1] No field-type match!" );
 		return 0;
 }
+
+$database->build_and_execute(
+	"update",
+	TABLE_PREFIX."mod_mpform_fields",
+	$fields,
+	"`field_id`= '".$field_id."'"
+);  
 
 // Check if there is a db error, otherwise say successful
 if ($database->is_error()) {
