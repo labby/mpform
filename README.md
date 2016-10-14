@@ -19,7 +19,7 @@ For details please see: http://wbdemo.heysoft.de/pages/en/mpform.php
 #### The original online-documentation (Version 1.0.4)
 
 The help and documentation for this module consists of approximately 20 pages.
-It is available online at http://wbdemo.heysoft.de/pages/en/mpform.php .
+It is available online at https://doc.lepton-cms.org/_extern/mp_form/EN/mpform.html .
 
 #### Notice
 
