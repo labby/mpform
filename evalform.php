@@ -94,7 +94,7 @@ if (!function_exists('upload_one_file')) {
 }
 
 if (!class_exists('wbx')) {
-	class wbx extends wb
+	class wbx // extends wb
 	{
 		function __construct() {
 		
@@ -120,7 +120,8 @@ if (!class_exists('wbx')) {
 			$plaintext = htmlspecialchars_decode(preg_replace(",</?\w+>,", " ", $plaintext), ENT_NOQUOTES);
 	
 			// create PHPMailer object and define default settings
-			$myMail = new wbmailer();
+			require_once LEPTON_PATH."/modules/lib_phpmailer/library.php";
+			$myMail = new PHPMailer\PHPMailer\PHPMailer();
 	
 			// set user defined from address
 			if ($fromaddress!='') {
@@ -149,6 +150,7 @@ if (!class_exists('wbx')) {
 
 			// check if there are any send mail errors, otherwise say successful
 			if (!$myMail->Send()) {
+				$_SESSION['mpform_wbx_error'] = $myMail->ErrorInfo;
 				return false;
 			} else {
 				return true;
@@ -525,7 +527,8 @@ function eval_form($section_id) {
 					$files_to_attach = array();
 				} else {
 					$success = false;
-					echo $TEXT['WBMAILER_FUNCTION']." (SITE) <br />\n";
+					echo (isset($TEXT['WBMAILER_FUNCTION']) ? $TEXT['WBMAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error'];
+					unlink( $_SESSION['mpform_wbx_error'] );
 				}
 			}
 			
