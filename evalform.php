@@ -121,7 +121,7 @@ if (!class_exists('wbx')) {
 	
 			// create PHPMailer object and define default settings
 			require_once LEPTON_PATH."/modules/lib_phpmailer/library.php";
-			$myMail = new PHPMailer\PHPMailer\PHPMailer();
+			$myMail = new PHPMailer();
 	
 			// set user defined from address
 			if ($fromaddress!='') {
