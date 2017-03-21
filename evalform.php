@@ -121,7 +121,14 @@ if (!class_exists('wbx')) {
 	
 			// create PHPMailer object and define default settings
 			require_once LEPTON_PATH."/modules/lib_phpmailer/library.php";
-			$myMail = new PHPMailer();
+			
+			//	ALDUS: PHPMailer >= 6 comes up with his own namespace
+			//	so we've have to look for the current version first here
+			$version = intval(file_get_contents(LEPTON_PATH."/modules/lib_phpmailer/phpmailer/VERSION"));
+			$myMail = ($version < 6)
+				? new PHPMailer()
+				: new PHPMailer\PHPMailer\PHPMailer()
+				;
 	
 			// set user defined from address
 			if ($fromaddress!='') {
