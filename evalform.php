@@ -148,7 +148,7 @@ if (!class_exists('wbx')) {
 			$myMail->Subject = $subject;                                // SUBJECT
 			$myMail->Body = $htmlmessage;                               // CONTENT (HTML)
 			$myMail->AltBody = $plaintext;                    			// CONTENT (PLAINTEXT)
-	
+			$myMail->CharSet="UTF-8";									// force text to be utf-8
 			if (is_array($file_attached)) {
 				foreach($file_attached as $k => $v) {
 					$myMail->AddAttachment($k, $v);                  // ATTACHMENT (FILE)
