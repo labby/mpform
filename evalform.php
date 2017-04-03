@@ -124,6 +124,7 @@ if (!class_exists('wbx')) {
 			
 			//	ALDUS: PHPMailer >= 6 comes up with his own namespace
 			//	so we've have to look for the current version first here
+			$module_version = '';
 			require_once LEPTON_PATH."/modules/lib_phpmailer/info.php";
 			$myMail = intval($module_version) < 6 
 				? new PHPMailer()
