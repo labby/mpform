@@ -58,36 +58,31 @@ if (!function_exists('upload_one_file')) {
 			$s = $MOD_MPFORM['frontend']['err_no_upload'];
 			return $s;
 		}
-	
-		$cwd = dirname(__FILE__);
-		$old_path = ini_get("include_path");
-		ini_set("include_path", $old_path.((strstr($old_path,';')) ? ';' : ':').$cwd."/pear/");
-		require_once "Upload.php";
-	
-		$upload = new http_upload();
-	
-		if ($chmod) $upload->setChmod(intval($chmod, 8));
-	
-		$file = $upload->getFiles($fileid, true);
-	
-		if ($upload->isError($file)) return $file->getMessage();
-	
-		if (trim($only_exts)) {
-			$a = explode(",",$only_exts);
-			$file->setValidExtensions($a,'accept');
-		} else {
-			$a = array('NOT_POSSIBLE_ONE');
-			$file->setValidExtensions($a,'deny');
-		}
-	
-		if (!$file->isMissing()) {
-			if ($file->isValid()) {
-				$file->setName($filename);
-				$dest_name = $file->moveTo($upload_files_folder);
-				if ($upload->isError($dest_name)) return $dest_name->getMessage();
-			} elseif ($file->isError()) return $file->errorMsg();
-		} else {
-			return "$fileid - missing... ".$file->errorMsg();
+
+		/**
+		 *	Test the file-extension (MIME type)
+		 */
+		$allowed_types = explode(",",$only_exts);
+		
+		$temp_array= explode( ".", $filename);
+		$temp_extension = array_pop( $temp_array);
+		if(!in_array($temp_extension, $allowed_types)) {
+			return "[1] File type not allowed here!";
+		} 
+		
+		require_once(LEPTON_PATH.'/modules/lib_lepton/upload/class.upload.php');
+		$upload = new upload($_FILES[ $fileid ]);
+		
+		if ($upload->uploaded) {
+		
+			$upload->Process( $upload_files_folder );
+			
+			 if ($upload->processed) {
+			 	// ok
+			 } else {
+			 	// ERROR
+			 	return "[2] ".$upload->error;
+			 }
 		}
 		return false;  // upload did not fail  
 	}

@@ -109,6 +109,11 @@ if($database->is_error()) {
 	echo "Search function updated successfully<br />";
 }
 
+// Remove outdated pear files for upload function (we use class.upload instead) version 1.1.16:
+if (file_exists (LEPTON_PATH.'/modules/mpform/pear/PEAR.php')) {
+		rm_full_dir( LEPTON_PATH.'/modules/mpform/pear' ); 
+}
+
 echo "<BR><B>Module $module_name updated to version: $module_version</B><BR>";
 
 ?>
