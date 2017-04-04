@@ -16,7 +16,7 @@
 $module_directory	= 'mpform';
 $module_name		= 'MPForm';
 $module_function	= 'page';
-$module_version		= '1.1.16';
+$module_version		= '1.2.0';
 $module_platform	= '2.x';
 $module_author		= 'Frank Heyne, Dietrich Roland Pehlke (last)';
 $module_license		= '<a href="http://www.gnu.org/licenses/gpl.htm">GNU General Public License</a>';
@@ -25,6 +25,6 @@ $module_description = 'This module allows you to create customised online forms.
 $module_home		= '<a href="http://lepton-cms.com">LEPAdoR</a>';
 
 /**
- * Documentation:  http://wbdemo.heysoft.de/pages/en/mpform.php
+ * Documentation:  https://doc.lepton-cms.org/_extern/mp_form/EN/mpform.html
  */
 ?>
