@@ -123,6 +123,7 @@ switch( $field_type ) {
 	case 'email':
 	case 'integer_number':
 	case 'decimal_number':
+	case 'filename':
 		$fields = array(
 			'value'		=> str_replace(array("[[", "]]"), '', htmlspecialchars($admin->get_post('value'), ENT_QUOTES)),
 			'extra'	=> int_not0($admin->get_post('length'))
