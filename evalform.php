@@ -35,8 +35,9 @@ if (!function_exists('upload_one_file')) {
 		// include strings for this function
 		$mod_dir = basename(dirname(__FILE__));
 		
-		$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
-		require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
+		global $MOD_MPFORM;		
+		$lang_file = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
+		require_once ( !file_exists($lang_file) ? (dirname(__FILE__))."/languages/EN.php" : $lang_file );
 	
 		// stop if file too large
 		if ($_FILES[$fileid]['size'] > $maxbytes) {
