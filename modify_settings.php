@@ -30,7 +30,7 @@ if (defined('LEPTON_PATH')) {
 	}
 }
 
-// Include WB admin wrapper script
+// Include admin wrapper script
 $admin_header = false;
 require(LEPTON_PATH.'/modules/admin.php');
 

@@ -33,11 +33,8 @@ if (defined('LEPTON_PATH')) {
 // obtain module directory
 $mod_dir = basename(dirname(__FILE__));
 
-// Include WB admin wrapper script
+// Include admin wrapper script
 require(LEPTON_PATH.'/modules/admin.php');
-
-// Load the other required class files if they are not already loaded
-require_once(LEPTON_PATH."/framework/class.database.php");
 
 // Include the ordering class
 require(LEPTON_PATH.'/framework/class.order.php');

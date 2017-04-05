@@ -37,7 +37,7 @@ if(!isset($_GET['field_id']) OR !is_numeric($_GET['field_id'])) {
 } else {
 	$field_id = $_GET['field_id'];
 }
-// Include WB admin wrapper script
+// Include admin wrapper script
 require(LEPTON_PATH.'/modules/admin.php');
 
 // Include the ordering class

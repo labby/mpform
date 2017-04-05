@@ -30,7 +30,7 @@ if (defined('LEPTON_PATH')) {
 	}
 }
 
-// Include WB admin wrapper script
+// Include admin wrapper script
 require(LEPTON_PATH.'/modules/admin.php');
 
 if(!isset($_GET['oldfield_id']) OR !is_numeric($_GET['oldfield_id'])) {
