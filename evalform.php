@@ -540,7 +540,7 @@ function eval_form($section_id) {
 				$user_body = str_replace(array('{DATA}', '{REFERER}', '{IP}', '{DATE}', '{USER}'), array($html_data_user, $_SESSION['href'], $ip, $jetzt, $wb_user), $success_email_text);
 				if (! $wbx->mailx($success_email_from, $success_email_to, $success_email_subject, $user_body, $success_email_fromname)) {
 					$success = false;
-					echo $TEXT['WBMAILER_FUNCTION']. " (CONFIRM) ";
+					echo (isset($TEXT['WBMAILER_FUNCTION']) ? $TEXT['WBMAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION']). " (CONFIRM) ";
 				}
 			}
 			
