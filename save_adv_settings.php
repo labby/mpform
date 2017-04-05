@@ -78,7 +78,7 @@ $upload_dir_mask = preg_replace("/[^0-7]/", "", $upload_dir_mask);  // only allo
 if(!is_numeric($upload_dir_mask) || $upload_dir_mask==0) $upload_dir_mask = '0705';
 
 $upload_file_mask = preg_replace("/[^0-7]/", "", $upload_file_mask);  // only allow valid chars
-if(!is_numeric($upload_file_mask) || $upload_file_mask==0) $upload_file_mask = '0204';
+if(!is_numeric($upload_file_mask) || $upload_file_mask==0) $upload_file_mask = '0604';
 
 require_once( LEPTON_PATH."/framework/functions/function.make_dir.php");
 require_once( LEPTON_PATH."/framework/functions/function.change_mode.php");
@@ -89,8 +89,8 @@ chmod(LEPTON_PATH.MEDIA_DIRECTORY, intval('0775', 8));
 
 if ($upload_files_folder != MEDIA_DIRECTORY ) {
 	if (!file_exists(LEPTON_PATH.$upload_files_folder) && !is_dir(LEPTON_PATH.$upload_files_folder)) {
-		make_dir(LEPTON_PATH.$upload_files_folder, $upload_dir_mask);
-		copy($curr_dir.'/index.php', LEPTON_PATH.$upload_files_folder.'/index.php'); // no directory listings allowed
+		make_dir(LEPTON_PATH.$upload_files_folder);
+		copy( LEPTON_PATH.MEDIA_DIRECTORY.'/index.php', LEPTON_PATH.$upload_files_folder.'/index.php'); // no directory listings allowed
 	}
 	if (is_dir(LEPTON_PATH.$upload_files_folder)) {
 		change_mode(LEPTON_PATH.$upload_files_folder); // reset to full permission
