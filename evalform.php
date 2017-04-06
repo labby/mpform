@@ -106,7 +106,7 @@ if (!class_exists('wbx')) {
 			/* 
 				INTEGRATED OPEN SOURCE PHPMAILER CLASS FOR SMTP SUPPORT AND MORE
 				SOME SERVICE PROVIDERS DO NOT SUPPORT SENDING MAIL VIA PHP AS IT DOES NOT PROVIDE SMTP AUTHENTICATION
-				NEW WBMAILER CLASS IS ABLE TO SEND OUT MESSAGES USING SMTP WHICH RESOLVE THESE ISSUE (C. Sommer)
+				NEW MAILER CLASS IS ABLE TO SEND OUT MESSAGES USING SMTP WHICH RESOLVE THESE ISSUE (C. Sommer)
 	
 				NOTE:
 				To use SMTP for sending out mails, you have to specify the SMTP host of your domain
@@ -536,7 +536,7 @@ function eval_form($section_id) {
 					$files_to_attach = array();
 				} else {
 					$success = false;
-					echo (isset($TEXT['WBMAILER_FUNCTION']) ? $TEXT['WBMAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error'];
+					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error'];
 					unlink( $_SESSION['mpform_wbx_error'] );
 				}
 			}
@@ -545,7 +545,7 @@ function eval_form($section_id) {
 				$user_body = str_replace(array('{DATA}', '{REFERER}', '{IP}', '{DATE}', '{USER}'), array($html_data_user, $_SESSION['href'], $ip, $jetzt, $wb_user), $success_email_text);
 				if (! $wbx->mailx($success_email_from, $success_email_to, $success_email_subject, $user_body, $success_email_fromname)) {
 					$success = false;
-					echo (isset($TEXT['WBMAILER_FUNCTION']) ? $TEXT['WBMAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION']). " (CONFIRM) ";
+					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION']). " (CONFIRM) ";
 				}
 			}
 			

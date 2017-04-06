@@ -31,7 +31,7 @@ if (defined('LEPTON_PATH')) {
 }
 
 $PRECHECK['VERSION']        = array(
-    'VERSION' => '2.4.0',
+    'VERSION' => '3.0',
     'OPERATOR' => '>='
 );
 
