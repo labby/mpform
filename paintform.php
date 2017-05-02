@@ -488,7 +488,16 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 		} else {
 			$classes = "captcha";
 		}
-
+		
+		if(file_exists( __DIR__."/recaptcha.php")) {
+			require_once __DIR__."/recaptcha.php";
+			
+			$captcha = mpform_recaptcha::build_captcha();
+			
+			echo $captcha;
+		}
+		else 
+		{
 		$field_loop = $fetch_settings['field_loop'];
 		$vars = array('{TITLE}', '{REQUIRED}', '{FIELD}', '{HELP}', '{HELPTXT}', '{CLASSES}', '{ERRORTEXT}');
 		$values = array($MOD_MPFORM['frontend']['VERIFICATION'], '<span class="mpform_required">*</span>',
@@ -496,6 +505,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 						(isset($err_txt['captcha'.$section_id])) ? $err_txt['captcha'.$section_id] : '');
 		$cmd = "{echo '" . str_replace($vars, $values, $field_loop) . "';}";
 		eval($cmd);
+		}
 	}
 	
 	// Print footer
