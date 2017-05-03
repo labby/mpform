@@ -127,10 +127,8 @@ if (!class_exists('wbx')) {
 			//	so we've have to look for the current version first here
 			$module_version = '';
 			require_once LEPTON_PATH."/modules/lib_phpmailer/info.php";
-			$myMail = intval($module_version) < 6 
-				? new PHPMailer()
-				: new PHPMailer\PHPMailer\PHPMailer()
-				;
+			$myMail = new PHPMailer\PHPMailer\PHPMailer();
+
 	
 			// set user defined from address
 			if ($fromaddress!='') {
