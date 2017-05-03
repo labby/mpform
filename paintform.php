@@ -483,28 +483,47 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	
 	// Captcha
 	if($use_captcha) {
+		
+		$field_loop = $fetch_settings['field_loop'];
+		
 		if (in_array('captcha'.$section_id, $missing)) {
 			$classes = "captcha_err";
 		} else {
 			$classes = "captcha";
 		}
 		
-		if(file_exists( __DIR__."/recaptcha.php")) {
-			require_once __DIR__."/recaptcha.php";
+		if(file_exists(LEPTON_PATH."/modules/mpform/recaptcha.php")) {
+			require_once LEPTON_PATH."/modules/mpform/recaptcha.php";
+
+			$vars = array(
+				'{TITLE}'		=> $MOD_MPFORM['frontend']['VERIFICATION'],
+				'{REQUIRED}'	=> '<span class="mpform_required">*</span>',
+				'{FIELD}'		=> mpform_recaptcha::build_captcha(),
+				'{HELP}'		=> "",
+				'{HELPTXT}'		=> "",
+				'{CLASSES}'		=> $classes,
+				'{ERRORTEXT}'	=> (isset($err_txt['captcha'.$section_id])) ? $err_txt['captcha'.$section_id] : ''
+			);
 			
-			$captcha = mpform_recaptcha::build_captcha();
-			
-			echo $captcha;
+			$cmd = str_replace( array_keys($vars), array_values($vars), $field_loop);
+			echo ($cmd);
+
 		}
 		else 
-		{
-		$field_loop = $fetch_settings['field_loop'];
-		$vars = array('{TITLE}', '{REQUIRED}', '{FIELD}', '{HELP}', '{HELPTXT}', '{CLASSES}', '{ERRORTEXT}');
-		$values = array($MOD_MPFORM['frontend']['VERIFICATION'], '<span class="mpform_required">*</span>',
-						"'; call_captcha('all', '', $section_id); echo '", "", "", $classes,
-						(isset($err_txt['captcha'.$section_id])) ? $err_txt['captcha'.$section_id] : '');
-		$cmd = "{echo '" . str_replace($vars, $values, $field_loop) . "';}";
-		eval($cmd);
+		{	
+			$vars = array(
+				'{TITLE}'		=> $MOD_MPFORM['frontend']['VERIFICATION'],
+				'{REQUIRED}'	=> '<span class="mpform_required">*</span>',
+				'{FIELD}'		=> "'; call_captcha('all', '', $section_id); echo '",
+				'{HELP}'		=> "",
+				'{HELPTXT}'		=> "",
+				'{CLASSES}'		=> $classes,
+				'{ERRORTEXT}'	=> (isset($err_txt['captcha'.$section_id])) ? $err_txt['captcha'.$section_id] : ''
+			);
+			
+			$cmd = "{echo '" . str_replace( array_keys($vars), array_values($vars), $field_loop) . "';}";
+			
+			eval($cmd);
 		}
 	}
 	

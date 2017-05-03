@@ -299,15 +299,34 @@ function eval_form($section_id) {
 
 	// Captcha
 	if($use_captcha) {
-		if(isset($_POST['captcha']) AND $_POST['captcha'] != ''){
-			// Check for a mismatch
-			if(!isset($_SESSION['captcha'.$section_id]) OR $_POST['captcha'] != $_SESSION['captcha'.$section_id]) {
+		/**
+		 *	Aldus: 2017-05-02
+		 *	google captcha
+		 */
+		if(file_exists(LEPTON_PATH."/modules/mpform/recaptcha.php")) {
+			require_once LEPTON_PATH."/modules/mpform/recaptcha.php";
+
+			$captcha_result = mpform_recaptcha::test_captcha( $_POST['g-recaptcha-response'] );
+
+			if( $captcha_result['success'] == false )
+			{
+				// neinn - nicht ok
 				$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA'];
 				$fer[] = 'captcha'.$section_id;
 			}
+			
 		} else {
-			$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA'];
-			$fer[] = 'captcha'.$section_id;
+
+			if(isset($_POST['captcha']) AND $_POST['captcha'] != ''){
+				// Check for a mismatch
+				if(!isset($_SESSION['captcha'.$section_id]) OR $_POST['captcha'] != $_SESSION['captcha'.$section_id]) {
+					$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA'];
+					$fer[] = 'captcha'.$section_id;
+				}
+			} else {
+				$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA'];
+				$fer[] = 'captcha'.$section_id;
+			}
 		}
 	}
 	if(isset($_SESSION['captcha'.$section_id])) { unset($_SESSION['captcha'.$section_id]); }
