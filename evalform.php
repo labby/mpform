@@ -124,12 +124,9 @@ if (!class_exists('wbx')) {
 			require_once LEPTON_PATH."/modules/lib_phpmailer/library.php";
 			
 			//	ALDUS: PHPMailer >= 6 comes up with his own namespace
-			//	so we've have to look for the current version first here
-			$module_version = '';
-			require_once LEPTON_PATH."/modules/lib_phpmailer/info.php";
+			
 			$myMail = new PHPMailer\PHPMailer\PHPMailer();
 
-	
 			// set user defined from address
 			if ($fromaddress!='') {
 				if($fromname!='') $myMail->FromName = $fromname;         // FROM-NAME
@@ -553,8 +550,8 @@ function eval_form($section_id) {
 					$files_to_attach = array();
 				} else {
 					$success = false;
-					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error'];
-					unlink( $_SESSION['mpform_wbx_error'] );
+					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error']." [E: 553]";
+					unset( $_SESSION['mpform_wbx_error'] );
 				}
 			}
 			
