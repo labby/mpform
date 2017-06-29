@@ -362,7 +362,7 @@ function eval_form($section_id) {
 						$field_value = str_replace($filter_settings['dot_replacement'], '.', $field_value);
 						$post_field = $field_value;
 					}
-					if($field['type'] == 'email' AND $admin->validate_email($post_field) == false) {
+					if($field['type'] == 'email' AND $admin->filter_var($post_field) == false) {
 						$err_txt[$field_id] = $MESSAGE['USERS']['INVALID_EMAIL'];
 						$fer[] = $field_id;
 					}
