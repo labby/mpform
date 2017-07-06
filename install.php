@@ -129,7 +129,15 @@ if(defined('LEPTON_URL')) {
 	// Query end
 	$query_end_code = "";
 	$database->query("INSERT INTO ".TABLE_PREFIX."search (name,value,extra) VALUES ('query_end', '$query_end_code', 'mpform')");
-	
-}
 
+	// move lepsem be-files
+	$be_file =	LEPTON_PATH."/modules/mpform/backend/lepsem/mpform/index.php";
+	if (file_exists ($be_file)) {
+		rename (LEPTON_PATH."/modules/mpform/backend/lepsem/mpform",LEPTON_PATH."/templates/lepsem/backend/mpform");
+		
+		// delete files
+		require_once(LEPTON_PATH.'/framework/summary.functions.php');
+		rm_full_dir(LEPTON_PATH."/modules/mpform/backend/");	
+	}
+} 
 ?>
