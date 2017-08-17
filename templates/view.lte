@@ -1,0 +1,61 @@
+{#
+/**
+ *
+ * 
+ *  @module      	MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @license        http://www.gnu.org/licenses/gpl.htm
+ *  @platform       see info.php of this addon
+ *  @license terms  see info.php of this addon
+ *  @version        see info.php of this module
+ *  
+ *
+ */
+ #}
+{% autoescape false %}
+<div class="mpform">
+	<form name="form_{{ section_id }}"  enctype="multipart/form-data" action="{{ form_action }}" method="post">
+	
+		<input type="hidden" name="submission_id" value="{{ submission_id }}" />
+		<input type="hidden" name="section_id" value="{{ section_id }}" />
+		<input type="hidden" name="page_id" value="{{ page_id }}" />
+
+{# 
+	ENABLED_ASP
+#}	
+	{% if (true == ENABLED_ASP) %}
+		<input type="hidden" name="submitted_when{{ section_id }}" value="{{ time }}" />
+		<p style="display:none">
+		email address:
+		<label for="email_{{ section_id }}">Leave this field email-address blank:</label>
+		<input id="email_{{ section_id }}" name="email" size="56" value="" />
+		Homepage:
+		<label for="homepage_{{ section_id }}">Leave this field homepage blank:</label>
+		<input id="homepage_{{ section_id }}" name="homepage" size="55" value="" />
+		URL:
+		<label for="url_{{ section_id }}">Do not fill out this field url:</label>
+		<input id="url_{{ section_id }}" name="url" size="63" value="" />
+		Comment:
+		<label for="comment_{{ section_id }}">Leave this field comment blank:</label>
+		<textarea id="comment_{{ section_id }}" name="comment" cols="50" rows="10"></textarea>
+		</p>
+	{% endif %}
+{# 
+	END ENABLED_ASP
+#}
+	{{ header }}
+	
+	{% for field in form_fields %}
+		{{ field }}
+	{% endfor %}
+	
+	{{ footer }}
+	
+	{% for add in additions %}
+		{{ add }}
+	{% endfor %}
+	 
+	</form>
+</div>
+
+{% endautoescape %}

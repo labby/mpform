@@ -52,8 +52,8 @@ $adm = module_header_footer($page_id, $mod_dir);
 ?>
 <div class="helppage">
 <p>The help and documentation for this module now consists of approximately 20 pages.
-It is available online at the <a href="http://wbdemo.heysoft.de/pages/en/mpform.php" target="help">Home page of the module</a>.</p>
-<p>If you find bugs, please report them to <em>mod 4 wb at heysoft dot de</em></p>
+It is available online at the <a href="https://doc.lepton-cms.org/_extern/mp_form/EN/mpform.html" target="_blank">LEPTON documentation</a>.</p>
+<p>If you find bugs, please <a href="https://doc.lepton-cms.org/" target="_blank">report them</a></p>
 </div>
 <br />
 		<table cellpadding="0" cellspacing="0" border="0" width="100%">

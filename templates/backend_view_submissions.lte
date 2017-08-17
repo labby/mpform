@@ -1,0 +1,63 @@
+{#
+/**
+ *
+ * 
+ *  @module      	MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @license        http://www.gnu.org/licenses/gpl.htm
+ *  @platform       see info.php of this addon
+ *  @license terms  see info.php of this addon
+ *  @version        see info.php of this module
+ *  
+ *
+ */
+ #}
+{% autoescape false %}
+
+<table>
+<tr>
+	<td>{{ TEXT.SUBMISSION_ID }}:</td>
+	<td>{{ submission.submission_id }}</td>
+</tr>
+<tr>
+	<td>{{ TEXT.SUBMITTED }}:</td>
+	<td>{{ submission.submitted_when_formatted }}</td>
+</td>
+<tr>
+	<td>{{ TEXT.USER }}:</td>
+	<td>{{ user.display_name }} ({{ user.username }})</td>
+</tr>
+<tr>
+	<td colspan="2">
+		<hr />
+	</td>
+</tr>
+<tr>
+	<td colspan="2">
+		{{ submission.submission_text }}
+	</td>
+</tr>
+</table>
+<br />
+
+<div class="ui grid">
+	<div class="three column row"> <!-- start submit -->	
+	<div class="column">				
+	</div>					
+				
+	<div class="column">			
+		<button class="positive ui button lepsem_submit" onclick="javascript: window.location = '{{ ADMIN_URL }}/pages/modify.php?page_id={{ page_id }}';" >
+		<input type="submit" name="submit" value="{{ TEXT.CLOSE }}" />							
+		</button>
+	
+		<button class="negative ui button lepsem_submit" onclick="javascript: confirm_link('{{ TEXT.ARE_YOU_SURE }}', '{{ LEPTON_URL }}/modules/mpform/delete_submission.php?page_id={{ page_id }}&section_id={{ section_id }}&submission_id={{ submission_id }}&leptoken={{ leptoken }}');" >
+		<input type="reset" name="reset" value="{{ TEXT.DELETE }}" />							
+		</button>					
+	</div>	
+					
+	<div class="column">							
+	</div>				
+	</div> <!-- end submit-->
+</div> <!-- end  grid -->
+
+{% endautoescape %}

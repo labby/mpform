@@ -190,6 +190,27 @@ switch( $field_type ) {
 		);
 		break;
 		
+	case 'fieldset_start':
+		//$extra = str_replace(array("[[", "]]"), '', $admin->get_post('seperator'));
+		//if ($extra=="" and $isnewfield) $extra = "<br />";   // set default value
+		
+		$fields = array(
+			'value'	=> $value, // *!
+			'extra'	=> "" // $extra
+		);
+		break;
+
+	case 'fieldset_end':
+		//$extra = str_replace(array("[[", "]]"), '', $admin->get_post('seperator'));
+		//if ($extra=="" and $isnewfield) $extra = "<br />";   // set default value
+		
+		$fields = array(
+			'value'	=> $value, // *!
+			'extra'	=> "" // $extra
+		);
+		break;
+
+		
 	default:
 		$admin->print_error( "[1] No field-type match!" );
 		return 0;

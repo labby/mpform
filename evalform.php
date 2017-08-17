@@ -124,9 +124,14 @@ if (!class_exists('wbx')) {
 			require_once LEPTON_PATH."/modules/lib_phpmailer/library.php";
 			
 			//	ALDUS: PHPMailer >= 6 comes up with his own namespace
-			
-			$myMail = new PHPMailer\PHPMailer\PHPMailer();
-
+			//	so we've have to look for the current version first here
+		#	$module_version = '';
+		#	require_once LEPTON_PATH."/modules/lib_phpmailer/info.php";
+		#	$myMail = intval($module_version) < 6 
+		#		? new PHPMailer()
+		#		: new PHPMailer\PHPMailer\PHPMailer()
+		#		;
+	$myMail = new PHPMailer\PHPMailer\PHPMailer();
 			// set user defined from address
 			if ($fromaddress!='') {
 				if($fromname!='') $myMail->FromName = $fromname;         // FROM-NAME
@@ -305,8 +310,8 @@ function eval_form($section_id) {
 
 			if( $captcha_result['success'] == false )
 			{
-				// neinn - nicht ok
-				$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA'];
+				// nein - nicht ok
+				$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA']." [314: recaptcha failed]";
 				$fer[] = 'captcha'.$section_id;
 			}
 			
@@ -362,7 +367,7 @@ function eval_form($section_id) {
 						$field_value = str_replace($filter_settings['dot_replacement'], '.', $field_value);
 						$post_field = $field_value;
 					}
-					if($field['type'] == 'email' AND $admin->filter_var($post_field) == false) {
+					if($field['type'] == 'email' AND $admin->validate_email($post_field) == false) {
 						$err_txt[$field_id] = $MESSAGE['USERS']['INVALID_EMAIL'];
 						$fer[] = $field_id;
 					}
@@ -550,8 +555,8 @@ function eval_form($section_id) {
 					$files_to_attach = array();
 				} else {
 					$success = false;
-					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error']." [E: 553]";
-					unset( $_SESSION['mpform_wbx_error'] );
+					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error'];
+					unlink( $_SESSION['mpform_wbx_error'] );
 				}
 			}
 			

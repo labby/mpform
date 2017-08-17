@@ -1,15 +1,12 @@
 <?php
 
 /**
- *
- * 
  *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
  *  @version        see info.php of this module
- *  
  *
  */
 
@@ -30,12 +27,12 @@ if (defined('LEPTON_PATH')) {
 	}
 }
 
-// obtain module directory
-$mod_dir = basename(dirname(__FILE__));
-require(LEPTON_PATH.'/modules/'.$mod_dir.'/info.php');
+global $MOD_MPFORM, $parser, $loader; 
 
-$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
-require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
+$mod_dir = basename(dirname(__FILE__));
+require_once LEPTON_PATH.'/modules/'.$mod_dir.'/info.php';
+require_once LEPTON_PATH.'/modules/'.$mod_dir.'/register_language.php';
+
 
 /** 
  *	Make sure that page and section id are numeric.
@@ -57,33 +54,17 @@ $database->prepare_and_execute(
 	$fields
 );
 
-// include template parser class and set template
-if (!class_exists("Template")) require_once(LEPTON_PATH . '/include/phplib/template.inc');
-
-$tpl = new Template(__DIR__. '/htt/');
-
-// set up how to handle unknown variables (default:='remove', during development use 'keep' or 'comment')
-$tpl->set_unknowns('keep');
-
-// set up the debug mode (default:=0 (disabled), 1:=variable assignments, 2:=calls to get variable, 4:=show internals)
-$tpl->debug = 0;
-
-$tpl->set_file('page', 'backend_modify.htt');
-$tpl->set_block('page', 'main_block', 'main');
-
-$imgurl = THEME_URL . '/images/';
-
-$tpl->set_var(
-	array(
-		// variables from Website Baker framework
+$imgurl= LEPTON_URL.'/templates/'.DEFAULT_THEME.'/images/';
+$form_values = array(
+		// variables from framework
 		'PAGE_ID'		=> (int) $page_id,
 		'SECTION_ID'	=> (int) $section_id,
 		'IMG_URL'		=> $imgurl,
-		'LEPTON_URL'		=> LEPTON_URL,
+		'LEPTON_URL'	=> LEPTON_URL,
 		'LANGUAGE'		=> ((file_exists(LEPTON_PATH .'/modules/'.$mod_dir.'/help.' . LANGUAGE .'.php')) ? LANGUAGE : 'EN'),
 		'MODULE_URL'    => LEPTON_URL.'/modules/'.$mod_dir,
 		
-		// variables from global WB language files
+		// variables from global language files
 		'TXT_SAVE'		=> $TEXT['SAVE'],
 		'TXT_CANCEL'	=> $TEXT['CANCEL'],
 		'TXT_HELP'		=> $MENU['HELP'],
@@ -107,16 +88,14 @@ $tpl->set_var(
 		'TXT_FIELDS'	=> $MOD_MPFORM['backend']['TXT_ADD_FIELD'],
 		'TXT_SETTINGS'	=> $MOD_MPFORM['backend']['TXT_SETTINGS'],
 		'EDIT_CSS'		=> $MOD_MPFORM['backend']['TXT_EDIT_CSS']
-	)
 );
 
 // Include the ordering class
-require_once(LEPTON_PATH.'/framework/class.order.php');
+require_once LEPTON_PATH.'/framework/class.order.php';
 // Create new order object an reorder
 $order = new order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
 $order->clean($section_id);
-require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
-$tpl->set_block('main_block', 'field_block' , 'field_loop');
+require_once LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php';
 
 // Loop through existing fields
 $all_fields = array();
@@ -126,7 +105,9 @@ $database->execute_query(
 	$all_fields
 );
 
+$order_fields = array();
 $num_fields = count($all_fields);
+
 if( $num_fields > 0) {
 	$pos = 0;
 
@@ -216,8 +197,8 @@ if( $num_fields > 0) {
 		} 
 		
 		// set vars for this field
-		$tpl->set_var(
-			array(
+		
+		$order_fields[] = array(
 				'FIELD_ID'			=> $field['field_id'],
 				'MUVE_UP_STYLE'		=> (($pos != 1) ? '' : 'style="display:none"'),
 				'MUVE_DOWN_STYLE'	=> (($pos != $num_fields) ? '' : 'style="display:none"'),
@@ -228,17 +209,12 @@ if( $num_fields > 0) {
 				'type_field'		=> $rt,
 				'entrytype'			=> $entrytype,		
 				'multiselect_field'	=> $multiselect_field
-			)
 		);
-		$tpl->parse('field_loop', 'field_block', true);
 	}
-} else {
-	$tpl->set_var('field_loop',$TEXT['NONE_FOUND']);
 }
 
-$tpl->set_block('main_block', 'submission_block' , 'submission_loop');
-
 // Query submissions table
+$order_submissions=array();
 $all_submissions = array();
 $database->execute_query(
 	"SELECT * FROM `".TABLE_PREFIX."mod_mpform_submissions` WHERE `section_id` = '".$section_id."' ORDER BY `submitted_when` DESC",
@@ -260,24 +236,29 @@ if(count($all_submissions) > 0) {
 			$rowcolor = '#DBEBF2';
 		}
 
-		$tpl->set_var(
-			array(
+		
+		$order_submissions[]= array(
 				'SUBMISSION_ID'	=> $submission['submission_id'],
 				'ROW_CLASS'		=> $row,
 				'ROW_COLOR'		=> $rowcolor,
 				'field_submission_id'	=> $submission['submission_id'],
-				'field_submission_when'	=> date(TIME_FORMAT.', '.DATE_FORMAT, $submission['submitted_when']),
-			)
+				'field_submission_when'	=> date(TIME_FORMAT.', '.DATE_FORMAT, $submission['submitted_when'])
 		);
-
-		$tpl->parse('submission_loop', 'submission_block', true);
 	}
-} else {
-	$tpl->set_var('submission_loop','<tr><td>'.$TEXT['NONE_FOUND'].'</td></tr>');
 }
-// Parse template objects output
-$tpl->parse('main', 'main_block', false);
-$tpl->pparse('output', 'page', false, false);
+
+$form_values["order_fields"]	= $order_fields;
+$form_values["order_submissions"]	= $order_submissions;
+$form_values["leptoken"]	= LEPTON_tools::get_leptoken();
+
+
+$oTWIG = lib_twig_box::getInstance();
+$oTWIG->registerModule( $mod_dir );
+
+echo $oTWIG->render(
+	'@mpform/backend_modify.lte',
+	$form_values
+);
 
 insert_drag_drop(5);
 ?>

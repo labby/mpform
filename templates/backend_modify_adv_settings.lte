@@ -1,0 +1,169 @@
+{#
+/**
+ *
+ * 
+ *  @module      	MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @license        http://www.gnu.org/licenses/gpl.htm
+ *  @platform       see info.php of this addon
+ *  @license terms  see info.php of this addon
+ *  @version        see info.php of this module
+ *  
+ *
+ */
+ #}
+{% autoescape false %}
+<!-- twig -->
+
+<div class="{{ MOD_CLASS }}">
+
+<form name="modify" action="{{ MOD_SAVE_URL }}" method="post" style="margin: 0;">
+	<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
+	<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
+	<fieldset>
+	<legend>{{ TXT_NOTIFICATION_SETTINGS }}</legend>
+	<table class="row_a" cellpadding="2" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td class="setting_name">{{ txt_heading_html }}:</td>
+		<td class="setting_value">
+				<textarea rows="5" cols="50" name="heading_html" class="setting_value_textarea">{{ heading_html }}</textarea>
+				<small>{{ des_heading_html }}</small>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="setting_name">{{ txt_short_html }}:</td>
+		<td class="setting_value">
+				<textarea rows="5" cols="50" name="short_html" class="setting_value_textarea">{{ short_html }}</textarea>
+				<small>{{ des_short_html }}</small>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="setting_name">{{ txt_long_html }}:</td>
+		<td class="setting_value">
+				<textarea rows="5" cols="50" name="long_html" class="setting_value_textarea">{{ long_html }}</textarea>
+				<small>{{ des_long_html }}</small>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="setting_name">{{ txt_email_html }}:</td>
+		<td class="setting_value">
+				<textarea rows="5" cols="50" name="email_html" class="setting_value_textarea">{{ email_html }}</textarea>
+				<small>{{ des_email_html }}</small>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="setting_name">{{ txt_uploadfile_html }}:</td>
+		<td class="setting_value">
+				<textarea rows="5" cols="50" name="uploadfile_html" class="setting_value_textarea">{{ uploadfile_html }}</textarea>
+				<small>{{ des_uploadfile_html }}</small>
+		</td>
+	</tr>
+	</table>
+	</fieldset>
+
+	<fieldset>
+	<legend>{{ TXT_UPLOAD_SETTINGS }}</legend>
+	<table class="row_a" cellpadding="2" cellspacing="0" border="0" width="100%">
+	<tr>
+		<td class="setting_name">{{ TXT_UPLOAD_FILE_FOLDER }}:</td>
+		<td class="setting_value"><input name="upload_files_folder" class="setting_value_text" type="text" title="{{ des_upload_files_folder }}" value="{{ upload_files_folder }}" /></td>
+	</tr>
+    <tr>
+		<td class="setting_name">{{ TXT_UPLOAD_DIRMASK }}:</td>
+		<td class="setting_value"><input name="upload_dir_mask" class="setting_value_text" type="text" title="{{ help_dirmask }}" value="{{ upload_dir_mask }}" />
+        <small>{{ help_dirmask }}</small>
+		</td>
+	</tr>
+    <tr>
+		<td class="setting_name">{{ TXT_UPLOAD_FILEMASK }}:</td>
+		<td class="setting_value"><input name="upload_file_mask" class="setting_value_text" type="text" title="{{ help_filemask }}" value="{{ upload_file_mask }}" />
+        <small>{{ help_filemask }}</small>
+		</td>
+	</tr>
+	<tr>
+		<td class="setting_name">{{ TXT_ATTACH_FILE }}:</td>
+		<td class="setting_value">
+			<input type="radio" name="attach_file" id="attach_file_true" value="1" {{ attach_file_true_checked }} title="{{ des_attach_file }}" />
+			<label for="attach_file_true">{{ TXT_ENABLED }}</label>
+			<input type="radio" name="attach_file" id="attach_file_false" value="0" {{ attach_file_false_checked }} title="{{ des_attach_file }}" />
+			<label for="attach_file_false">{{ TXT_DISABLED }}</label>
+		</td>
+	</tr>
+	<tr>
+		<td class="setting_name">{{ TXT_MAX_FILE_SIZE_KB }}:</td>
+		<td class="setting_value"><input name="max_file_size_kb" class="setting_value_text" type="text" title="{{ des_max_file_size_kb }}" value="{{ max_file_size_kb }}" /></td>
+	</tr>
+	<tr>
+		<td class="setting_name">{{ TXT_UPLOAD_ONLY_EXTS }}:</td>
+		<td class="setting_value"><input name="upload_only_exts" class="setting_value_text" type="text" title="{{ help_extensions }}" value="{{ upload_only_exts }}" />
+		<small>{{ help_extensions }}</small>
+		</td>
+	</tr>
+	</table>
+	</fieldset>
+
+	<fieldset>
+	<legend>{{ TXT_ASP_SETTINGS }}</legend>
+	<table class="row_a" cellpadding="2" cellspacing="0" border="0" width="100%">
+	<tr>
+		<td class="setting_name">{{ txt_use_captcha }}:</td>
+		<td class="setting_value">
+			<input type="radio" name="use_captcha" id="use_captcha_true" value="1" {{ use_captcha_true_checked }} title="{{ des_use_captcha }}" />
+			<label for="use_captcha_true">{{ TXT_ENABLED }}</label>
+			<input type="radio" name="use_captcha" id="use_captcha_false" value="0" {{ use_captcha_false_checked }} title="{{ des_use_captcha }}" />
+			<label for="use_captcha_false">{{ TXT_DISABLED }}</label>
+		</td>
+	</tr>
+	<tr>
+		<td class="setting_name">{{ txt_max_submissions }}:</td>
+		<td class="setting_value"><input name="max_submissions" class="setting_value_text" type="text" title="{{ des_max_submissions }}" value="{{ max_submissions }}" /></td>
+	</tr>
+	<tr>
+		<td class="setting_name">{{ txt_stored_submissions }}:</td>
+		<td class="setting_value"><input name="stored_submissions" class="setting_value_text" type="text" title="{{ des_stored_submissions }}" value="{{ stored_submissions }}" /></td>
+	</tr>	
+	</table>
+	</fieldset>
+
+	<fieldset>
+	<legend>{{ SPECIAL_SETTINGS }}</legend>
+	<table class="row_a" cellpadding="2" cellspacing="0" border="0" width="100%">
+
+	<tr>
+		<td class="setting_name">{{ txt_enum }}:</td>
+		<td class="setting_value">
+				<input type="text" name="enum_start" maxlength="1"  value="{{ enum_start }}"  />
+				<small>{{ des_enum }}</small>
+		</td>
+	</tr>
+
+	<tr>
+		<td class="setting_name">{{ TXT_DATE_FORMAT }}:</td>
+		<td class="setting_value"><input name="date_format" class="setting_value_text" type="text" title="{{ des_date_format }}" value="{{ date_format }}" />
+        <a href="http://www.ss64.com/bash/date.html" target="bash"><small>{{ des_date_format }}</small></a>
+		</td>
+	</tr>
+
+	</table>
+	</fieldset>
+	
+	<table cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+		<td align="left">
+			<button name="save" type="submit" class=""><img src="{{ MODULE_URL }}/images/ok.gif" alt="" width="16" height="16" border="0" />{{ TXT_SAVE }}</button>
+		</td>
+		<td align="right">
+			<button class="" onclick="javascript:window.location = '{{ MOD_CANCEL_URL }}'; return false;"><img src="{{ MODULE_URL }}/images/cancel.gif" alt="" width="16" height="16" border="0" /> {{ TXT_CANCEL }}</button>
+		</td>
+	</tr>
+    </table>
+</form>	
+</div>
+</div>
+<!-- end twig -->
+{% endautoescape %}

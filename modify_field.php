@@ -1,15 +1,12 @@
 <?php
 
 /**
- *
- * 
  *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
  *  @version        see info.php of this module
- *  
  *
  */
 
@@ -32,17 +29,19 @@ if (defined('LEPTON_PATH')) {
 
 require(LEPTON_PATH.'/modules/admin.php');
 
-// obtain module directory
-$mod_dir = basename(dirname(__FILE__));
+global $MOD_MPFORM, $parser, $loader; 
 
-$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
-require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
+$mod_dir = basename(dirname(__FILE__));
+require_once LEPTON_PATH.'/modules/'.$mod_dir.'/info.php';
+require_once LEPTON_PATH.'/modules/'.$mod_dir.'/register_language.php';
 
 //START HEADER HERE
 require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
 require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/constants.php');
-module_header_footer($page_id, $mod_dir);
 //END HEADER HERE
+
+$oTWIG = lib_twig_box::getInstance();
+$oTWIG->registerModule( $mod_dir );
 
 // Get id
 
@@ -73,21 +72,7 @@ if ($form['page_id'] != $page_id) {
 	exit(0);
 }
 
-// include template parser class and set template
-require_once(LEPTON_PATH . '/include/phplib/template.inc');
-$tpl = new Template(dirname(__FILE__) . '/htt/');
-// define how to handle unknown variables (default:='remove', during development use 'keep' or 'comment')
-$tpl->set_unknowns('keep');
-
-// define debug mode (default:=0 (disabled), 1:=variable assignments, 2:=calls to get variable, 4:=show internals)
-$tpl->debug = 0;
-
-$tpl->set_file('page', 'backend_modify_field.htt');
-$tpl->set_block('page', 'main_block', 'main');
-
-// list possible field types
-$tpl->set_block('main_block', 'field_block', 'field_loop');
-$fieldtypes = array (
+$field_typtes = array(
 	"heading"	=> $TEXT['HEADING'],
 	"fieldset_start"	=> $MOD_MPFORM['backend']['fieldset_start'],
 	"fieldset_end"	=> $MOD_MPFORM['backend']['fieldset_end'],
@@ -105,14 +90,8 @@ $fieldtypes = array (
 	"decimal_number"	=> $MOD_MPFORM['backend']['decimal_number'],
 	"html"	=> $MOD_MPFORM['backend']['HTML'] 
 );
-foreach ($fieldtypes as $k => $v) {
-	$selected = ($k == $type) ? " selected=\"selected\">" : ">";
-	$tpl->set_var('VAL_FIELDTYPE', '"'. $k . '"'. $selected . $v);
-	$tpl->parse('field_loop', 'field_block', true);
-}
 
 // show additional fields depending on type
-$tpl->set_block('main_block', 'type_options', 'typeoptions');
 $fieldtypeoption = "";
 // first round:
 switch ($type) {
@@ -283,37 +262,38 @@ if($type != 'heading' AND $type != 'fieldset_start' AND $type != 'fieldset_end' 
 	$fieldtypeoption .= '<td><textarea name="help"  cols="50" rows="5" style="width: 98%; height: 100px;">'. $form['help'] ."</textarea></td>\n</tr>\n";
 }
 
-$tpl->set_var('VAL_TYPE_OPTIONS', $fieldtypeoption);
-$tpl->parse('typeoptions', 'type_options', true);
 
-$tpl->set_var(
-	array(
-		// variables from Website Baker framework
-		'PAGE_ID'		=> (int) $page_id,
-		'SECTION_ID'	=> (int) $section_id,
-		'FIELD_ID'		=> (int) $field_id,
-		'LEPTON_URL'		=> LEPTON_URL,
-		'ADMIN_URL'		=> ADMIN_URL,
-		'TXT_SAVE'		=> $TEXT['SAVE'],
-		'TXT_CANCEL'	=> $TEXT['CANCEL'],
-		'TXT_TITLE'		=> $TEXT['TITLE'],
-		'TXT_PLEASE_SELECT'	=> $TEXT['PLEASE_SELECT'],
-		'MODULE_URL'    => LEPTON_URL.'/modules/'.$mod_dir,
+$form_values = array(
+	// variables from framework
+	'PAGE_ID'		=> (int) $page_id,
+	'SECTION_ID'	=> (int) $section_id,
+	'FIELD_ID'		=> (int) $field_id,
+	'LEPTON_URL'		=> LEPTON_URL,
+	'ADMIN_URL'		=> ADMIN_URL,
+	'TXT_SAVE'		=> $TEXT['SAVE'],
+	'TXT_CANCEL'	=> $TEXT['CANCEL'],
+	'TXT_TITLE'		=> $TEXT['TITLE'],
+	'TXT_PLEASE_SELECT'	=> $TEXT['PLEASE_SELECT'],
+	'MODULE_URL'    => LEPTON_URL.'/modules/'.$mod_dir,
 		
-		// module settings
-		'MODULE_DIR'    => $mod_dir,
-		'TXT_TYPE'		=> $MOD_MPFORM['backend']['TXT_TYP'],
-		'TXT_COPY_FIELD'=> $MOD_MPFORM['backend']['TXT_COPY_FIELD'],
-		'TXT_ADD_FIELD'	=> $MOD_MPFORM['backend']['TXT_ADD_FIELD'],
-		'TXT_MODIFY_FIELD'	=> sprintf($MOD_MPFORM['backend']['TXT_MODIFY_FIELD'], $field_id),
-		'VAL_TITLE'		=> $form['title']
-	)
+	// module settings
+	'MODULE_DIR'    => $mod_dir,
+	'TXT_TYPE'		=> $MOD_MPFORM['backend']['TXT_TYP'],
+	'TXT_COPY_FIELD'=> $MOD_MPFORM['backend']['TXT_COPY_FIELD'],
+	'TXT_ADD_FIELD'	=> $MOD_MPFORM['backend']['TXT_ADD_FIELD'],
+	'TXT_MODIFY_FIELD'	=> sprintf($MOD_MPFORM['backend']['TXT_MODIFY_FIELD'], $field_id),
+	'VAL_TITLE'		=> $form['title'],
+	
+	'VAL_TYPE_OPTIONS'	=> $fieldtypeoption,
+	
+	'form'			=> $form,
+	'field_typtes'	=> $field_typtes
 );
 
-// Parse template objects output
-$tpl->parse('main', 'main_block', false);
-$tpl->pparse('output', 'page',false, false);
-
+echo $oTWIG->render(
+	'@mpform/backend_modify_field.lte',
+	$form_values
+);
 // Print admin footer
 $admin->print_footer();
 

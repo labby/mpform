@@ -35,9 +35,8 @@ require(LEPTON_PATH.'/modules/admin.php');
 
 // obtain module directory
 $mod_dir = basename(dirname(__FILE__));
-
-$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
-require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
+require_once LEPTON_PATH.'/modules/'.$mod_dir.'/info.php';
+require_once LEPTON_PATH.'/modules/'.$mod_dir.'/register_language.php';
 
 //START HEADER HERE
 require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
@@ -55,72 +54,88 @@ if ($setting['page_id'] != $page_id) {
 }
 
 // include template parser class and set template
-require_once(LEPTON_PATH . '/include/phplib/template.inc');
-$tpl = new Template(dirname(__FILE__) . '/htt/');
+// require_once(LEPTON_PATH . '/include/phplib/template.inc');
+// $tpl = new Template(dirname(__FILE__) . '/htt/');
 
 // define how to handle unknown variables (default:='remove', during development use 'keep' or 'comment')
-$tpl->set_unknowns('keep');
+// $tpl->set_unknowns('keep');
 
 // define debug mode (default:=0 (disabled), 1:=variable assignments, 2:=calls to get variable, 4:=show internals)
-$tpl->debug = 0;
+// $tpl->debug = 0;
 
-$tpl->set_file('page', 'backend_modify_adv_settings.htt');
-$tpl->set_block('page', 'main_block', 'main');
+// $tpl->set_file('page', 'backend_modify_adv_settings.htt');
+// $tpl->set_block('page', 'main_block', 'main');
 
 // replace all placeholder {xxx} of the template file with values from language file
+
+$form_values = array();
+
 foreach($MOD_MPFORM['backend_adv'] as $key => $value) {
-	$tpl->set_var($key, $value);
+	$form_values[ $key ] = $value;
 }
 
 // obtain display option from the database table
-$table = TABLE_PREFIX . 'mod_mpform_settings';
-$sql = "SELECT * FROM `$table` WHERE `section_id` = '$section_id'";
-$sql_result = $database->query($sql);
-$settings = $sql_result->fetchRow();
+$settings = array();
+$database->execute_query(
+	"SELECT * FROM `".TABLE_PREFIX . "mod_mpform_settings` WHERE `section_id` = ".$section_id,
+	true,
+	$settings,
+	false
+);
 
 // replace all placeholder {xxx} of the template file with values from the db
 foreach($settings as $key => $value) {
-	$tpl->set_var($key, $value);
+	$form_values[ $key ] =  $value;
 }
 
 // replace static template placeholders with values from language file
-$tpl->set_var(
-	array(
-		// variables from Website Baker framework
-		'PAGE_ID'			=> (int) $page_id,
-		'SECTION_ID'		=> (int) $section_id,
-		'MOD_CLASS'			=> strtolower(basename(dirname(__FILE__))),
-		'MODULE_URL'		=> LEPTON_URL . "/modules/mpform",
-		// variables from global WB language files
-		'des_use_captcha'           => '',
-		'txt_use_captcha'           => $TEXT['CAPTCHA_VERIFICATION'],
-		'use_captcha_true_checked'	=> (($settings['use_captcha']==true) ? 'checked="checked"' : ''),
-		'use_captcha_false_checked'	=> (($settings['use_captcha']==true) ? '' : 'checked="checked"'),
-		'des_max_submissions'       => '',
-		'txt_max_submissions'       => $TEXT['MAX_SUBMISSIONS_PER_HOUR'],
-		'des_stored_submissions'    => '',
-		'txt_stored_submissions'    => $TEXT['SUBMISSIONS_STORED_IN_DATABASE'],
-		'des_upload_files_folder'   => '',
-		'MEDIA_DIRECTORY'           => LEPTON_PATH . MEDIA_DIRECTORY,
-		'des_attach_file'           => '',
-		'attach_file_true_checked'	=> (($settings['attach_file']==true) ? 'checked="checked"' : ''),
-		'attach_file_false_checked'	=>(($settings['attach_file']==true) ? '' : 'checked="checked"'),
-		'des_max_file_size_kb'     	=> '',
-		'TXT_ENABLED'		=> $TEXT['ENABLED'],
-		'TXT_DISABLED'		=> $TEXT['DISABLED'],
-		'TXT_SAVE'			=> $TEXT['SAVE'],
-		'TXT_CANCEL'		=> $TEXT['CANCEL'],
-
+$temp =	array(
+	// variables from Website Baker framework
+	'PAGE_ID'			=> (int) $page_id,
+	'SECTION_ID'		=> (int) $section_id,
+	'MOD_CLASS'			=> strtolower(basename(dirname(__FILE__))),
+	'MODULE_URL'		=> LEPTON_URL . "/modules/mpform",
+	// variables from global WB language files
+	'des_use_captcha'           => '',
+	'txt_use_captcha'           => $TEXT['CAPTCHA_VERIFICATION'],
+	'use_captcha_true_checked'	=> (($settings['use_captcha']==true) ? 'checked="checked"' : ''),
+	'use_captcha_false_checked'	=> (($settings['use_captcha']==true) ? '' : 'checked="checked"'),
+	'des_max_submissions'       => '',
+	'txt_max_submissions'       => $TEXT['MAX_SUBMISSIONS_PER_HOUR'],
+	'des_stored_submissions'    => '',
+	'txt_stored_submissions'    => $TEXT['SUBMISSIONS_STORED_IN_DATABASE'],
+	'des_upload_files_folder'   => '',
+	'MEDIA_DIRECTORY'           => LEPTON_PATH . MEDIA_DIRECTORY,
+	'des_attach_file'           => '',
+	'attach_file_true_checked'	=> (($settings['attach_file']==true) ? 'checked="checked"' : ''),
+	'attach_file_false_checked'	=>(($settings['attach_file']==true) ? '' : 'checked="checked"'),
+	'des_max_file_size_kb'     	=> '',
+	'TXT_ENABLED'		=> $TEXT['ENABLED'],
+	'TXT_DISABLED'		=> $TEXT['DISABLED'],
+	'TXT_SAVE'			=> $TEXT['SAVE'],
+	'TXT_CANCEL'		=> $TEXT['CANCEL'],
 		// module settings
-		'MOD_SAVE_URL'				=> LEPTON_URL. str_replace("\\","/",substr(dirname(__FILE__),strlen(LEPTON_PATH))).'/save_adv_settings.php',
-		'MOD_CANCEL_URL'			=> ADMIN_URL.'/pages/modify.php?page_id='.$page_id
-	)
+	'MOD_SAVE_URL'				=> LEPTON_URL. str_replace("\\","/",substr(dirname(__FILE__),strlen(LEPTON_PATH))).'/save_adv_settings.php',
+	'MOD_CANCEL_URL'			=> ADMIN_URL.'/pages/modify.php?page_id='.$page_id
 );
 
-// Parse template objects output
-$tpl->parse('main', 'main_block', false);
-$tpl->pparse('output', 'page',false, false);
+foreach($temp as $key => $value)
+{
+	$form_values[ $key ] =  $value;
+}
 
-echo "&nbsp;";
+// Parse template objects output
+// $tpl->parse('main', 'main_block', false);
+// $tpl->pparse('output', 'page',false, false);
+
+
+$oTWIG = lib_twig_box::getInstance();
+$oTWIG->registerModule( $mod_dir );
+
+echo $oTWIG->render(
+	"@mpform/backend_modify_adv_settings.lte",
+	$form_values
+);
+
 $admin->print_footer();
 ?>
