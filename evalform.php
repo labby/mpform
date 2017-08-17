@@ -556,7 +556,7 @@ function eval_form($section_id) {
 				} else {
 					$success = false;
 					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error'];
-					unlink( $_SESSION['mpform_wbx_error'] );
+					unset( $_SESSION['mpform_wbx_error'] );
 				}
 			}
 			
