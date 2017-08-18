@@ -13,8 +13,23 @@
  *
  */
 
-// manually include the config.php file (defines the required constants)
-require('../../config.php');
+if (defined('LEPTON_PATH')) {	
+	include(LEPTON_PATH.'/framework/class.secure.php'); 
+} else {
+	$oneback = "../";
+	$root = $oneback;
+	$level = 1;
+	while (($level < 10) && (!file_exists($root.'/framework/class.secure.php'))) {
+		$root .= $oneback;
+		$level += 1;
+	}
+	if (file_exists($root.'/framework/class.secure.php')) { 
+		include($root.'/framework/class.secure.php'); 
+	} else {
+		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
+	}
+}
+
 require(LEPTON_PATH.'/modules/admin.php');
 
 // obtain module directory
@@ -41,9 +56,9 @@ if (WB_VERSION >= "2.8.2") {
 } else {
 	if(!isset($_GET['submission_id']) OR !is_numeric($_GET['submission_id'])) {
 		header("Location: ".ADMIN_URL."/pages/index.php");
-		exit(0);
+		die();
 	} else {
-		$submission_id = $_GET['submission_id'];
+		$submission_id = intval($_GET['submission_id']);
 	}
 }
 
@@ -68,7 +83,7 @@ $submission_text = "";
 $lines = explode("\n",$submission['body']);
 foreach($lines as $k => $v) {
 	$hr = explode('url]',$v);
-//				print_r($hr);
+
 	if (count($hr)>1) {
 		$hr[0] = substr($hr[0],0,-1);
 		$hr[1] = substr($hr[1],0,-2);

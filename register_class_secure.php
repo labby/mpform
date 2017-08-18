@@ -32,7 +32,8 @@ $files_to_register = array(
 	$base.'save.php',
 	$base.'save_settings.php',
 	$base.'save_adv_settings.php',
-	$base.'save_field.php'
+	$base.'save_field.php',
+	$base.'view_submission.php'
 );
 
 $lepton_filemanager->register( $files_to_register );
