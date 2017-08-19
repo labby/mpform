@@ -20,6 +20,7 @@ $MOD_MPFORM = array();
 // Text outputs for the backend
 $MOD_MPFORM['backend'] = array(
 	'SETTINGS' => 'Form Settings',
+	'BACK' 		=> 'Back',
 	'TXT_TYP'	=> 'Type',
 	'TXT_LIST'	=> "List",
 	'TXT_DEFAULT'	=> "Default value",

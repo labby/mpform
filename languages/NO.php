@@ -20,6 +20,7 @@ $MOD_MPFORM = array();
 // Text outputs for the backend
 $MOD_MPFORM['backend'] = array(
 	'SETTINGS' => 'Skjema innstillinger',
+	'BACK' 		=> 'Back',	
 	'TXT_TYP'	=> 'Type',
 	'TXT_LIST'	=> 'Vis', //List *uklar
 	'TXT_DEFAULT'	=> 'Standard verdi',

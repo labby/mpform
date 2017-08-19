@@ -23,6 +23,7 @@ $MOD_MPFORM = array();
 // Text outputs for the backend
 $MOD_MPFORM['backend'] = array(
 	'SETTINGS' 	=> 'Formular-Einstellungen',
+	'BACK' 		=> 'Zurück',	
 	'TXT_TYP'	=> 'Typ',
 	'TXT_LIST'	=> "Liste",
 	'TXT_DEFAULT'	=> "Vorgabewert",
