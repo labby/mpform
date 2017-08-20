@@ -25,7 +25,6 @@ $MOD_MPFORM = array();
 // Text outputs for the backend
 $MOD_MPFORM['backend'] = array(
 	'SETTINGS' => 'Formulierinstellingen',
-	'BACK' 		=> 'Back',	
 	'TXT_TYP'	=> 'Type',
 	'TXT_LIST'	=> "Lijst",
 	'TXT_DEFAULT'	=> "Standaardwaarde",

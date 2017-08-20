@@ -265,6 +265,7 @@ if($type != 'heading' AND $type != 'fieldset_start' AND $type != 'fieldset_end' 
 
 $form_values = array(
 	// variables from framework
+	'MOD_MPFORM'	=> $MOD_MPFORM,
 	'PAGE_ID'		=> (int) $page_id,
 	'SECTION_ID'	=> (int) $section_id,
 	'FIELD_ID'		=> (int) $field_id,
