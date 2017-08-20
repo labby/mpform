@@ -131,7 +131,7 @@
 	    <td colspan="2"><small>{{ MOD_MPFORM.des_email_to }}</small></td>
 	</tr>
     <tr>
-		<td class="setting_name">{{ MOD_MPFORM.txt_email_from_field }}: <span style='color:#FF0000;'>[attention!: 1]</span></td>
+		<td class="setting_name">{{ MOD_MPFORM.txt_email_from_field }}:</td>
 		<td class="setting_value">
 			<select name="email_from_field" class="setting_value" onchange="mpform_settings_set_email_from( this );" >
 				<option value="" {% if ( settings.email_from == "" ) %}selected="selected"{% endif %}>{{ MOD_MPFORM.TXT_STATIC_ADDR }}:</option>
@@ -146,7 +146,7 @@
 		</td>
 	</tr>
     <tr>
-		<td class="setting_name">{{ MOD_MPFORM.txt_email_fromname_field }}: <span style='color:#FF0000;'>[attention!: 2]</span></td>
+		<td class="setting_name">{{ MOD_MPFORM.txt_email_fromname_field }}:</td>
 		<td class="setting_value">
 			<select name="email_fromname_field" class="setting_value">
 				<option value="" onclick="javascript: document.getElementById('email_fromname_f_slave').style.display:block;">{{ MOD_MPFORM.TXT_STATIC_NAME }}:</option>
@@ -179,7 +179,7 @@
 	<legend>{{ MOD_MPFORM.EMAIL_SETTINGS_2 }}</legend>
 	<table class="row_a" cellpadding="2" cellspacing="0" border="0" width="100%">
 	<tr>
-		<td class="setting_name">{{ MOD_MPFORM.txt_success_email_to }}: <span style='color:#FF0000;'>[attention!: 3]</span></td>
+		<td class="setting_name">{{ MOD_MPFORM.txt_success_email_to }}:</td>
 		<td class="setting_value">
 			<select name="success_email_to" class="setting_value">
 				<option value="" {% if ( settings.success_email_to == "" ) %}selected="selected"{% endif %}>{{ NONEN }}</option>
