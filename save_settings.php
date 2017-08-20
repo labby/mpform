@@ -71,12 +71,12 @@ foreach ($emails as $recip) {
 	$teil = explode("<", $recip);
 	$ok = false;
 	if (count($teil) == 1) { // no name part found
-		$ok = $admin->validate_email(trim($teil[0]));
+		$ok = $admin->filter_var(trim($teil[0]));
 	} elseif (count($teil) == 2) { // with name part
 		$s = explode(">", $teil[1]);  	// string with (list of) email address(es)
 		$se = explode(",", $s[0]);		// array  with (list of) email address(es)
 		foreach ($se as $sh) {
-			$ok = $admin->validate_email(trim($sh)); // check each address
+			$ok = $admin->filter_var(trim($sh)); // check each address
 			if (!$ok) break;  // break as soon as an invalid address is found
 		}
 	}
@@ -84,8 +84,8 @@ foreach ($emails as $recip) {
 }
 $email_to = $temp_email_to;
 
-if (!$admin->validate_email($email_from)) $email_from = '';
-if (!$admin->validate_email($success_email_from)) $success_email_from = '';
+if (!$admin->filter_var($email_from)) $email_from = '';
+if (!$admin->filter_var($success_email_from)) $success_email_from = '';
 
 $email_fromname = htmlspecialchars($email_fromname, ENT_QUOTES);
 $email_subject = htmlspecialchars($email_subject, ENT_QUOTES);
