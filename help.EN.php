@@ -53,13 +53,13 @@ $adm = module_header_footer($page_id, $mod_dir);
 <div class="helppage">
 <p>The help and documentation for this module now consists of approximately 20 pages.
 It is available online at the <a href="https://doc.lepton-cms.org/_extern/mp_form/EN/mpform.html" target="_blank">LEPTON documentation</a>.</p>
-<p>If you find bugs, please <a href="https://doc.lepton-cms.org/" target="_blank">report them</a></p>
+<p>If you find bugs, please <a href="http://forum.lepton-cms.org/" target="_blank">report them</a></p>
 </div>
 <br />
 		<table cellpadding="0" cellspacing="0" border="0" width="100%">
 		<tr>
 			<td align="center">
-				<input type="button" value="<?php echo $TEXT['BACK']; ?>" onclick="javascript: window.location = '<?php echo ADMIN_URL; ?>/pages/modify.php?page_id=<?php echo $page_id; ?>';" style="width: 100px; margin-top: 5px;" />
+				<input class="helppage" type="button" value="<?php echo $TEXT['BACK']; ?>" onclick="javascript: window.location = '<?php echo ADMIN_URL; ?>/pages/modify.php?page_id=<?php echo $page_id; ?>';" style="width: 100px; margin-top: 5px;" />
 			</td>
 		</tr>
 		</table>
