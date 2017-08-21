@@ -84,8 +84,8 @@ foreach ($emails as $recip) {
 }
 $email_to = $temp_email_to;
 
-if (!filter_var($email_from), FILTER_VALIDATE_EMAIL) $email_from = '';
-if (!filter_var($success_email_from), FILTER_VALIDATE_EMAIL) $success_email_from = '';
+if (!filter_var($email_from, FILTER_VALIDATE_EMAIL)) $email_from = '';
+if (!filter_var($success_email_from, FILTER_VALIDATE_EMAIL)) $success_email_from = '';
 
 $email_fromname = htmlspecialchars($email_fromname, ENT_QUOTES);
 $email_subject = htmlspecialchars($email_subject, ENT_QUOTES);
