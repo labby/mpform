@@ -120,19 +120,12 @@ class orderx extends order {
 }  // end of: class orderx extends order
 
 function insert_drag_drop($button_up_cell) {
-echo "<script type=\"text/javascript\">
-<!--
-var JsAdmin = { LEPTON_URL : '". LEPTON_URL."', THEME_URL : '". THEME_URL."', structure_type : 'ul', buttonCell : ". $button_up_cell." };
-//-->
-</script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/yahoo/yahoo-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/event/event-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/dom/dom-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/connection/connection-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/dragdrop/dragdrop-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/modules/jsadmin/js/jsadmin.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/modules/mpform/js/dragdrop.js'></script>
-";
+echo "<div>
+	<script type=\"text/javascript\">
+	<!--
+	var JsAdmin = { LEPTON_URL : '". LEPTON_URL."', THEME_URL : '". THEME_URL."', structure_type : 'ul', buttonCell : ". $button_up_cell." };
+	//-->
+	</script>
+</div>";
 } // end of: function insert_drag_drop
-
 ?>
