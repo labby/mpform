@@ -566,6 +566,10 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 		}
 	}
 	
+	else {
+		$vars['{FIELD}']=''; // avoid notice if captcha is not in use!
+	}
+	
 	$form_values['form_fields']	= $form_fields;
 	
 	// Hack for captcha
