@@ -23,6 +23,7 @@ class mpform
 			switch( $field['type'] )
 			{
 				case 'checkbox':
+				case 'radio':
 				case 'select':
 					$subfields = explode(",", $field['value']);
 					$checkbox_options = array();
@@ -33,7 +34,7 @@ class mpform
 						
 						$checkbox_options[] = array(
 								'title'	=> $temp[0],
-								'checked'	=> ((count($temp) == 1) ? "" : "checked='checked'") 
+								'checked'	=> ((count($temp) == 1) ? "" : ( $field['type']=='select' ? "selected='selected'" : "checked='checked'") ) 
 							);
 					}
 					$field['options'] = $checkbox_options; 
