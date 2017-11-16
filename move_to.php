@@ -88,7 +88,7 @@ AND isset($_GET['section_id']) AND is_numeric($_GET['section_id'])) {
 	}
 	
 	// Create new order object
-	$order = new orderx(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
+	$order = new mpform_order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
 	
 	// Reorder It!
 	switch ($where) {
