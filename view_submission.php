@@ -47,19 +47,11 @@ module_header_footer($page_id,$mod_dir);
 //END HEADER HERE
 
 // Get id
-if (WB_VERSION >= "2.8.2") {
-	$submission_id = $admin->checkIDKEY('submission_id', false, 'GET');
-	if (!$submission_id) {
-		$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], ADMIN_URL);
-		exit();
-	}
+if(!isset($_GET['submission_id']) OR !is_numeric($_GET['submission_id'])) {
+	header("Location: ".ADMIN_URL."/pages/index.php");
+	die();
 } else {
-	if(!isset($_GET['submission_id']) OR !is_numeric($_GET['submission_id'])) {
-		header("Location: ".ADMIN_URL."/pages/index.php");
-		die();
-	} else {
-		$submission_id = intval($_GET['submission_id']);
-	}
+	$submission_id = intval($_GET['submission_id']);
 }
 
 // Get submission details

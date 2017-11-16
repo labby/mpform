@@ -43,19 +43,11 @@ require(LEPTON_PATH.'/modules/admin.php');
 require(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
 
 // Get id
-if (WB_VERSION >= "2.8.2") {
-	$field_id = $admin->checkIDKEY('field_id', false, 'GET');
-	if (!$field_id) {
-		$admin->print_error($MESSAGE['GENERIC_SECURITY_ACCESS'], ADMIN_URL);
-		exit();
-	}
+if(!isset($_GET['field_id']) OR !is_numeric($_GET['field_id'])) {
+	header("Location: ".ADMIN_URL."/pages/index.php");
+	exit(0);
 } else {
-	if(!isset($_GET['field_id']) OR !is_numeric($_GET['field_id'])) {
-		header("Location: ".ADMIN_URL."/pages/index.php");
-		exit(0);
-	} else {
-		$field_id = $_GET['field_id'];
-	}
+	$field_id = $_GET['field_id'];
 }
 
 
