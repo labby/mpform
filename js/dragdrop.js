@@ -89,8 +89,6 @@ JsAdmin.init_drag_drop = function() {
 	}
 
 	var links = document.getElementsByTagName('a');
-//	var reImg = /(.*)move_(down|up)\.php(.*)/;
-//	var reImg = /(.*)+JsAdmin.WB_PRG+(.*)/;
 
 	var reImg = /(.*)move_to\.php(.*)/;
 	var reImgW = /(.*)where=(.*)/;
@@ -258,7 +256,7 @@ JsAdmin.DD.trDDSwap.prototype.endDrag = function(e) {
 	var newIndex = this.getEl().rowIndex;
 	if(newIndex != this.rowIndex) {
 		url = JsAdmin.movable_rows[this.getEl().id].url;
-//		var url = JsAdmin.LEPTON_URL + "/modules/formx2/move_to.php";
+
 		url += JsAdmin.movable_rows[this.getEl().id].params + "&position=" + newIndex;
 		//alert(url);return;
 //		window.status = url;
@@ -371,10 +369,8 @@ JsAdmin.DD.liDDSwap.prototype.endDrag = function(e) {
 	if(newIndex != this.rowIndex) {
 		url = JsAdmin.movable_rows[this.getEl().id].url;
 
-//		var url = JsAdmin.LEPTON_URL + JsAdmin.WB_PRG; //"/modules/formx2/move_to.php";
-
 		url += JsAdmin.movable_rows[this.getEl().id].params + "&position=" + (newIndex+1);
-//		url += JsAdmin.movable_rows[this.getEl().id].params + "&position=" + newIndex;
+
 		//alert(url);return;
 		window.status = url;
 		document.body.className = String(document.body.className).replace(/(\s*)jsadmin_([a-z]+)/g, "$1") + " jsadmin_busy";

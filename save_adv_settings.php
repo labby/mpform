@@ -30,7 +30,7 @@ if (defined('LEPTON_PATH')) {
 	}
 }
 
-// include WB admin wrapper script to check permissions
+// include admin wrapper script to check permissions
 $update_when_modified = true;
 require(LEPTON_PATH . '/modules/admin.php');
 

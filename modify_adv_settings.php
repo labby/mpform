@@ -95,7 +95,7 @@ $temp =	array(
 	'SECTION_ID'		=> (int) $section_id,
 	'MOD_CLASS'			=> strtolower(basename(dirname(__FILE__))),
 	'MODULE_URL'		=> LEPTON_URL . "/modules/mpform",
-	// variables from global WB language files
+	// variables from global language files
 	'des_use_captcha'           => '',
 	'txt_use_captcha'           => $TEXT['CAPTCHA_VERIFICATION'],
 	'use_captcha_true_checked'	=> (($settings['use_captcha']==true) ? 'checked="checked"' : ''),
