@@ -120,6 +120,7 @@ switch( $field_type ) {
 	
 	case 'textfield':
  	case 'email_subj':
+ 	case 'email_recip':
 	case 'email':
 	case 'integer_number':
 	case 'decimal_number':

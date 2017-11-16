@@ -15,9 +15,10 @@
 
 class mpform_order extends LEPTON_order {
 
-// Clean ordering (should be called if a row in the middle has been deleted)
-	function move_to($cf_value,$field_id,$position) {
-		global $database;
+    // Clean ordering (should be called if a row in the middle has been deleted)
+	public function move_to($cf_value,$field_id,$position) {
+		
+		$database = LEPTON_database::getInstance();
 
 		// Get current index
 		$order = $this->get_position($field_id);
@@ -49,8 +50,9 @@ class mpform_order extends LEPTON_order {
 		return true;
 	}
 	
-	function get_position($field_id) {
-		global $database;
+	public function get_position($field_id) {
+		
+		$database = LEPTON_database::getInstance();
 
 		// Get current index
 		$query_order = "SELECT `".$this->order_field."` FROM `".$this->table."` WHERE `".$this->id_field."` = '$field_id'";
@@ -64,6 +66,6 @@ class mpform_order extends LEPTON_order {
 		
 		return $order;
 	}
-}  // end of: class orderx extends order
+}  // end of: class mpform_order
 
 ?>
