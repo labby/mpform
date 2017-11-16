@@ -13,6 +13,7 @@
  *
  */
 
+ // include class.secure.php to protect this file and the whole CMS!
 if (defined('LEPTON_PATH')) {	
 	include(LEPTON_PATH.'/framework/class.secure.php'); 
 } else {
@@ -29,6 +30,7 @@ if (defined('LEPTON_PATH')) {
 		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
 	}
 }
+// end include class.secure.php
 
 // obtain module directory
 $mod_dir = basename(dirname(__FILE__));
@@ -37,7 +39,7 @@ $mod_dir = basename(dirname(__FILE__));
 require(LEPTON_PATH.'/modules/admin.php');
 
 // Include the ordering class
-require(LEPTON_PATH.'/framework/class.order.php');
+
 require(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
 
 // Get id

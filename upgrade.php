@@ -13,6 +13,7 @@
  *
  */
 
+ // include class.secure.php to protect this file and the whole CMS!
 if (defined('LEPTON_PATH')) {	
 	include(LEPTON_PATH.'/framework/class.secure.php'); 
 } else {
@@ -29,6 +30,7 @@ if (defined('LEPTON_PATH')) {
 		trigger_error(sprintf("[ <b>%s</b> ] Can't include class.secure.php!", $_SERVER['SCRIPT_NAME']), E_USER_ERROR);
 	}
 }
+// end include class.secure.php
 
 require(LEPTON_PATH.'/modules/mpform/info.php');
 
@@ -113,6 +115,12 @@ if($database->is_error()) {
 if (file_exists (LEPTON_PATH.'/modules/mpform/pear/PEAR.php')) {
 		rm_full_dir( LEPTON_PATH.'/modules/mpform/pear' ); 
 }
+
+//from LEPTON 3.1.0
+$directory_names = array(
+'/modules/mpform/htt'
+);
+LEPTON_handle::delete_obsolete_directories($directory_names);
 
 echo "<BR><B>Module $module_name updated to version: $module_version</B><BR>";
 

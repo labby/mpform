@@ -34,9 +34,9 @@ if (defined('LEPTON_PATH')) {
 require(LEPTON_PATH.'/modules/admin.php');
 
 // Include the ordering class
-require(LEPTON_PATH.'/framework/class.order.php');
+
 // Get new order
-$order = new order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
+$order = new LEPTON_order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
 $position = $order->get_new($section_id);
 
 // Insert new row into database

@@ -65,8 +65,8 @@ function module_header_footer($page_id, $mod_dir) {
 	
 }  // end of: function module_header_footer
 
-require_once (LEPTON_PATH.'/framework/class.order.php');
-class orderx extends order {
+
+class orderx extends LEPTON_order {
 
 // Clean ordering (should be called if a row in the middle has been deleted)
 	function move_to($cf_value,$field_id,$position) {

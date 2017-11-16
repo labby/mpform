@@ -41,9 +41,9 @@ if(!isset($_GET['oldfield_id']) OR !is_numeric($_GET['oldfield_id'])) {
 }
 
 // Include the ordering class
-require(LEPTON_PATH.'/framework/class.order.php');
+
 // Get new order
-$order = new order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
+$order = new LEPTON_order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
 $position = $order->get_new($section_id);
 
 // Insert new row into database

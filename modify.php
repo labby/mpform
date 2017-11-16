@@ -91,9 +91,9 @@ $form_values = array(
 );
 
 // Include the ordering class
-require_once LEPTON_PATH.'/framework/class.order.php';
+
 // Create new order object an reorder
-$order = new order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
+$order = new LEPTON_order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
 $order->clean($section_id);
 require_once LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php';
 

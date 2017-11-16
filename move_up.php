@@ -41,10 +41,10 @@ if(!isset($_GET['field_id']) OR !is_numeric($_GET['field_id'])) {
 require(LEPTON_PATH.'/modules/admin.php');
 
 // Include the ordering class
-require(LEPTON_PATH.'/framework/class.order.php');
+
 
 // Create new order object an reorder
-$order = new order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
+$order = new LEPTON_order(TABLE_PREFIX.'mod_mpform_fields', 'position', 'field_id', 'section_id');
 if($order->move_up($field_id)) {
 	$admin->print_success($TEXT['SUCCESS'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
 } else {
