@@ -60,10 +60,8 @@ if (!function_exists('upload_one_file')) {
 			return $s;
 		}
 
-				
-		require_once(LEPTON_PATH.'/modules/lib_lepton/upload/class.upload.php');
 		/**
-		 *	first est the file-extension (MIME type)
+		 *	first set the file-extension (MIME type)
 		 */
 		$allowed_types = explode(",",$only_exts);
 		
@@ -73,108 +71,35 @@ if (!function_exists('upload_one_file')) {
 			return "[1] File type not allowed here!";
 		} 
 // 		get new instance
-		$upload = new upload($_FILES[ $fileid ]);
-		
+		$oUpload = lib_lepton::getToolInstance("upload", $_FILES[ $fileid ]);
+
 //		change filename according to line 439 $newfilename	
 		$new_filename_body = implode( ".", $temp_array);
-		$upload->file_new_name_body = $new_filename_body;
+		$oUpload->file_new_name_body = $new_filename_body;
 		
-		if ($upload->uploaded) {
+		if ($oUpload->uploaded) {
 		
-			$upload->Process( $upload_files_folder );
+			$oUpload->Process( $upload_files_folder );
 			
-			 if ($upload->processed) {
+			 if ($oUpload->processed) {
 			 	// ok
 			 } else {
 			 	// ERROR
-			 	return "[2] ".$upload->error;
+			 	return "[2] ".$oUpload->error;
 			 }
 		}
 		return false;  // upload did not fail  
 	}
 }
 
-if (!class_exists('wbx')) {
-	class wbx // extends wb
-	{
-		function __construct() {
-		
-		}
-	
-		// Validate send email
-		function mailx($fromaddress, $toaddress, $subject, $message, $fromname='', $file_attached='') {
-			/* 
-				INTEGRATED OPEN SOURCE PHPMAILER CLASS FOR SMTP SUPPORT AND MORE
-				SOME SERVICE PROVIDERS DO NOT SUPPORT SENDING MAIL VIA PHP AS IT DOES NOT PROVIDE SMTP AUTHENTICATION
-				NEW MAILER CLASS IS ABLE TO SEND OUT MESSAGES USING SMTP WHICH RESOLVE THESE ISSUE (C. Sommer)
-	
-				NOTE:
-				To use SMTP for sending out mails, you have to specify the SMTP host of your domain
-				via the Settings panel in the backend of Website Baker
-			*/ 
-	
-			$fromaddress = preg_replace('/[\r\n]/', '', $fromaddress);
-			$subject = preg_replace('/[\r\n]/', '', $subject);
-			$htmlmessage = preg_replace('/[\r\n]/', "<br />\n", $message);
-			$plaintext = preg_replace(",<br />,", "\r\n", $message);
-			$plaintext = preg_replace(",</h.>,", "\r\n", $plaintext);
-			$plaintext = htmlspecialchars_decode(preg_replace(",</?\w+>,", " ", $plaintext), ENT_NOQUOTES);
-	
-			// create PHPMailer object and define default settings
-			require_once LEPTON_PATH."/modules/lib_phpmailer/library.php";
-			
-			//	ALDUS: PHPMailer >= 6 comes up with his own namespace
-			//	so we've have to look for the current version first here
-		#	$module_version = '';
-		#	require_once LEPTON_PATH."/modules/lib_phpmailer/info.php";
-		#	$myMail = intval($module_version) < 6 
-		#		? new PHPMailer()
-		#		: new PHPMailer\PHPMailer\PHPMailer()
-		#		;
-	$myMail = new PHPMailer\PHPMailer\PHPMailer();
-			// set user defined from address
-			if ($fromaddress!='') {
-				if($fromname!='') $myMail->FromName = $fromname;         // FROM-NAME
-				$myMail->From = $fromaddress;                            // FROM:
-				$myMail->AddReplyTo($fromaddress);                       // REPLY TO:
-			}
-			
-			// define recipient(s)
-			$emails = explode(",", $toaddress);
-			foreach ($emails as $recip) {
-				if (trim($recip) != '')
-				$myMail->AddAddress(trim($recip));                      // TO:
-			}
-			
-			// define information to send out
-			$myMail->Subject = $subject;                                // SUBJECT
-			$myMail->Body = $htmlmessage;                               // CONTENT (HTML)
-			$myMail->AltBody = $plaintext;                    			// CONTENT (PLAINTEXT)
-			$myMail->CharSet="UTF-8";									// force text to be utf-8
-			if (is_array($file_attached)) {
-				foreach($file_attached as $k => $v) {
-					$myMail->AddAttachment($k, $v);                  // ATTACHMENT (FILE)
-				}
-			}
 
-			// check if there are any send mail errors, otherwise say successful
-			if (!$myMail->Send()) {
-				$_SESSION['mpform_wbx_error'] = $myMail->ErrorInfo;
-				return false;
-			} else {
-				return true;
-			}
-		}
-	}
-	global $wbx;
-	$wbx = new wbx;
-}
+$oMpform_mail = new mpform_mail();
 
 ////////////////// Main function ///////////////////////
 
 if (!function_exists('eval_form')) {
 function eval_form($section_id) {
-	global $database, $MESSAGE, $admin, $TEXT, $wbx, $MOD_MPFORM;
+	global $database, $MESSAGE, $admin, $TEXT, $MOD_MPFORM;
 
 	 $ip = (preg_match("/^\d+\.\d+\.\d+\.\d+$/", $_SERVER['REMOTE_ADDR'])) ? $_SERVER['REMOTE_ADDR'] : 'unknown';  // IP address of sender
 
@@ -394,12 +319,12 @@ function eval_form($section_id) {
 						$html_data_site .= str_replace('{HEADING}', $field['title'], $heading_html);
 					} elseif ($field['type'] == 'email_recip') {
 						// the browser will convert umlauts, we need to undo this for compare:
-						$recip = htmlentities  ($post_field[0], ENT_NOQUOTES, 'UTF-8');
+						$recip = $post_field[0];//htmlentities  ($post_field[0], ENT_NOQUOTES, 'UTF-8');
 						if ($recip == $MOD_MPFORM['frontend']['select']) {
 							$err_txt[$field_id] = $MOD_MPFORM['frontend']['select_recip'];
 							$fer[]=$field_id;
 						}
-						$recip = htmlspecialchars($post_field[0], ENT_QUOTES);
+//						$recip = htmlspecialchars($post_field[0], ENT_QUOTES);
 						//$email_body .= $field['title'].': '.$recip."\n";
 						$html_data_user .= str_replace(array('{TITLE}', '{DATA}'), array($field['title'], $recip), $short_html);
 						$html_data_site .= str_replace(array('{TITLE}', '{DATA}'), array($field['title'], $recip), $short_html);
@@ -551,18 +476,18 @@ function eval_form($section_id) {
 					}
 				}
 
-				if($wbx->mailx($email_from, $mailto, $email_subject, $body, $email_fromname, $files_to_attach)) {
+				if($oMpform_mail->mailx($email_from, $mailto, $email_subject, $body, $email_fromname, $files_to_attach)) {
 					$files_to_attach = array();
 				} else {
 					$success = false;
-					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error'];
-					unset( $_SESSION['mpform_wbx_error'] );
+					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_mail_error'];
+					unset( $_SESSION['mpform_mail_error'] );
 				}
 			}
 			
 			if ($success==true AND $success_email_to != '') {
 				$user_body = str_replace(array('{DATA}', '{REFERER}', '{IP}', '{DATE}', '{USER}'), array($html_data_user, $_SESSION['href'], $ip, $jetzt, $wb_user), $success_email_text);
-				if (! $wbx->mailx($success_email_from, $success_email_to, $success_email_subject, $user_body, $success_email_fromname)) {
+				if (! $oMpform_mail->mailx($success_email_from, $success_email_to, $success_email_subject, $user_body, $success_email_fromname)) {
 					$success = false;
 					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION']). " (CONFIRM) ";
 				}
