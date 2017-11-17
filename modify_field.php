@@ -174,6 +174,7 @@ switch ($type) {
 		."</tr>\n";
 		break;
 	case 'select':
+ 	case 'email_recip':	
 	case 'checkbox':
 	case 'radio':
 		($type == 'radio') ? $kind = 'radio' : $kind = 'checkbox';

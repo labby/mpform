@@ -120,7 +120,6 @@ switch( $field_type ) {
 	
 	case 'textfield':
  	case 'email_subj':
- 	case 'email_recip':
 	case 'email':
 	case 'integer_number':
 	case 'decimal_number':
@@ -158,6 +157,7 @@ switch( $field_type ) {
 		break;
 		
 	case 'select':
+ 	case 'email_recip':	
 		$fields = array(
 			'value' => $value, 	// *
 			'extra'	=> int_not0($admin->get_post('size')).','.$admin->get_post('multiselect')
