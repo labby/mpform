@@ -186,7 +186,7 @@
 				<option value="wbu" {% if ( settings.success_email_to == "wbu" ) %}selected="selected"{% endif %}>{{ MOD_MPFORM.TXT_USER_ADDR }}</option>
 {# BEGIN success_email_to_block #}
 				{% for email_field in all_email_fields %}
-				<option value="field{{ email_field.field_id }}" {% if ( settings.success_email_to == ("field" . email_field.field_id) ) %}selected="selected"{% endif %}>formular field: {{ email_field.title }}</option>
+				<option value="{{ email_field.field_id }}" {% if ( settings.success_email_to == email_field.field_id ) %}selected="selected"{% endif %}>formular field: {{ email_field.title }}</option>
 				{% endfor %}
 {# END success_email_to_block #}
 			</select>

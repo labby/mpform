@@ -92,14 +92,14 @@ if (!function_exists('upload_one_file')) {
 	}
 }
 
-
+global $oMpform_mail;
 $oMpform_mail = new mpform_mail();
 
 ////////////////// Main function ///////////////////////
 
 if (!function_exists('eval_form')) {
 function eval_form($section_id) {
-	global $database, $MESSAGE, $admin, $TEXT, $MOD_MPFORM;
+	global $database, $MESSAGE, $admin, $TEXT, $oMpform_mail, $MOD_MPFORM;
 
 	 $ip = (preg_match("/^\d+\.\d+\.\d+\.\d+$/", $_SERVER['REMOTE_ADDR'])) ? $_SERVER['REMOTE_ADDR'] : 'unknown';  // IP address of sender
 
