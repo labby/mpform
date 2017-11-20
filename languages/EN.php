@@ -26,7 +26,7 @@ $MOD_MPFORM['backend'] = array(
 	'TXT_DEFAULT'	=> "Default value",
 	'TXT_ISFOLLOWING' => "Has a predecessing form",
 	'des_is_following'=> 'Specifies whether the page is the first page of a multi page form or not.<br />
-For forms consisting of a single page No is required!',
+							For forms consisting of a single page No is required!',
 	'TXT_MP_SETTINGS' => 'Workflow Settings',
 	'EMAIL_SETTINGS_1' => 'E-Mail Settings (Mail to site owner)',
 	'EMAIL_SETTINGS_2' => 'E-Mail Settings (Confirmation mail to user)',
@@ -41,6 +41,7 @@ For forms consisting of a single page No is required!',
 	'HELP' => 'Help for',
 	'TXT_COPY_FIELD' => 'Copy Field',
 	'TXT_ADD_FIELD'	=> 'Add Field',
+	'txt_delete_submissions'=> 'Delete Submissions',
 	'ROWS'	=> 'Rows',
 	'TXT_TBLSFX' => 'Name suffix for results table',
 	'DES_TXT_TBLSFX' => 'Results from all pages with the same suffix go into the same table.',
@@ -50,10 +51,10 @@ For forms consisting of a single page No is required!',
 	'fileupload'	=> 'File upload',
 	'txt_email_to'	=> '&quot;To&quot; Address(es)',
 	'des_email_to'	=> 'Put only one &quot;To&quot; address on a line, formatted as in the following example:<br />
- &nbsp; Support stuff &lt;support@yourbussines.com&gt;<br />
- &nbsp; Marketing stuff &lt;marketing@yourbussines.com,marketing2@yourbussines.com&gt;<br />
- You can also let the email address alone (without the name part and without brackets),
- but in this case the user will see the email address if he is allowed to choose the recipient of the email.',
+						 &nbsp; Support stuff &lt;support@yourbussines.com&gt;<br />
+						 &nbsp; Marketing stuff &lt;marketing@yourbussines.com,marketing2@yourbussines.com&gt;<br />
+						 You can also let the email address alone (without the name part and without brackets),
+						 but in this case the user will see the email address if he is allowed to choose the recipient of the email.',
  
 	'txt_success_email_to'	=> '&quot;To&quot; Address',
 	'txt_email_fromname_field'	=> '&quot;From&quot; Name',
@@ -62,19 +63,19 @@ For forms consisting of a single page No is required!',
 	'txt_success_email_from'	=> '&quot;From&quot; Address',
 	'txt_success_page'	=> 'Following page',
 	'des_success_page'	=> 'The "Following page" will sent to the browser after the form has been filled out without any failure.<br />
-If no "Following page" is set, the text specified in the next field will be sent.
-',
+							If no "Following page" is set, the text specified in the next field will be sent.
+							',
 	'txt_success_text'	=> 'Success text',
 	'des_success_text'	=> 'If no "Following page" is set, this text will be shown after the form has been filled out without any failure.',
 	'txt_submissions_text'	=> 'Data transfer to mpform_submissions table',
 	'des_submissions_text'	=> 'this text will be written to the field <b>body</b> of the mpform_submissions table.',
 	'success_options'	=> 'The following place holders are possible:<br />
- &nbsp; {DATA} - all data entered in the form<br />
- &nbsp; {REFERER} - if known, the page from where the form has been called<br />
- &nbsp; {IP} - the IP address of the sender<br />
- &nbsp; {DATE} - date and time<br />
- &nbsp; {USER} - name of the logged on user<br />
-',
+							 &nbsp; {DATA} - all data entered in the form<br />
+							 &nbsp; {REFERER} - if known, the page from where the form has been called<br />
+							 &nbsp; {IP} - the IP address of the sender<br />
+							 &nbsp; {DATE} - date and time<br />
+							 &nbsp; {USER} - name of the logged on user<br />
+							',
 	'des_success_email_text'	=> 'Content of the confirmation email to the sender',
 	'des_email_text'	=> 'Content of the email to the site owner',
 	'fieldset_start'	=> 'Fieldset (start)',
@@ -91,20 +92,21 @@ If no "Following page" is set, the text specified in the next field will be sent
 	'optional_entry'	=> "optional",
 	'ro_entry'	=> "read only",
 	'des_field_loop'	=> 'The following place holders are possible:<br />
- &nbsp; {CLASSES} - css class (dependent from field type and error status)<br />
- &nbsp; {TITLE} - title of the form field<br />
- &nbsp; {FIELD} - the field itself<br />
- &nbsp; {REQUIRED} - mark for mandatory fields<br />
- &nbsp; {HELP} - hidden help text, requires Javascript<br />
- &nbsp; {HELPTXT} - help text always visible<br />
- &nbsp; {ERRORTEXT} - error text (only for certain field types)<br />',
+							 &nbsp; {CLASSES} - css class (dependent from field type and error status)<br />
+							 &nbsp; {TITLE} - title of the form field<br />
+							 &nbsp; {FIELD} - the field itself<br />
+							 &nbsp; {REQUIRED} - mark for mandatory fields<br />
+							 &nbsp; {HELP} - hidden help text, requires Javascript<br />
+							 &nbsp; {HELPTXT} - help text always visible<br />
+							 &nbsp; {ERRORTEXT} - error text (only for certain field types)<br />',
 	'des_footer'	=> 'The following place holder is possible:<br />
- &nbsp; {SUBMIT} - Submit button',
+						&nbsp; {SUBMIT} - Submit button',
  'TXT_MODIFY_FIELD'	=> 'Edit Field (ID: %s)',
  'TXT_ADD_FIELD'	=> 'Add Field',
  'TXT_SETTINGS'		=> 'General Options',
  'TXT_EDIT_CSS'		=> 'CSS Settings',
- 'Are_you_sure'		=> 'Are you sure you want to delete the selected item?'
+ 'Are_you_sure'		=> 'Are you sure you want to delete the selected item?',
+ 'submission_selected' => 'No submission was selected',
 );
 
 $MOD_MPFORM['backend_adv'] = array(
@@ -123,7 +125,7 @@ $MOD_MPFORM['backend_adv'] = array(
 	'SPECIAL_SETTINGS'	=> 'Special Settings',
 	'txt_enum'	=> 'Start value for Radio and Checkbox',
 	'des_enum'	=> 'Default behaviour: If this field is empty, Radio buttons and checkboxes return the visible text.<br />
- If this field contains a character (useful characters might be, for instance, 0, 1 or a), then this value will be incremented for every option and returned instead of the text.',
+					If this field contains a character (useful characters might be, for instance, 0, 1 or a), then this value will be incremented for every option and returned instead of the text.',
 	'TXT_DATE_FORMAT' => "Date format",
 	'TXT_ASP_SETTINGS'	=> 'SPAM Protection', 
  	'des_date_format'	=> 'Bash Date Format (eg. %m/%d/%Y)',

@@ -86,6 +86,8 @@ $form_values = array(
 		'TEXT_TYPE'		=> $MOD_MPFORM['backend']['TXT_TYP'],
 		'TXT_ADV_SETTINGS'	=> $MOD_MPFORM['backend_adv']['adv_settings'],
 		'TXT_FIELDS'	=> $MOD_MPFORM['backend']['TXT_ADD_FIELD'],
+		'txt_delete_submissions'	=> $MOD_MPFORM['backend']['txt_delete_submissions'],
+		'mark_all'		=> $MESSAGE['ADDON_GROUPS_MARKALL'],		
 		'TXT_SETTINGS'	=> $MOD_MPFORM['backend']['TXT_SETTINGS'],
 		'EDIT_CSS'		=> $MOD_MPFORM['backend']['TXT_EDIT_CSS']
 );
