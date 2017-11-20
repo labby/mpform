@@ -37,6 +37,7 @@ For forms consisting of a single page No is required!',
 	'HELP' => 'Hjelp for', //*uklar
 	'TXT_COPY_FIELD' => 'Kopier felt',
 	'TXT_ADD_FIELD'	=> 'Legg til felt',
+	'txt_delete_submissions'=> 'Delete Submissions',	
 	'ROWS'	=> 'Rader',
 	'TXT_TBLSFX' => 'Endelse for resultat tabellen(_skjema01)',
 	'DES_TXT_TBLSFX' => 'Resultatene fra skjema med samme endelse ender i den samme tabellen.',
@@ -99,7 +100,8 @@ If no "Following page" is set, the text specified in the next field will be sent
  'TXT_ADD_FIELD'	=> 'Add Field',
  'TXT_SETTINGS'		=> 'General Options',
  'TXT_EDIT_CSS'		=> 'CSS Settings',
-  'Are_you_sure'		=> 'Are you sure you want to delete the selected item?'
+ 'Are_you_sure'		=> 'Are you sure you want to delete the selected item?',
+ 'submission_selected' => 'No submission was selected'  
 );
 
 $MOD_MPFORM['backend_adv'] = array(

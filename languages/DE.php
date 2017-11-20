@@ -44,6 +44,7 @@ Bei einseitigen Formularen muss Nein eingestellt sein!',
 	'HELP' => 'Hilfe zu',
 	'TXT_COPY_FIELD' => 'Feld kopieren',
 	'TXT_ADD_FIELD'	=> 'Feld hinzuf&uuml;gen',
+	'txt_delete_submissions'=> 'Eingänge löschen',	
 	'ROWS'	=> 'Zeilen',
 	'TXT_TBLSFX' => 'Namensendung f&uuml;r die Ergebnistabelle',
 	'DES_TXT_TBLSFX' => 'Die Ergebnisse von allen Seiten mit der gleichen Namensendung landen in der gleichen Tabelle.',	
@@ -108,7 +109,8 @@ Falls keine Folgeseite angegeben wurde, wird der Text ausgegeben, der im folgend
  'TXT_ADD_FIELD'	=> 'Feld hinzuf&uuml;gen',
  'TXT_SETTINGS'		=> 'Allgemeine Optionen',
  'TXT_EDIT_CSS'		=> 'CSS-Einstellungen',
-  'Are_you_sure'		=> 'Sind sie sicher, das Sie diese Auswahl l&ouml;schen wollen?'
+ 'Are_you_sure'		=> 'Sind sie sicher, das Sie diese Auswahl l&ouml;schen wollen?',
+ 'submission_selected' => 'No submission was selected'  
 );
 
 $MOD_MPFORM['backend_adv'] = array(

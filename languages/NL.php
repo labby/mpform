@@ -42,6 +42,7 @@ Voor formulieren die uit een enkele pagina bestaan is NEE vereist!',
 	'HELP' => 'Hulp voor',
 	'TXT_COPY_FIELD' => 'Veld kopi&euml;ren',
 	'TXT_ADD_FIELD'	=> 'Veld toevoegen',
+	'txt_delete_submissions'=> 'Delete Submissions',	
 	'ROWS'	=> 'Hoogte (aantal regels)',
 	'TXT_TBLSFX' => 'Achtervoegsel voor databasetabel',
 	'DES_TXT_TBLSFX' => 'Maar als u meerdere MPForm-formulieren gebruikt op uw site, is het aan te raden om de resultaten in aparte databasetabellen op te slaan, om te voorkomen dat alle resultaten in dezelfde tabel terechtkomen.',
@@ -107,7 +108,8 @@ Als geen landingspagina is ingesteld wordt de in het volgende veld gespecificeer
  'TXT_ADD_FIELD'	=> 'Add Field',
  'TXT_SETTINGS'		=> 'General Options',
  'TXT_EDIT_CSS'		=> 'CSS Settings',
-  'Are_you_sure'		=> 'Are you sure you want to delete the selected item?' 
+ 'Are_you_sure'		=> 'Are you sure you want to delete the selected item?',
+ 'submission_selected' => 'No submission was selected'  
 );
 	
 $MOD_MPFORM['backend_adv'] = array(

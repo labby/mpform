@@ -106,7 +106,7 @@ $MOD_MPFORM['backend'] = array(
  'TXT_SETTINGS'		=> 'General Options',
  'TXT_EDIT_CSS'		=> 'CSS Settings',
  'Are_you_sure'		=> 'Are you sure you want to delete the selected item?',
- 'submission_selected' => 'No submission was selected',
+ 'submission_selected' => 'No submission was selected'
 );
 
 $MOD_MPFORM['backend_adv'] = array(
