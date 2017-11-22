@@ -57,7 +57,7 @@ if ($settings['page_id'] != $page_id) {
 }
 
 // Get all pages for the "pages" select for the "following" (success) pages 
-LEPTON_tools::register( "page_tree" );
+LEPTON_handle::register( "page_tree" );
 $all_pages = array();
 page_tree( 0, $all_pages, array('page_id','page_title','menu_title') );
 
