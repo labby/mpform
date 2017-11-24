@@ -30,24 +30,8 @@ if (defined('LEPTON_PATH')) {
 	}
 }
 
-// obtain module directory
-$mod_dir = basename(dirname(__FILE__));
-
-// Include admin wrapper script
-require(LEPTON_PATH.'/modules/admin.php');
-
-// 2nd level...
-require_once(LEPTON_PATH.'/framework/class.admin.php');
-
-
-$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
-require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
-
-
-//START HEADER HERE
-require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
-$adm = module_header_footer($page_id, $mod_dir);
-//END HEADER HERE
+$page_id = isset($_POST['page_id']) ? $_POST['page_id'] : 0;
+$admin = new LEPTON_admin('Pages', 'pages_modify');
 
 ?>
 <div class="helppage">
