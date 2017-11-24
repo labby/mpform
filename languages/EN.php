@@ -42,6 +42,7 @@ $MOD_MPFORM['backend'] = array(
 	'TXT_COPY_FIELD' => 'Copy Field',
 	'TXT_ADD_FIELD'	=> 'Add Field',
 	'txt_delete_submissions'=> 'Delete Submissions',
+	'delete_submissions'=> 'A copy of submissions_table was created in your database.',	
 	'ROWS'	=> 'Rows',
 	'TXT_TBLSFX' => 'Name suffix for results table',
 	'DES_TXT_TBLSFX' => 'Results from all pages with the same suffix go into the same table.',

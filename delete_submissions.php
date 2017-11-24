@@ -45,17 +45,20 @@ if(!isset($_POST['marked_submission']) OR !is_array($_POST['marked_submission'])
 	$submission_ids = $_POST['marked_submission'];
 }
 
+// first copy content of original table to xsik_table
+$database->simple_query("DROP TABLE IF EXISTS `".TABLE_PREFIX."xsik_mod_mpform_submissions`");
+$database->simple_query("CREATE TABLE `".TABLE_PREFIX."xsik_mod_mpform_submissions` LIKE `".TABLE_PREFIX."mod_mpform_submissions`");
+// insert content from sik_table to original table
+$database->simple_query("INSERT INTO `".TABLE_PREFIX."xsik_mod_mpform_submissions` SELECT * FROM `".TABLE_PREFIX."mod_mpform_submissions`");
 
-
-$database->prepare_and_execute(
-	"DELETE FROM `".TABLE_PREFIX."mod_mpform_submissions` WHERE `submission_id` IN(".implode(',',$submission_ids).") "
-);
+// delete entries from original table
+$database->simple_query("DELETE FROM `".TABLE_PREFIX."mod_mpform_submissions` WHERE `submission_id` IN(".implode(',',$submission_ids).") ");
 
 // Check if there is a db error, otherwise say successful
 if($database->is_error()) {
 	$admin->print_error($database->get_error(), ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
 } else {
-	$admin->print_success($TEXT['SUCCESS'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
+	$admin->print_success($TEXT['SUCCESS'].'<br /><br />'.$MOD_MPFORM['backend']['delete_submissions'], ADMIN_URL.'/pages/modify.php?page_id='.$page_id);
 }
 
 // Print admin footer
