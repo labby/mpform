@@ -219,9 +219,9 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	
 	$needhelpbutton = (strpos($field_loop, "{HELP}") !== false);  // we only need a help button if this variable is used
 
-	// execute private function in private.php, if available
-	if (function_exists('private_function_before_new_form')) {
-		private_function_before_new_form($section_id);
+	// execute custom function in custom.php, if available
+	if (function_exists('custom_function_before_new_form')) {
+		custom_function_before_new_form($section_id);
 	}
 
 	// Set new submission ID in session if it is not a follower on a multipage form

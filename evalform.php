@@ -434,9 +434,9 @@ function eval_form($section_id) {
 			$success = false;
 		} else {
 			
-			// execute private function in private.php, if available
-			if (function_exists('private_function_before_email')) {
-				$success = private_function_before_email($section_id);
+			// execute custom function in custom.php, if available
+			if (function_exists('custom_function_before_email')) {
+				$success = custom_function_before_email($section_id);
 			} else $success = true;
 			
 			// Now send the email + attachment...
@@ -598,9 +598,9 @@ function eval_form($section_id) {
 	if (isset($success) AND $success == true) {
 		if (isset($_SESSION['captcha_time'])) unset($_SESSION['captcha_time']);	// can't do this in captcha module when multiple forms on one page!
 
-		// execute private function in private.php, if available
-		if (function_exists('private_function_on_success')) {
-			$success = private_function_on_success($section_id);
+		// execute custom function in custom.php, if available
+		if (function_exists('custom_function_on_success')) {
+			$success = custom_function_on_success($section_id);
 		}
 					
 		if ($success == true) {

@@ -117,10 +117,11 @@ if (file_exists (LEPTON_PATH.'/modules/mpform/pear/PEAR.php')) {
 }
 
 //from LEPTON 3.1.0
-$directory_names = array(
-'/modules/mpform/htt'
-);
-LEPTON_handle::delete_obsolete_directories($directory_names);
+LEPTON_handle::delete_obsolete_directories('/modules/mpform/htt');
+
+if (file_exists (LEPTON_PATH.'/modules/mpform/private.php')) {
+	rename( LEPTON_PATH.'/modules/mpform/private.php',LEPTON_PATH .'/modules/mpform/private_sik.php');
+}
 
 echo "<BR><B>Module $module_name updated to version: $module_version</B><BR>";
 

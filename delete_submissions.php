@@ -45,11 +45,8 @@ if(!isset($_POST['marked_submission']) OR !is_array($_POST['marked_submission'])
 	$submission_ids = $_POST['marked_submission'];
 }
 
-// first copy content of original table to xsik_table
-$database->simple_query("DROP TABLE IF EXISTS `".TABLE_PREFIX."xsik_mod_mpform_submissions`");
-$database->simple_query("CREATE TABLE `".TABLE_PREFIX."xsik_mod_mpform_submissions` LIKE `".TABLE_PREFIX."mod_mpform_submissions`");
-// insert content from sik_table to original table
-$database->simple_query("INSERT INTO `".TABLE_PREFIX."xsik_mod_mpform_submissions` SELECT * FROM `".TABLE_PREFIX."mod_mpform_submissions`");
+// save original table before deleting entries
+LEPTON_handle::create_sik_table('mod_mpform_submissions');
 
 // delete entries from original table
 $database->simple_query("DELETE FROM `".TABLE_PREFIX."mod_mpform_submissions` WHERE `submission_id` IN(".implode(',',$submission_ids).") ");

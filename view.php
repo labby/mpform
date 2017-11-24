@@ -37,12 +37,12 @@ require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.ph
 
 require_once LEPTON_PATH.'/modules/captcha_control/captcha/captcha.php';
 
-// define some vars required later in private.php
+// define some vars required later in custom.php
 global $success_email_text, $success_email_to, $felder;
 
-// include private functions, if available
-if (file_exists(LEPTON_PATH .'/modules/mpform/private.php')) {
-	include_once(LEPTON_PATH .'/modules/mpform/private.php');
+// include custom functions, if available
+if (file_exists(LEPTON_PATH .'/modules/mpform/custom.php')) {
+	include_once(LEPTON_PATH .'/modules/mpform/custom.php');
 }
 
 // Work-out if the form has been submitted or not

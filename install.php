@@ -28,9 +28,9 @@ if(defined('LEPTON_URL')) {
 		}
 	}
 	
-	if (!file_exists(LEPTON_PATH."/modules/mpform/private.php")) {
-		if (file_exists(LEPTON_PATH."/modules/mpform/private.php.txt")) {
-			rename(LEPTON_PATH."/modules/mpform/private.php.txt",  LEPTON_PATH."/modules/mpform/private.php");
+	if (!file_exists(LEPTON_PATH."/modules/mpform/custom.php")) {
+		if (file_exists(LEPTON_PATH."/modules/mpform/custom.php.txt")) {
+			rename(LEPTON_PATH."/modules/mpform/custom.php.txt",  LEPTON_PATH."/modules/mpform/custom.php");
 		}
 	}
 	
