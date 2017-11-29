@@ -30,7 +30,7 @@ if (defined('LEPTON_PATH')) {
 	}
 }
 
-$page_id = isset($_POST['page_id']) ? $_POST['page_id'] : 0;
+
 $admin = new LEPTON_admin('Pages', 'pages_modify');
 
 ?>
