@@ -362,7 +362,7 @@ function eval_form($section_id) {
 						$field_value = str_replace($filter_settings['dot_replacement'], '.', $field_value);
 						$post_field = $field_value;
 					}
-					if($field['type'] == 'email' AND $admin->filter_var($post_field) == false) {
+					if($field['type'] == 'email' AND filter_var($post_field, FILTER_VALIDATE_EMAIL) == false) {
 						$err_txt[$field_id] = $MESSAGE['USERS']['INVALID_EMAIL'];
 						$fer[] = $field_id;
 					}
@@ -389,12 +389,12 @@ function eval_form($section_id) {
 						$html_data_site .= str_replace('{HEADING}', $field['title'], $heading_html);
 					} elseif ($field['type'] == 'email_recip') {
 						// the browser will convert umlauts, we need to undo this for compare:
-						$recip = htmlentities  ($post_field[0], ENT_NOQUOTES, 'UTF-8');
+						// $recip = htmlentities  ($post_field[0], ENT_NOQUOTES, 'UTF-8');
 						if ($recip == $MOD_MPFORM['frontend']['select']) {
 							$err_txt[$field_id] = $MOD_MPFORM['frontend']['select_recip'];
 							$fer[]=$field_id;
 						}
-						$recip = htmlspecialchars($post_field[0], ENT_QUOTES);
+						// $recip = htmlspecialchars($post_field[0], ENT_QUOTES);
 						//$email_body .= $field['title'].': '.$recip."\n";
 						$html_data_user .= str_replace(array('{TITLE}', '{DATA}'), array($field['title'], $recip), $short_html);
 						$html_data_site .= str_replace(array('{TITLE}', '{DATA}'), array($field['title'], $recip), $short_html);

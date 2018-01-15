@@ -21,6 +21,8 @@ $mod_dir = basename(dirname(__FILE__));
 
 $MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
 require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
+//	load the correct language-file
+require_once (LEPTON_PATH."/modules/mpform/register_language.php");
 
 $captcha_filename_lepton_1 = LEPTON_PATH."/include/captcha/captcha.php";
 require_once((file_exists($captcha_filename_lepton_1))
