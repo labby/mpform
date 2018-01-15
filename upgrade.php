@@ -116,7 +116,7 @@ if (file_exists (LEPTON_PATH.'/modules/mpform/pear/PEAR.php')) {
 		rm_full_dir( LEPTON_PATH.'/modules/mpform/pear' ); 
 }
 
-//from LEPTON 3.1.0
+//from LEPTON 4.0
 LEPTON_handle::delete_obsolete_directories('/modules/mpform/htt');
 
 if (file_exists (LEPTON_PATH.'/modules/mpform/private.php')) {
