@@ -13,9 +13,15 @@
  *
  */
 
-class mpform
+class mpform extends LEPTON_abstract
 {
-
+    public static $instance;
+    
+    public function initialize()
+    {
+    
+    }
+    
 	static public function prepare_fields( &$all_fields )
 	{
 		foreach($all_fields as &$field)
