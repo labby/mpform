@@ -10,35 +10,30 @@
  *
  */
  
-global $lepton_filemanager;
-if (!is_object($lepton_filemanager)) require_once( "../../framework/class.lepton.filemanager.php" );
 
-$base = "/modules/mpform/";
  
 $files_to_register = array(
-	$base.'add.php',
-	$base.'add_field.php',
-	$base.'copy_field.php',
-	$base.'delete_field.php',
-	$base.'delete_submission.php',
-	$base.'delete_submissions.php',	
-	$base.'help.DE.php',
-	$base.'help.EN.php',
-	$base.'modify_field.php',
-	$base.'modify_settings.php',
-	$base.'modify_adv_settings.php',
-	$base.'modify_submissions.php',	
-	$base.'move_to.php',
-	$base.'move_down.php',
-	$base.'move_up.php',
-	$base.'save.php',
-	$base.'save_settings.php',
-	$base.'save_adv_settings.php',
-	$base.'save_field.php',
-	$base.'view_submission.php'
+	'add.php',
+	'add_field.php',
+	'copy_field.php',
+	'delete_field.php',
+	'delete_submission.php',
+	'delete_submissions.php',	
+	'help.DE.php',
+	'help.EN.php',
+	'modify_field.php',
+	'modify_settings.php',
+	'modify_adv_settings.php',
+	'modify_submissions.php',	
+	'move_to.php',
+	'move_down.php',
+	'move_up.php',
+	'save.php',
+	'save_settings.php',
+	'save_adv_settings.php',
+	'save_field.php',
+	'view_submission.php'
 );
 
-$lepton_filemanager->register( $files_to_register );
-
-// LEPTON_secure::getInstance()->register_filenames( $files_to_register );
+LEPTON_secure::getInstance()->accessFiles( $files_to_register );
 ?>
