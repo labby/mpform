@@ -246,7 +246,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	}
 
 	echo "\n<div class=\"mpform\">
-	<form name=\"form_$section_id\"  enctype='multipart/form-data' action=\"". htmlspecialchars(strip_tags($_SERVER['SCRIPT_NAME'])) ."#".SEC_ANCHOR."section_".$section_id."\" method=\"post\">
+	<form name=\"form_$section_id\"  enctype='multipart/form-data' action=\"".LEPTON_URL. htmlspecialchars(strip_tags($_SERVER['SCRIPT_NAME'])) .'?lang='.LANGUAGE."#".SEC_ANCHOR."section_".$section_id."\" method=\"post\">
 	<input type=\"hidden\" name=\"submission_id\" value=\"". $_SESSION['submission_id_'.$section_id] ."\" />\n";
 	
 	
