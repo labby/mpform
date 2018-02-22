@@ -21,7 +21,22 @@ class mpform extends LEPTON_abstract
     {
     
     }
-    
+ 
+	public static function build_action_url ($iSection_id = -1) {
+		$database = LEPTON_database::getInstance();
+		$page_id = $database->get_one("SELECT page_id FROM ".TABLE_PREFIX."sections WHERE section_id = ".$iSection_id." ");
+		
+		$page_values = array ();
+		$database->execute_query(
+			"SELECT * FROM ".TABLE_PREFIX."pages WHERE page_id = ".$page_id." " ,
+			true,
+			$page_values,
+			false
+		);
+
+		return LEPTON_URL.PAGES_DIRECTORY.$page_values['link'].PAGE_EXTENSION.'?lang='.LANGUAGE."#".SEC_ANCHOR."section_".$section_id;	
+	}
+	
 	static public function prepare_fields( &$all_fields )
 	{
 		foreach($all_fields as &$field)

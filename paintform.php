@@ -282,7 +282,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 		'section_id'	=> $section_id,
 		'time'			=> $now_time,
 		
-		'form_action'	=> htmlspecialchars(strip_tags($_SERVER['SCRIPT_NAME'])) ."#".SEC_ANCHOR."section_".$section_id,
+		'form_action'	=> mpform::build_action_url($section_id),
 		'submission_id'	=> $_SESSION['submission_id_'.$section_id],
 		'ENABLED_ASP'	=> (defined("ENABLED_ASP") ? true : false),
 		'header'		=> $header,
