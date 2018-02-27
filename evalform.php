@@ -550,7 +550,7 @@ function eval_form($section_id) {
 					$files_to_attach = array();
 				} else {
 					$success = false;
-					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error']." [E: 553]";
+					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error']." [E: 553, is set sender_mail?]";
 					unset( $_SESSION['mpform_wbx_error'] );
 				}
 			}
