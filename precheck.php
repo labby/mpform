@@ -30,9 +30,15 @@ if (defined('LEPTON_PATH')) {
 	}
 }
 
-$PRECHECK['VERSION']        = array(
+$PRECHECK['VERSION']	= array(
     'VERSION' => '4.0.0',
     'OPERATOR' => '>='
 );
 
+$PRECHECK['ADDONS']		= array(
+    'mpform' => array(
+        'VERSION' => '1.2.',
+        'OPERATOR' => '>'
+    ),
+);
 ?>

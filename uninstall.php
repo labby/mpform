@@ -30,18 +30,27 @@ if (defined('LEPTON_PATH')) {
 	}
 }
 
+// delete search table entries
 $database->execute_query("DELETE FROM ".TABLE_PREFIX."search WHERE name = 'module' AND value = 'mpform'");
 $database->execute_query("DELETE FROM ".TABLE_PREFIX."search WHERE extra = 'mpform'");
 
-$database->execute_query("DROP TABLE IF EXISTS `".TABLE_PREFIX."mod_mpform_fields`");
-$database->execute_query("DROP TABLE IF EXISTS `".TABLE_PREFIX."mod_mpform_settings`");
-$database->execute_query("DROP TABLE IF EXISTS `".TABLE_PREFIX."mod_mpform_submissions`");
+// drop tables
+LEPTON_handle::drop_table("mod_mpform_fields");
+LEPTON_handle::drop_table("mod_mpform_settings");
+LEPTON_handle::drop_table("mod_mpform_submissions");
 
+//drop result tables
 $table_name = TABLE_PREFIX . "mod_mpform_results_%";
-$t = $database->query("SHOW TABLES LIKE '".$table_name."'");
-if ($t->numRows() > 0 ) {
-	while ($tn = $t->fetchRow()) {
-		$database->execute_query("DROP TABLE IF EXISTS `".$tn[0]."`");
+$result_tables = array();
+$database->execute_query(
+	"SHOW TABLES LIKE ".$table_name." ",
+	true,
+	$result_tables,
+	true
+);	
+if (count($result_tables) > 0 ) {
+	foreach ($result_tables as $to_delete) {
+		LEPTON_handle::drop_table($to_delete);
 	}
 }
 
