@@ -3,8 +3,8 @@
 /**
  *
  * 
- *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @module         MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
@@ -20,6 +20,7 @@ $MOD_MPFORM = array();
 // Text outputs for the backend
 $MOD_MPFORM['backend'] = array(
 	'SETTINGS' => 'Form Settings',
+	'BACK' => 'Back',	
 	'TXT_TYP'	=> 'Type',
 	'TXT_LIST'	=> "List",
 	'TXT_DEFAULT'	=> "Default value",

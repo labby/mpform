@@ -1,0 +1,74 @@
+{#
+/**
+ *
+ * 
+ *  @module         MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
+ *  @license        http://www.gnu.org/licenses/gpl.htm
+ *  @platform       see info.php of this addon
+ *  @license terms  see info.php of this addon
+ *  @version        see info.php of this module
+ *  
+ *
+ */
+ #}
+{% autoescape false %}
+<!-- twig -->
+<div class="{{ MODULE_DIR }}">
+<form name="modify" action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/save_field.php" method="post" style="margin: 0;">
+
+<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
+<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
+<input type="hidden" name="field_id" value="{{ FIELD_ID }}" />
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+				<td align="right">
+				<button type="submit" name="add"><img src="{{ MODULE_URL }}/images/add_new.gif" alt="" width="16" height="16" border="0" /> {{ TXT_ADD_FIELD }}</button>
+				&nbsp;
+				<button type="submit" name="copy"><img src="{{ MODULE_URL }}/images/duplicate.gif" alt="" width="16" height="16" border="0" /> {{ TXT_COPY_FIELD }}</button></td>
+	</tr>
+</table>
+<fieldset>
+<legend>{{ TXT_MODIFY_FIELD }}</legend>
+
+<table cellpadding="2" cellspacing="0" border="0" width="100%">
+	<tr>
+		<td width="20%">{{ TXT_TITLE }}:</td>
+		<td>
+			<input type="text" name="title" value="{{ VAL_TITLE }}" style="width: 98%;" maxlength="255" />
+		</td>
+	</tr>
+	<tr>
+		<td>{{ TXT_TYPE }}:</td> 
+		<td>
+			<select name="type" style="width: 98%;">
+				<option value="">{{ TXT_PLEASE_SELECT }}...</option> 
+				<!-- BEGIN field_block -->
+					{% for temp_type,type_label in field_typtes %}
+					<option value={{ temp_type }} {% if (form.type == temp_type) %}selected='selected'{% endif %}>{{ type_label }}</option>
+					{% endfor %}
+				<!-- END field_block -->
+			</select>
+		</td>
+	</tr>
+
+	<!-- BEGIN type_options -->
+		{{ VAL_TYPE_OPTIONS }}
+	<!-- END type_options -->
+</table>
+</fieldset>
+<table cellpadding="0" cellspacing="0" border="0" width="100%">
+	<tr>
+		<td align="left">
+			<button type="submit" name="save"><img src="{{ MODULE_URL }}/images/ok.gif" alt="" width="16" height="16" border="0" /> {{ TXT_SAVE }}</button>
+		</td>
+		<td align="right">
+		<button type="button" onclick="javascript: window.location = '{{ ADMIN_URL }}/pages/modify.php?page_id={{ PAGE_ID }}';"><img src="{{ MODULE_URL }}/images/cancel.gif" alt="" width="16" height="16" border="0" /> {{ TXT_CANCEL }}</button>
+		</td>
+	</tr>
+</table>
+</form>
+</div>
+</div>
+<!-- end twig -->
+{% endautoescape %}

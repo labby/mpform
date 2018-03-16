@@ -1,30 +1,27 @@
 <?php
 
 /**
- *
- * 
- *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @module         MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
  *  @version        see info.php of this module
- *  
  *
  */
 
 function module_header_footer($page_id, $mod_dir) {
 	global $admin, $database, $HEADING, $TEXT, $MESSAGE, $section_id;
+	
 	require_once(LEPTON_PATH.'/modules/admin.php');
 	
 	require(LEPTON_PATH.'/modules/'.$mod_dir.'/info.php');
-	//START HEADER HERE
 	
 	// Get page details
 	$results_array=$admin->get_page_details($page_id);
 	
 	// Get display name of person who last modified the page
-	$user=$admin->get_user_details($results_array['modified_by']);
+	$user=$admin->get_user_details( $results_array['modified_by'] );
 	
 	// Convert the unix ts for modified_when to human a readable form
 	if($results_array['modified_when'] != 0) {
@@ -32,11 +29,8 @@ function module_header_footer($page_id, $mod_dir) {
 	} else {
 		$modified_ts = 'Unknown';
 	}
-	// Include page info script
-	$template = new Template(LEPTON_PATH.'/modules/'.$mod_dir.'/htt/');
-	$template->set_file('page', 'modify.htt');
-	$template->set_block('page', 'main_block', 'main');
-	$template->set_var(array(
+
+	$header_values = array(
 		'PAGE_ID' => $results_array['page_id'],
 		'SECTION_ID' => $section_id,
 		'PAGE_TITLE' => ($results_array['page_title']),
@@ -47,39 +41,28 @@ function module_header_footer($page_id, $mod_dir) {
 		'MODIFIED_WHEN' => $modified_ts,
 		'ADMIN_URL' => ADMIN_URL,
 		'MOD_CLASS'	=> $mod_dir
-		)
+		
 	);
-	if($modified_ts == 'Unknown') {
-		$template->set_var('DISPLAY_MODIFIED', 'hide');
-	} else {
-		$template->set_var('DISPLAY_MODIFIED', '');
-	}
+	$header_values['DISPLAY_MODIFIED'] = '';
 
-	// Work-out if we should show the "manage sections" link
-	$query_sections = $database->query("SELECT section_id FROM ".TABLE_PREFIX."sections WHERE page_id = '$page_id' AND module = 'menu_link'");
-	if($query_sections->numRows() > 0) {
-		$template->set_var('DISPLAY_MANAGE_SECTIONS', 'none');
-	} elseif(MANAGE_SECTIONS == 'enabled') {
-		$template->set_var('TEXT_MANAGE_SECTIONS', $HEADING['MANAGE_SECTIONS']);
-	} else {
-		$template->set_var('DISPLAY_MANAGE_SECTIONS', 'none');
-	}
+	$header_values['TEXT_MANAGE_SECTIONS'] = $HEADING['MANAGE_SECTIONS'];
+	$header_values['DISPLAY_MANAGE_SECTIONS'] = "";
+
+	$header_values['TEXT_CURRENT_PAGE'] = $TEXT['CURRENT_PAGE'];
+	$header_values['TEXT_CHANGE_SETTINGS'] = $TEXT['CHANGE_SETTINGS'];
+	$header_values['LAST_MODIFIED'] = $MESSAGE['PAGES']['LAST_MODIFIED'];
+	$header_values['HEADING_MODIFY_PAGE'] = $HEADING['MODIFY_PAGE'];
 	
-	// Insert language TEXT
-	$template->set_var(array(
-		'TEXT_CURRENT_PAGE' => $TEXT['CURRENT_PAGE'],
-		'TEXT_CHANGE_SETTINGS' => $TEXT['CHANGE_SETTINGS'],
-		'LAST_MODIFIED' => $MESSAGE['PAGES']['LAST_MODIFIED'],
-		'HEADING_MODIFY_PAGE' => $HEADING['MODIFY_PAGE']
-		)
+	$oTwig = lib_twig_box::getInstance();
+	$oTwig->registerModule( $mod_dir );
+
+	echo $oTwig->render(
+		"@mpform/backend_header.lte",
+		$header_values
 	);
 	
-	// Parse and print header template
-	$template->parse('main', 'main_block', false);
-	$template->pparse('output', 'page');
+	return true;
 	
-	return $admin;
-	//END HEADER HERE
 }  // end of: function module_header_footer
 
 require_once (LEPTON_PATH.'/framework/class.order.php');
@@ -137,19 +120,12 @@ class orderx extends order {
 }  // end of: class orderx extends order
 
 function insert_drag_drop($button_up_cell) {
-echo "<script type=\"text/javascript\">
-<!--
-var JsAdmin = { LEPTON_URL : '". LEPTON_URL."', THEME_URL : '". THEME_URL."', structure_type : 'ul', buttonCell : ". $button_up_cell." };
-//-->
-</script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/yahoo/yahoo-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/event/event-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/dom/dom-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/connection/connection-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/include/yui/dragdrop/dragdrop-min.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/modules/jsadmin/js/jsadmin.js'></script>
-<script type='text/javascript' src='". LEPTON_URL."/modules/mpform/js/dragdrop.js'></script>
-";
+echo "<div>
+	<script type=\"text/javascript\">
+	<!--
+	var JsAdmin = { LEPTON_URL : '". LEPTON_URL."', THEME_URL : '". THEME_URL."', structure_type : 'ul', buttonCell : ". $button_up_cell." };
+	//-->
+	</script>
+</div>";
 } // end of: function insert_drag_drop
-
 ?>

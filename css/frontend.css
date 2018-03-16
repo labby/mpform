@@ -1,8 +1,8 @@
 /**
  *
  * 
- *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @module         MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
@@ -216,9 +216,10 @@ width:410px;
 }
 
 .mpform_submit {
-cursor: pointer;
-border: 2px solid #999;	
-color:#666666;
+    border: 2px solid #999;
+    color: #666666;
+    cursor: pointer;
+    margin-top: 20px;
 }
 .mpform_submit:hover{
 border: 2px solid #333;

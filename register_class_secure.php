@@ -1,17 +1,15 @@
 <?php
 
 /**
- *
- * 
- *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @module         MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
  *  @version        see info.php of this module
- *  
  *
  */
+ 
 global $lepton_filemanager;
 if (!is_object($lepton_filemanager)) require_once( "../../framework/class.lepton.filemanager.php" );
 
@@ -34,9 +32,11 @@ $files_to_register = array(
 	$base.'save.php',
 	$base.'save_settings.php',
 	$base.'save_adv_settings.php',
-	$base.'save_field.php'
+	$base.'save_field.php',
+	$base.'view_submission.php'
 );
 
 $lepton_filemanager->register( $files_to_register );
 
+// LEPTON_secure::getInstance()->register_filenames( $files_to_register );
 ?>

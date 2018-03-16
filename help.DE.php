@@ -3,8 +3,8 @@
 /**
  *
  * 
- *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @module         MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
@@ -39,11 +39,10 @@ require(LEPTON_PATH.'/modules/admin.php');
 // 2nd level...
 require_once(LEPTON_PATH.'/framework/class.admin.php');
 
-// include core functions to edit the optional module CSS files (frontend.css, backend.css)
-@include_once(LEPTON_PATH .'/framework/module.functions.php');
 
-// include the module language file depending on the backend language of the current user
-if (!@include(get_module_language_file($mod_dir))) return;
+$MOD_MPFORM = (dirname(__FILE__))."/languages/". LANGUAGE .".php";
+require_once ( !file_exists($MOD_MPFORM) ? (dirname(__FILE__))."/languages/EN.php" : $MOD_MPFORM );
+
 
 //START HEADER HERE
 require_once(LEPTON_PATH.'/modules/'.$mod_dir.'/functions.php');
@@ -52,14 +51,14 @@ $adm = module_header_footer($page_id, $mod_dir);
 
 ?>
 <div class="helppage">
-<p>Die Dokumentation zu diesem Modul umfasst mittlerweile etwa 20 Seiten. Sie ist online auf der <a href="http://wbdemo.heysoft.de/pages/de/mpform.php" target="help">Homepage des Moduls</a> verf&uuml;gbar.</p>
-<p>Falls Sie Bugs finden, melden Sie sie bitte an <em>mod 4 wb at heysoft dot de</em></p>
+<p>Die Dokumentation zu diesem Modul umfasst mittlerweile etwa 20 Seiten. Sie ist online auf der <a href="https://doc.lepton-cms.org/_extern/mp_form/DE/mpform.html" target="_blank">LEPTON Dokumentation</a> verf&uuml;gbar.</p>
+<p>Falls Sie Bugs finden, <a href="http://forum.lepton-cms.org/" target="_blank">melden Sie sie bitte</a></p>
 </div>
 <br />
 		<table cellpadding="0" cellspacing="0" border="0" width="100%">
 		<tr>
 			<td align="center">
-				<input type="button" value="<?php echo $TEXT['BACK']; ?>" onclick="javascript: window.location = '<?php echo ADMIN_URL; ?>/pages/modify.php?page_id=<?php echo $page_id; ?>';" style="width: 100px; margin-top: 5px;" />
+				<input class="helppage" type="button" value="<?php echo $TEXT['BACK']; ?>" onclick="javascript: window.location = '<?php echo ADMIN_URL; ?>/pages/modify.php?page_id=<?php echo $page_id; ?>';" style="width: 100px; margin-top: 5px;" />
 			</td>
 		</tr>
 		</table>

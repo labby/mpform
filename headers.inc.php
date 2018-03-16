@@ -12,19 +12,18 @@
  *  
  *
  */
+ 
+$mod_headers = array(
+	'frontend' => array(
+		'js' => array(
+			"modules/lib_jquery/jquery-ui/jquery-ui.min.js",
+		),
+		'css'	=> array(
+			array(
+					'media'		=> 'screen',
+					'file'		=> "modules/lib_jquery/jquery-ui/jquery-ui.min.css"
+				)
+		)
 
-$fields = array(
-	'section_id' => $section_id
+	)
 );
-
-$database->prepare_and_execute(
-	"DELETE FROM `".TABLE_PREFIX."mod_mpform_fields` WHERE `section_id` = :section_id",
-	$fields
-);
-
-$database->prepare_and_execute(
-	"DELETE FROM `".TABLE_PREFIX."mod_mpform_settings` WHERE `section_id` = :section_id",
-	$fields
-);
-
-?>

@@ -3,8 +3,8 @@
 /**
  *
  * 
- *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @module         MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
@@ -180,6 +180,9 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	global $database, $MENU, $TEXT, $MOD_MPFORM;
 	global $code, $admin;
 	
+	// Make sure this one is set! Default is false
+	$jscal_use_time = false;
+
 	if($missing != array()) {
 		if(!isset($MOD_MPFORM['frontend']['REQUIRED_FIELDS'])) {
 			$msg = 'Please complete or correct the fields in red color!';
@@ -190,23 +193,30 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 	}
 
 	// Get settings
-	$query_settings = $database->query("SELECT * FROM ".TABLE_PREFIX."mod_mpform_settings WHERE section_id = '$section_id'");
-	if($query_settings->numRows() > 0) {
-		$fetch_settings = $query_settings->fetchRow();
-		$header = str_replace('{LEPTON_URL}',LEPTON_URL,$fetch_settings['header']);
-		$field_loop = $fetch_settings['field_loop'];
-		$footer = str_replace('{LEPTON_URL}',LEPTON_URL,$fetch_settings['footer']);
-		$use_captcha = $fetch_settings['use_captcha'];
-		$is_following = $fetch_settings['is_following'];
-		$max_file_size = $fetch_settings['max_file_size_kb'] * 1024;
-		$date_format = $fetch_settings['date_format'];
-		$email_to = $fetch_settings['email_to'];
+	$fetch_settings = array();
+	$database->execute_query(
+		"SELECT * FROM `".TABLE_PREFIX."mod_mpform_settings` WHERE `section_id` = ".$section_id,
+		true,
+		$fetch_settings,
+		false
+	);
+	
+	if( count($fetch_settings) > 0) {
+		$header			= str_replace('{LEPTON_URL}',LEPTON_URL,$fetch_settings['header']);
+		$field_loop		= $fetch_settings['field_loop'];
+		$footer			= str_replace('{LEPTON_URL}',LEPTON_URL,$fetch_settings['footer']);
+		$use_captcha	= $fetch_settings['use_captcha'];
+		$is_following	= $fetch_settings['is_following'];
+		$max_file_size	= $fetch_settings['max_file_size_kb'] * 1024;
+		$date_format	= $fetch_settings['date_format'];
+		$email_to		= $fetch_settings['email_to'];
 		$upload_only_exts = $fetch_settings['upload_only_exts'];
-		$enum_start = $fetch_settings['enum_start'];
-		$success_page = $fetch_settings['success_page'];
+		$enum_start		= $fetch_settings['enum_start'];
+		$success_page	= $fetch_settings['success_page'];
 	} else {
-		exit($TEXT['UNDER_CONSTRUCTION']);
+		exit($TEXT['UNDER_CONSTRUCTION']." E: pf[1]");
 	}
+	
 	$needhelpbutton = (strpos($field_loop, "{HELP}") !== false);  // we only need a help button if this variable is used
 
 	// execute private function in private.php, if available
@@ -219,9 +229,16 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 		$_SESSION['submission_id_'.$section_id] = new_submission_id();
 	}
 	if ($success_page != 'none') {
-		$qs = $database->query("SELECT * FROM ".TABLE_PREFIX."sections WHERE page_id = '$success_page' AND module = 'mpform'");
-		if($qs->numRows() > 0) {
-			$s = $qs->fetchRow();
+		$success_page_info = array();
+		// $qs = $database->query("SELECT * FROM ".TABLE_PREFIX."sections WHERE page_id = '$success_page' AND module = 'mpform'");
+		$database->execute_query(
+			"SELECT * FROM `".TABLE_PREFIX."sections` WHERE `page_id` = ".$success_page." AND `module` = 'mpform'",
+			true,
+			$success_page_info,
+			true
+		);
+		if( count($success_page_info) > 0) {
+			$s = $success_page_info[0]; 	// geting the first one!
 			$sid = $s['section_id'];
 			if (!isset($_SESSION['submission_id_'.$section_id])) $_SESSION['submission_id_'.$section_id] = "";
 			$_SESSION['submission_id_'.$sid] = substr($_SESSION['submission_id_'.$section_id], 0, 8);
@@ -235,9 +252,16 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 		$_SESSION['href'] = 'unknown';
 	}
 
-	// Do i need to include calendar files ?
-	$query_fields= $database->query("SELECT * FROM ".TABLE_PREFIX."mod_mpform_fields WHERE section_id = '$section_id' AND type = 'date'");
-	if($query_fields->numRows() > 0) {
+	// Do i need to include calendar files?
+	$temp_info = array();
+	// $query_fields= $database->query("SELECT * FROM ".TABLE_PREFIX."mod_mpform_fields WHERE section_id = '$section_id' AND type = 'date'");
+	$database->execute_query(
+		"SELECT * FROM `".TABLE_PREFIX."mod_mpform_fields` WHERE `section_id` = ".$section_id." AND type = 'date'",
+		true,
+		$temp_info,
+		true
+	);
+	if( count($temp_info) > 0) {
 		// include jscalendar-setup
 		$jscal_use_time = true; // whether to use a clock, too
 		require_once(dirname(__FILE__) . "/jscalendar.php");
@@ -245,44 +269,49 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 		if ($date_format) $jscal_ifformat = $date_format; //"%Y-%m-%d"; // - format for jscalendar (default: from wb-backend-date-format)
 	}
 
-	echo "\n<div class=\"mpform\">
-	<form name=\"form_$section_id\"  enctype='multipart/form-data' action=\"".LEPTON_URL. htmlspecialchars(strip_tags($_SERVER['SCRIPT_NAME'])) .'?lang='.LANGUAGE."#".SEC_ANCHOR."section_".$section_id."\" method=\"post\">
-	<input type=\"hidden\" name=\"submission_id\" value=\"". $_SESSION['submission_id_'.$section_id] ."\" />\n";
+	/**
+	 *	Start collecting the values for the output
+	 */
+	$now_time = TIME();
+	$_SESSION['submitted_when'.$section_id] = $now_time;
+	
+	$form_values = array(
+		'LEPTON_URL'	=> LEPTON_URL,
+		
+		'page_id'		=> PAGE_ID,
+		'section_id'	=> $section_id,
+		'time'			=> $now_time,
+		
+		'form_action'	=> htmlspecialchars(strip_tags($_SERVER['SCRIPT_NAME'])) ."#".SEC_ANCHOR."section_".$section_id,
+		'submission_id'	=> $_SESSION['submission_id_'.$section_id],
+		'ENABLED_ASP'	=> (defined("ENABLED_ASP") ? true : false),
+		'header'		=> $header,
+		'LANGUAGE'		=> strtolower( LANGUAGE )
+	);
 	
 	
-	if(ENABLED_ASP) { // first add some honeypot-fields
-		$t = time();
-		$_SESSION['submitted_when'.$section_id] = $t; 
-		echo "<input type=\"hidden\" name=\"submitted_when$section_id\" value=\"$t\" />
-		<p style=\"display:none\">
-		email address:
-		<label for=\"email_$section_id\">Leave this field email-address blank:</label>
-		<input id=\"email_$section_id\" name=\"email\" size=\"56\" value=\"\" /><br />
-		Homepage:
-		<label for=\"homepage_$section_id\">Leave this field homepage blank:</label>
-		<input id=\"homepage_$section_id\" name=\"homepage\" size=\"55\" value=\"\" /><br />
-		URL:
-		<label for=\"url_$section_id\">Do not fill out this field url:</label>
-		<input id=\"url_$section_id\" name=\"url\" size=\"63\" value=\"\" /><br />
-		Comment:
-		<label for=\"comment_$section_id\">Leave this field comment blank:</label>
-		<textarea id=\"comment_$section_id\" name=\"comment\" cols=\"50\" rows=\"10\"></textarea><br />
-		</p>";
-	}
-
-	// Print header
-	echo $header;
 	$first_MAX = true;
 
 	// Get list of fields
-	$query_fields = $database->query("SELECT * FROM ".TABLE_PREFIX."mod_mpform_fields WHERE section_id = '$section_id' ORDER BY position ASC");
+	$all_fields = array();
+	$database->execute_query(
+		"SELECT * FROM `".TABLE_PREFIX."mod_mpform_fields` WHERE `section_id` = ".$section_id." ORDER BY `position` ASC",
+		true,
+		$all_fields,
+		true
+	);
 	
 	$cla= array();
 	$onehelp=false;
 	//$is_table_layout = (stripos($header, "<table") !== false);  // consists the form of a table?  // php5
 	$is_table_layout = (strpos($header, "<table") !== false || strpos($header, "<TABLE") !== false);  // consists the form of a table?  // php4 version
-	if($query_fields->numRows() > 0) {
-		while($field = $query_fields->fetchRow()) {
+	
+	$form_fields = array();
+	
+	if( count($all_fields) > 0) {
+		//while($field = $query_fields->fetchRow()) {
+		foreach( $all_fields as $field )
+		{
 			// Set field values
 			$field_id = $field['field_id'];
 			$value = $field['value'];
@@ -333,6 +362,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 			} elseif($field['type'] == 'email_subj') {
 				$vars[] = '{FIELD}';
 				$values[] = '<input type="text" name="field'.$field_id.'" id="field'.$field_id.'" '.$maxlength.' value="'.(isset($_SESSION['field'.$field_id])?$_SESSION['field'.$field_id]:$value).'" class="'.$err_class.'text" '."$readonly />";
+			
 			} elseif ($field['type'] == 'integer_number') {
 				$vars[] = '{FIELD}';
 				$js = 'onkeypress="if(event.which) {
@@ -342,6 +372,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 					.'}else{
 						if((event.charCode &lt; 48 || event.charCode > 57) &amp;&amp; event.charCode != 0){return false;}}"';  // FF
 				$values[] = '<input type="text" '.$js.' name="field'.$field_id.'" id="field'.$field_id.'" '.$maxlength.' value="'.(isset($_SESSION['field'.$field_id])?$_SESSION['field'.$field_id]:$value).'" class="'.$err_class.'text" '."$readonly />";
+			
 			} elseif ($field['type'] == 'decimal_number') {
 				$vars[] = '{FIELD}';						
 				$js = 'onkeypress="if(event.which) {
@@ -418,6 +449,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 				if ($is_table_layout) $field_loop .= "</table>\n";
 				$field_loop .= "</fieldset>\n";
 				if ($is_table_layout) $field_loop .= "$header\n";
+			
 			} elseif($field['type'] == 'checkbox') {
 				$vars[] = '{FIELD}';
 				$options = explode(',', $value);
@@ -425,6 +457,7 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 				array_walk($options, 'make_checkbox', array($field_id, $field['extra'], (isset($_SESSION['field'.$field_id])?$_SESSION['field'.$field_id]:array()), $err_class, $isnew));
 				$options[count($options)-1]=substr($options[count($options)-1],0,strlen($options[count($options)-1])-strlen($field['extra']));
 				$values[] = implode($options);
+			
 			} elseif($field['type'] == 'radio') {
 				$vars[] = '{FIELD}';
 				$options = explode(',', $value);
@@ -472,10 +505,10 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 				$vars[] = '{ERRORTEXT}';  // new in v 0.4.0
 				(isset($err_txt[$field_id])) ? $values[] = '<p>'.$err_txt[$field_id].'</p>' : $values[] = '';	// new in v 0.4.0
 				if($field['type'] != '') {
-					echo str_replace($vars, $values, $field_loop)."\n";
+					$form_fields[] = str_replace($vars, $values, $field_loop)."\n";
 				}
 			} else {
-				echo htmlspecialchars_decode($field['value']);  // output html field without any translation
+				$form_fields[] = htmlspecialchars_decode($field['value']);  // output html field without any translation
 			}
 			if (isset($tmp_field_loop)) $field_loop = $tmp_field_loop;
 		}
@@ -506,43 +539,82 @@ function paint_form($section_id, $missing=array(), $err_txt=array(), $isnew=true
 			);
 			
 			$cmd = str_replace( array_keys($vars), array_values($vars), $field_loop);
-			echo ($cmd);
+			$form_fields[] = $cmd;
 
 		}
 		else 
 		{	
+			/**
+			 *	Get the captcha
+			 */
+			ob_start();
+				call_captcha('all', '', $section_id);
+				$captcha = ob_get_clean();
+				
 			$vars = array(
 				'{TITLE}'		=> $MOD_MPFORM['frontend']['VERIFICATION'],
 				'{REQUIRED}'	=> '<span class="mpform_required">*</span>',
-				'{FIELD}'		=> "'; call_captcha('all', '', $section_id); echo '",
+				'{FIELD}'		=> $captcha,
 				'{HELP}'		=> "",
 				'{HELPTXT}'		=> "",
 				'{CLASSES}'		=> $classes,
 				'{ERRORTEXT}'	=> (isset($err_txt['captcha'.$section_id])) ? $err_txt['captcha'.$section_id] : ''
 			);
 			
-			$cmd = "{echo '" . str_replace( array_keys($vars), array_values($vars), $field_loop) . "';}";
-			
-			eval($cmd);
+			$cmd = str_replace( array_keys($vars), array_values($vars), $field_loop);
+			$form_fields[]	= $cmd;
 		}
 	}
 	
+	else {
+		$vars['{FIELD}']=''; // avoid notice if captcha is not in use!
+	}
+	
+	$form_values['form_fields']	= $form_fields;
+	
+	// Hack for captcha
+	$all_fields[] = array(
+		'type'	=> 'captcha',
+		'title'	=> 'Capcha verification',
+		'value'	=> $vars['{FIELD}']
+	);
+	
+	//	prepare all fields
+	mpform::prepare_fields( $all_fields );
+	
+	// all fields!
+	$form_values['all_fields']	= $all_fields;
+	
 	// Print footer
-	echo $footer;
-	echo "\n</form>";
-	echo "\n</div>\n";
+	$form_values['footer']	= $footer;
+	
 	
 	if($onehelp) js_for_help();
 	
+	$form_values['additions'] = array();
+	
 	foreach($cla as $k => $v) {
-		$s = "<script type=\"text/javascript\">\n";
+		$s = "<script type=\"text/javascript\">\n
+			var ref = document.getElementById('".$k."_trigger');
+			if(ref) {
+		";
 		$s .= "Calendar.setup( {\n\tinputField  : \"$k\",\n\tifFormat    : \"$jscal_ifformat\",\n\tbutton      : \"$k"."_trigger\",\n\tfirstDay    : $jscal_firstday,\n";
 		if (isset($jscal_use_time) && $jscal_use_time==TRUE) { 
 			$s .= "	showsTime   : \"true\",\n\ttimeFormat  : \"24\",\n";
 		} 
-		$s .= "	date        : \"$jscal_today\",\n\trange       : [1970, 2037],\n\tstep        : 1\n} );\n</script>";
-		echo $s;
+		$s .= "	date        : \"$jscal_today\",\n\trange       : [1970, 2037],\n\tstep        : 1\n} );\n
+		}
+		</script>";
+		$form_values['additions'][] = $s;
 	}
+	
+	$oTWIG = lib_twig_box::getInstance();
+	$oTWIG->registerModule( 'mpform' );
+	
+	echo $oTWIG->render(
+		'@mpform/view.lte',
+		$form_values
+	);
 }
 }
 

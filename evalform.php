@@ -3,8 +3,8 @@
 /**
  *
  * 
- *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @module         MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
@@ -124,9 +124,14 @@ if (!class_exists('wbx')) {
 			require_once LEPTON_PATH."/modules/lib_phpmailer/library.php";
 			
 			//	ALDUS: PHPMailer >= 6 comes up with his own namespace
-			
-			$myMail = new PHPMailer\PHPMailer\PHPMailer();
-
+			//	so we've have to look for the current version first here
+		#	$module_version = '';
+		#	require_once LEPTON_PATH."/modules/lib_phpmailer/info.php";
+		#	$myMail = intval($module_version) < 6 
+		#		? new PHPMailer()
+		#		: new PHPMailer\PHPMailer\PHPMailer()
+		#		;
+	$myMail = new PHPMailer\PHPMailer\PHPMailer();
 			// set user defined from address
 			if ($fromaddress!='') {
 				if($fromname!='') $myMail->FromName = $fromname;         // FROM-NAME
@@ -305,8 +310,8 @@ function eval_form($section_id) {
 
 			if( $captcha_result['success'] == false )
 			{
-				// neinn - nicht ok
-				$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA'];
+				// nein - nicht ok
+				$err_txt['captcha'.$section_id] = $MOD_MPFORM['frontend']['INCORRECT_CAPTCHA']." [314: recaptcha failed]";
 				$fer[] = 'captcha'.$section_id;
 			}
 			
@@ -389,12 +394,12 @@ function eval_form($section_id) {
 						$html_data_site .= str_replace('{HEADING}', $field['title'], $heading_html);
 					} elseif ($field['type'] == 'email_recip') {
 						// the browser will convert umlauts, we need to undo this for compare:
-						// $recip = htmlentities  ($post_field[0], ENT_NOQUOTES, 'UTF-8');
+						$recip = htmlentities  ($post_field[0], ENT_NOQUOTES, 'UTF-8');
 						if ($recip == $MOD_MPFORM['frontend']['select']) {
 							$err_txt[$field_id] = $MOD_MPFORM['frontend']['select_recip'];
 							$fer[]=$field_id;
 						}
-						// $recip = htmlspecialchars($post_field[0], ENT_QUOTES);
+						$recip = htmlspecialchars($post_field[0], ENT_QUOTES);
 						//$email_body .= $field['title'].': '.$recip."\n";
 						$html_data_user .= str_replace(array('{TITLE}', '{DATA}'), array($field['title'], $recip), $short_html);
 						$html_data_site .= str_replace(array('{TITLE}', '{DATA}'), array($field['title'], $recip), $short_html);
@@ -550,7 +555,7 @@ function eval_form($section_id) {
 					$files_to_attach = array();
 				} else {
 					$success = false;
-					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error']." [E: 553, is set sender_mail?]";
+					echo (isset($TEXT['MAILER_FUNCTION']) ? $TEXT['MAILER_FUNCTION'] : $TEXT['MAILER_FUNCTION'])." (SITE) <br />\n".$_SESSION['mpform_wbx_error'];
 					unset( $_SESSION['mpform_wbx_error'] );
 				}
 			}

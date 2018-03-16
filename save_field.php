@@ -3,8 +3,8 @@
 /**
  *
  * 
- *  @module      	MPForm
- *  @author         Frank Heyne, Dietrich Roland Pehlke (last)
+ *  @module         MPForm
+ *  @author         Frank Heyne, Dietrich Roland Pehlke, erpe
  *  @license        http://www.gnu.org/licenses/gpl.htm
  *  @platform       see info.php of this addon
  *  @license terms  see info.php of this addon
@@ -189,6 +189,27 @@ switch( $field_type ) {
 			'extra'	=> $extra
 		);
 		break;
+		
+	case 'fieldset_start':
+		//$extra = str_replace(array("[[", "]]"), '', $admin->get_post('seperator'));
+		//if ($extra=="" and $isnewfield) $extra = "<br />";   // set default value
+		
+		$fields = array(
+			'value'	=> $value, // *!
+			'extra'	=> "" // $extra
+		);
+		break;
+
+	case 'fieldset_end':
+		//$extra = str_replace(array("[[", "]]"), '', $admin->get_post('seperator'));
+		//if ($extra=="" and $isnewfield) $extra = "<br />";   // set default value
+		
+		$fields = array(
+			'value'	=> $value, // *!
+			'extra'	=> "" // $extra
+		);
+		break;
+
 		
 	default:
 		$admin->print_error( "[1] No field-type match!" );
