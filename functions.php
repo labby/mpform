@@ -50,7 +50,7 @@ function module_header_footer($page_id, $mod_dir) {
 
 	$header_values['TEXT_CURRENT_PAGE'] = $TEXT['CURRENT_PAGE'];
 	$header_values['TEXT_CHANGE_SETTINGS'] = $TEXT['CHANGE_SETTINGS'];
-	$header_values['LAST_MODIFIED'] = $MESSAGE['PAGES']['LAST_MODIFIED'];
+	$header_values['LAST_MODIFIED'] = $MESSAGE['PAGES_LAST_MODIFIED'];
 	$header_values['HEADING_MODIFY_PAGE'] = $HEADING['MODIFY_PAGE'];
 	
 	$oTwig = lib_twig_box::getInstance();

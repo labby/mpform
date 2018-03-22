@@ -23,3 +23,16 @@ function mpform_settings_set_email_from ( aSelectRef )
 	}
 	return true;
 }
+
+function mpform_settings_set_email_fromname ( aSelectRef )
+{
+	var curr = aSelectRef.options[ aSelectRef.selectedIndex ].value;
+	// alert( curr );
+	var ref = document.getElementById("email_fromname_f_slave");
+	if(ref)
+	{
+		ref.style.display = (curr=="") ? 'block' : 'none';
+ 		//alert("s: "+ref.style.display );
+	}
+	return true;
+}

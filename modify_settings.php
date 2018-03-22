@@ -92,6 +92,10 @@ $database->execute_query(
 	$all_text_fields,
 	true
 );
+
+foreach($all_text_fields as &$ref) {
+	$ref['field_id']= 'field'.$ref['field_id'];
+}
 	 
 // Collecting the values for the template
 $form_values = array(
@@ -133,7 +137,6 @@ $form_values = array(
 	'txt_success_email_subject'		=> $TEXT['SUBJECT'],
 	'txt_success_email_text'		=> $TEXT['TEXT'],
 	'txt_email_text' 	=> $TEXT['TEXT'],
-	'NONEN'				=> $TEXT['NONE'],
 	'TXT_YES'			=> $TEXT['YES'],
 	'TXT_NO'			=> $TEXT['NO'],
 	// module settings
@@ -224,12 +227,9 @@ function give_me_pages_list($page, $fname){	// returns list of possible success 
 
 // fill some fields with lists
 $rt1 = give_me_address_list($email_from_value, true, 'email_from_f', $MOD_MPFORM['backend']['TXT_USER_ADDR']);
-// die( LEPTON_tools::display( $rt1 ));
-// $tpl->set_var('display_email_from_field', (($rt1) ? 'none' : 'block'));
 $form_values['display_email_from_field'] = ($settings['email_from'] === 'wbu') ? 'none' :'block';//  (($rt1) ? 'none' : 'block');
-
+// die( LEPTON_tools::display( $rt1,'pre','ui message' ));
 $rt2 = give_me_name_list($email_fromname_value, true, 'email_fromname_f', $MOD_MPFORM['backend']['TXT_USER_NAME']);
-// $tpl->set_var('display_email_fromname_field', (($rt2) ? 'none' : 'block'));
 $form_values['display_email_fromname_field'] = (($rt2) ? 'none' : 'block');
 
 give_me_address_list($settings['success_email_to'], false, 'success_email_to', $MOD_MPFORM['backend']['TXT_USER_ADDR']);
