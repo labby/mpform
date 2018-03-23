@@ -78,7 +78,9 @@ $database->execute_query(
 	true
 );
 
-//die( LEPTON_tools::display( $all_email_fields ));
+foreach($all_email_fields as &$ref) {
+	$ref['field_id']= 'field'.$ref['field_id'];
+}
 
 /**
  *	Same for the textfields for "names"
