@@ -34,18 +34,21 @@ if (defined('LEPTON_PATH')) {
 $admin = new LEPTON_admin('Pages', 'pages_modify');
 
 ?>
-<div class="helppage">
-<p>Die Dokumentation zu diesem Modul umfasst mittlerweile etwa 20 Seiten. Sie ist online auf der <a href="https://doc.lepton-cms.org/_extern/mp_form/DE/mpform.html" target="_blank">LEPTON Dokumentation</a> verf&uuml;gbar.</p>
-<p>Falls Sie Bugs finden, <a href="http://forum.lepton-cms.org/" target="_blank">melden Sie sie bitte</a></p>
-</div>
-<br />
-		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+<div class="ui grey segment">
+	<h2 class="ui header">MP Form Hilfe</h2>
+	<div class="helppage">
+		<p>Die Dokumentation zu diesem Modul umfasst mittlerweile etwa 20 Seiten. Sie ist online auf der <a href="https://doc.lepton-cms.org/_extern/mp_form/DE/mpform.html" target="_blank">LEPTON Dokumentation</a> verf&uuml;gbar.</p>
+		<p>Falls Sie Bugs finden, <a href="http://forum.lepton-cms.org/" target="_blank">melden Sie sie bitte</a></p>
+	</div>
+	<br />
+	<table cellpadding="0" cellspacing="0" border="0" width="100%">
 		<tr>
 			<td align="center">
 				<input class="helppage" type="button" value="<?php echo $TEXT['BACK']; ?>" onclick="javascript: window.location = '<?php echo ADMIN_URL; ?>/pages/modify.php?page_id=<?php echo $page_id; ?>';" style="width: 100px; margin-top: 5px;" />
 			</td>
 		</tr>
-		</table>
+	</table>
+</div>
 <?php
 $admin->print_footer();
 ?>

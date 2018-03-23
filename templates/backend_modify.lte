@@ -14,108 +14,123 @@
  #}
 {% autoescape false %}
 <!-- twig -->
-<div class="{{ MODULE_DIR }}">
-<h2>{{ TXT_HEADING }}</h2>
-<table class="mpform_backend">
-	<tr>
-		<td>
-			<form action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/modify_settings.php" method="post">
-				<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
-				<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
-				<input class="mpform_button" type="submit" value="{{ TXT_SETTINGS }}"/>
-			</form>
-		</td>
-		<td>
-			<form action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/modify_adv_settings.php" method="post">
-				<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
-				<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
-				<input class="mpform_button" type="submit" value="{{ TXT_ADV_SETTINGS }}"/>
-			</form>
-		</td>
-		<td>
-			<form action="{{ LEPTON_URL }}/modules/edit_module_files.php?page_id={{ PAGE_ID }}" method="post">
-				<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
-				<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
-				<input type="hidden" name="mod_dir" value="mpform" />
-				<input type="hidden" name="edit_file" value="frontend.css" />
-				<input type="hidden" name="action" value="edit" />
-				<input class="mpform_button" type="submit" value="{{ EDIT_CSS }}"/>
-			</form>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<form action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/add_field.php" method="post">
-				<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
-				<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
-				<input class="mpform_button" type="submit" value="{{ TXT_FIELDS }}"/>
-			</form>
-		</td>
-		<td>
-				&nbsp;
-		</td>
-		<td>
-			<form action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/help.{{ LANGUAGE }}.php" method="post">
-				<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
-				<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
-				<input class="mpform_button" type="submit" value="{{ TXT_HELP }}"/>
-			</form>
-		</td>
-	</tr>
-</table>
-<br />
-<h2>{{ TEXT_HEADING_F }}</h2>
-<div>
-	<ul class="p0">
-{% for field in order_fields %}
-        <li class="p0">
-    	   	<table class="mpform_backend mpform_list">
+<div class="ui basic segment">
+	<div class="{{ MODULE_DIR }}">
+		<h2>{{ TXT_HEADING }}</h2>
+		<div class="spacer3"></div>
+		<div class="ui four columns stackable grid">	
+			<div class="column">
+				<form class="ui form" action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/modify_settings.php" method="post">
+					<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
+					<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
+					<button class="ui olive basic button" type="submit">{{ TXT_SETTINGS }}</button>
+				</form>		
+			</div>
+			<div class="column">
+				<form class="ui form" action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/modify_adv_settings.php" method="post">
+					<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
+					<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
+					<button class="ui olive basic button" type="submit">{{ TXT_ADV_SETTINGS }}</button>
+				</form>				
+			</div>
+			<div class="column">
+				<form class="ui form" action="{{ LEPTON_URL }}/modules/edit_module_files.php?page_id={{ PAGE_ID }}" method="post">
+					<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
+					<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
+					<input type="hidden" name="mod_dir" value="mpform" />
+					<input type="hidden" name="edit_file" value="frontend.css" />
+					<input type="hidden" name="action" value="edit" />
+					<button class="ui olive basic button" type="submit">{{ EDIT_CSS }}</button>
+				</form>				
+			</div>
+			<div class="column">
+				<form class="ui form" action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/help.{{ LANGUAGE }}.php" method="post">
+					<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
+					<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
+					<button class="ui olive basic button" type="submit">{{ TXT_HELP }}</button>
+				</form>			
+			</div>			
+		</div>	
+
+		<div class="ui four columns stackable grid">	
+			<div class="column">
+				<form class="ui form" action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/add_field.php" method="post">
+					<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
+					<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
+					<button class="ui grey basic button" type="submit"><i class="olive icon plus"></i>{{ TXT_FIELDS }}</button>
+				</form>	
+			</div>
+			<div class="column">			
+			</div>
+			<div class="column">
+				<form class="ui form" action="{{ LEPTON_URL }}/modules/{{ MODULE_DIR }}/modify_submissions.php" method="post">
+					<input type="hidden" name="section_id" value="{{ SECTION_ID }}" />
+					<input type="hidden" name="page_id" value="{{ PAGE_ID }}" />
+					<button class="ui grey basic button" type="submit"><i class="red icon delete"></i>{{ txt_delete_submissions }}</button>
+				</form>	
+			</div>
+			<div class="column">			
+			</div>			
+		</div>
+		
+		<h4 class="ui dividing header">{{ TEXT_HEADING_F }}</h4>
+		<table class="ui celled padded striped table">
+			<thead>
+			    <tr>
+					<th>{{ TEXT.EDIT }}</th>
+					<th>{{ TEXT.FIELD }}</th>
+					<th>{{ TEXT.NAME }}</th>
+					<th colspan="5">{{ TEXT.ACTIONS }}</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% for field in order_fields %}			
 				<tr bgcolor="{{ field.ROW_COLOR }}" onmouseover="this.style.backgroundColor = '#F1F8DD'" onmouseout="this.style.backgroundColor = '{{ field.ROW_COLOR }}'" >
-					<td class="mpform_action_icon">
-						<a href="{{ MODULE_URL }}/modify_field.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;field_id={{ field.FIELD_ID }}" title="{{ TEXT_MODIFY }}"><img src="{{ IMG_URL }}modify_16.png" border="0" alt="^" /></a>
+					<td class="single line">
+						<a href="{{ MODULE_URL }}/modify_field.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;field_id={{ field.FIELD_ID }}" title="{{ TEXT_MODIFY }}"><i class="large write icon"></i></a>
 					</td>
-					<td class="mpform_info field_name">
+					<td class="single line">
 						<a href="{{ MODULE_URL }}/modify_field.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;field_id={{ field.FIELD_ID }}">{{ field.field_title }}</a>
 					</td>
-					<td class="mpform_info field_type" title="{{ TEXT_TYPE }}">{{ field.type_field }}</td>
-					<td class="mpform_info" >{{ field.entrytype }}</td>
-					<td class="mpform_action_icon" >{{ field.multiselect_field }}</td>
-					<td class="mpform_action_icon">
-						<a {{ MUVE_UP_STYLE }} href="{{ MODULE_URL }}/move_to.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;field_id={{ field.FIELD_ID }}&amp;where=up" title="{{ TEXT_MOVE_UP }}"><img src="{{ IMG_URL }}up_16.png" border="0" alt="^" /></a>
+					<td class="single line" title="{{ TEXT_TYPE }}">{{ field.type_field }}</td>
+					<td class="single line" >{{ field.entrytype }}</td>
+					<td class="single line" >{{ field.multiselect_field }}</td>
+					<td class="single line">
+						<a href="{{ MODULE_URL }}/move_to.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;field_id={{ field.FIELD_ID }}&amp;where=up" title="{{ TEXT_MOVE_UP }}"><i class="large olive sort ascending icon"></i></a>
 					</td>
-					<td class="mpform_action_icon">
-						<a {{ MUVE_DOWN_STYLE }} href="{{ MODULE_URL }}/move_to.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;field_id={{ field.FIELD_ID }}&amp;where=down" title="{{ TEXT_MOVE_DOWN }}"><img src="{{ IMG_URL }}down_16.png" border="0" alt="v" /></a>
+					<td class="single line">
+						<a href="{{ MODULE_URL }}/move_to.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;field_id={{ field.FIELD_ID }}&amp;where=down" title="{{ TEXT_MOVE_DOWN }}"><i class="large olive sort descending icon"></i></a>
 					</td>
-					<td class="mpform_action_icon">
-						<a href="javascript:confirm_link('{{ TEXT_ARE_YOU_SURE }}','{{ MODULE_URL }}/delete_field.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;field_id={{ field.FIELD_ID }}');" title="{{ TEXT_DELETE }}"><img src="{{ IMG_URL }}delete_16.png" border="0" alt="X" /></a>
+					<td class="single line">
+						<a href="javascript:confirm_link('{{ TEXT_ARE_YOU_SURE }}','{{ MODULE_URL }}/delete_field.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;field_id={{ field.FIELD_ID }}');" title="{{ TEXT_DELETE }}"><i class="large red remove icon"></i></a>
 					</td>
+				</tr>			
+			{% endfor %}			
+			</tbody>		
+		</table>
+		
+		<div class="spacer3"></div>
+		<hr />
+		<h4 class="ui header">{{ TEXT_HEADING_S }}</h4>
+		<table class="ui celled padded striped table">
+		{% for submission in order_submissions %}
+					<tr>					
+					<td class="single line">
+						<a href="{{ MODULE_URL }}/view_submission.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;submission_id={{ submission.SUBMISSION_ID }}">
+							<i class="large folder icon"></i>
+						</a>
+					</td>
+					<td class="single line">{{ TEXT_SUBMISSION_ID }}: {{ submission.field_submission_id }}</td>
+					<td class="single line">{{ TEXT_SUBMITTED }}: {{ submission.field_submission_when }}</td>
+					<td class="single line">
+						<a href="javascript:confirm_link('{{ TEXT_ARE_YOU_SURE }}','{{ MODULE_URL }}/delete_submission.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;submission_id={{ submission.SUBMISSION_ID }}');" title="{{ TEXT_DELETE }}">
+							<i class="large red remove icon"></i>
+						</a>
+					</td>					
 				</tr>
-			</table>
-		</li>
-{% endfor %}
-    </ul>
-</div>
-<br />
-<h2>{{ TEXT_HEADING_S }}</h2>
-<table cellpadding="2" cellspacing="0" border="0" width="100%">
-{% for submission in order_submissions %}
-			<tr bgcolor="{{ ROW_COLOR }}" onmouseover="this.style.backgroundColor = '#F1F8DD'" onmouseout="this.style.backgroundColor = '{{ ROW_COLOR }}'" style="border:white solid 2px; height:20px;">
-			<td width="20" style="padding-left: 5px;">
-				<a href="{{ MODULE_URL }}/view_submission.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;submission_id={{ submission.SUBMISSION_ID }}">
-					<img src="{{ IMG_URL }}folder_16.png" alt="{{ TEXT_OPEN }}" border="0" />
-				</a>
-			</td>
-			<td width="237">{{ TEXT_SUBMISSION_ID }}: {{ submission.field_submission_id }}</td>
-			<td>{{ TEXT_SUBMITTED }}: {{ submission.field_submission_when }}</td>
-			<td width="20">
-				<a href="javascript:confirm_link('{{ TEXT_ARE_YOU_SURE }}','{{ MODULE_URL }}/delete_submission.php?page_id={{ PAGE_ID }}&amp;section_id={{ SECTION_ID }}&amp;submission_id={{ submission.SUBMISSION_ID }}');" title="{{ TEXT_DELETE }}">
-					<img src="{{ IMG_URL }}delete_16.png" border="0" alt="X" />
-				</a>
-			</td>
-		</tr>
-{% endfor %}
-</table>
-</div>
+		{% endfor %}	
+		</table>		
+	</div>		
 </div>
 <!-- end twig -->
 {% endautoescape %}
