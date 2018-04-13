@@ -48,7 +48,7 @@
 		{% if (page.subpages|length > 0) %}
 			
 			{% import _self as sub_here %}	
-			{{ sub_here.build_option( page.subpages, (deep +1) ) }}
+			{{ sub_here.build_option( page.subpages, (deep +1),settings ) }}
 			
 		{% endif %}
 			
